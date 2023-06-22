@@ -3,6 +3,25 @@
   "parserOptions": {
     "project": "./tsconfig.app.json"
   },
+  "rules": {
+    "@typescript-eslint/dot-notation": 0,
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": [
+      1,
+      { "extensions": [".js", ".jsx", "ts", ".tsx"] }
+    ],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/prop-types": "off",
+    "react/require-default-props": "off",
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": ["arrow-function", "function-declaration"]
+      }
+    ]
+  },
   "root": true,
   // ignore test files
   "ignorePatterns": [
