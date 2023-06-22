@@ -1,20 +1,49 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Prerequisites
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+This is a starter repo for a standalone Nx React application. Good luck!
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+First of all, run
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+```
+npm install
+```
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+or the installation with your favourite package manager, to install the dependencies!
+
+After installing the dependecies some files might show an error that they can not find the types. Simply restarting VS Code (or the IDE of your choice) should fix that.
+<br>
+<br>
+# What does this repo come with?
+
+asdad
+<br>
+<br>
+# Nx Generators
+
+NOTE: If you have npx installed globally, you can skip the "npx" at the beginning of the command
+<br>
+
+To generate a component use (the --directory flag is optional, but most likely you want to place the new component in a certain folder):
+
+```
+npx nx g @nx/react:component NewComponentName --directory=components
+```
+
+Or the shorter version:
+
+```
+npx nx g c NewComponentName --directory=components
+```
+
+Story
+
+```
+npx nx g component-story
+```
+
+This will generate a folder with the given name and inside that folder will generate the NewComponentName.tsx component and a .spec.tsx test file with a simple render test.
+We omit the auto-generation of a style file (.scss in this project) as we mostly use bootstrap classes and don't want to clutter the folders unnecessarily.
+
+Unfor
+<br>
+<br>

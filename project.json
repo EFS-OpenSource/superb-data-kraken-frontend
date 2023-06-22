@@ -1,0 +1,128 @@
+{
+  "name": "nx-test2",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "./src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "development",
+      "options": {
+        "outputPath": "dist/nx-test2"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        },
+        "typecheck": {
+          "executor": "nx:run-commands",
+          "options": {
+            "commands": ["tsc -p tsconfig.app.json --noEmit"],
+            "cwd": "src/**/*.{ts, tsx}",
+            "forwardAllArgs": false
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "nx-test2:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "nx-test2:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "nx-test2:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "nx-test2:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "nx-test2:build:development"
+        },
+        "production": {
+          "buildTarget": "nx-test2:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["coverage/nx-test2"],
+      "options": {
+        "reportsDirectory": "coverage/nx-test2",
+        "jestConfig": "jest.config.ts",
+        "passWithNoTests": true,
+        "codeCoverage": true,
+        "coverage": true,
+        "coverageReporters": ["lcov", "text-summary"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["./src/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "nx-test2:build"
+      }
+    },
+    "storybook": {
+      "executor": "@nx/storybook:storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "./.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@nx/storybook:build",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/nx-test2",
+        "configDir": "./.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "nx-test2:build-storybook",
+        "staticFilePath": "dist/storybook/nx-test2"
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "nx-test2:build-storybook:ci"
+        }
+      }
+    },
+    "tags": {}
+  }
+}

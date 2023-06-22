@@ -1,0 +1,29 @@
+{
+  "extends": ["plugin:@nx/react", "airbnb", "airbnb-typescript"],
+  "parserOptions": {
+    "project": "./tsconfig.app.json"
+  },
+  "root": true,
+  // ignore test files
+  "ignorePatterns": [
+    "src/**/*.spec.tsx",
+    "src/**/*.stories.tsx",
+    "*.config.ts",
+    "*.preset.js",
+    "tsconfig.json",
+    "node_modules"
+  ],
+  "plugins": ["@nx"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
+      "rules": {}
+    }
+  ]
+}
