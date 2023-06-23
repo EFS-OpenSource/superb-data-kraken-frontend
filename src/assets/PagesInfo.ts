@@ -21,7 +21,7 @@ export const appPageInfo = [
     path: '/home/*',
     icon: BsHouseFill,
     buttonText: 'HomePage.open-button',
-    page: typeof HomePage,
+    page: HomePage,
   },
 
   //   {
