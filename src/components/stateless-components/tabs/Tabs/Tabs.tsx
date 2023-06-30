@@ -1,7 +1,7 @@
 import { Tab, Nav } from 'react-bootstrap';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import PrimaryTab from '../PrimaryTab/PrimaryTab';
-import SecondaryTab from '../SecondaryTab/SecondaryTab';
+import { PrimaryTab } from '../PrimaryTab/PrimaryTab';
+import { SecondaryTab } from '../SecondaryTab/SecondaryTab';
 import { Tab as TabType } from '../../../../types/tabs';
 
 export interface TabsProps {
@@ -13,7 +13,7 @@ export interface TabsProps {
   disabledStyle?: string;
 }
 
-const Tabs = ({
+export const Tabs = ({
   tabs,
   className,
   variant,
@@ -67,5 +67,3 @@ const Tabs = ({
     </Tab.Container>
   );
 };
-
-export default Tabs;

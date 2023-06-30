@@ -1,11 +1,11 @@
-import React, { ReactNode, useMemo } from 'react';
+import { ReactNode, createContext, useMemo, useState } from 'react';
 
 interface IsExpandedContextProps {
   isExpanded: boolean;
   updateIsExpanded: (isExpanded: boolean) => void;
 }
 
-export const IsExpandedContext = React.createContext<IsExpandedContextProps>(
+export const IsExpandedContext = createContext<IsExpandedContextProps>(
   {} as any,
 );
 
@@ -14,7 +14,7 @@ export const IsExpandedContextProvider = ({
 }: {
   children: ReactNode;
 }): JSX.Element => {
-  const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const updateIsExpanded = (newIsExpanded: boolean): void => {
     setIsExpanded(newIsExpanded);

@@ -20,7 +20,8 @@
       {
         "namedComponents": ["arrow-function", "function-declaration"]
       }
-    ]
+    ],
+    "import/prefer-default-export": "off"
   },
   "root": true,
   // ignore test files
