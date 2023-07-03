@@ -16,7 +16,11 @@ function SdkRouter() {
       <IsExpandedContextProvider>
         <Routes>
           <Route element={<Layout onLanguageChange={setLanguage} />}>
-            <Route path="/*" element={<HomePage />} />
+            <Route path="/home/*" element={<HomePage />} />
+            <Route
+              path="*"
+              element={<Navigate to="/home/overview" replace />}
+            />
             <Route path="/apps/dashboard" element={<OpenSearchApp />} />
             <Route path="/apps/workflow" element={<ArgoWorkflow />} />
             <Route path="/apps/search" element={<SearchApp />} />

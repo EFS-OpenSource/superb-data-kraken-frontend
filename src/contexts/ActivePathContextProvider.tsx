@@ -18,7 +18,9 @@ export const ActivePathContextProvider = ({
 }): JSX.Element => {
   const location = useLocation();
   const [activePath, setActivePath] = useState(
-    location.pathname === '/home/overview' ? '/home/*' : location.pathname,
+    location.pathname === '/home/overview' || location.pathname === '/'
+      ? '/home/*'
+      : location.pathname,
   );
 
   const onChangeActivePath = (path: string): void => {
