@@ -1,11 +1,11 @@
 import { CSSProperties } from 'react';
 import { IconType } from 'react-icons/lib';
 import { BsCircleFill, BsCircle } from 'react-icons/bs';
-import PropTypes from 'prop-types';
-import { Icon } from '../Icon/Icon';
-import { textColors, TextColor } from '../../../types/colorTypes';
+import PropTypes, { bool, oneOf } from 'prop-types';
+import { Icon } from '@components/index';
+import { TextColor, textColors } from '@customTypes/colorTypes';
 
-export interface ApplicationAvatarProps {
+interface ApplicationAvatarProps {
   icon: IconType;
   size: number;
   isActive?: boolean;
@@ -14,7 +14,7 @@ export interface ApplicationAvatarProps {
   style?: CSSProperties | undefined;
 }
 
-export const ApplicationAvatar = ({
+const ApplicationAvatar = ({
   icon,
   isActive,
   size,
@@ -65,9 +65,9 @@ export const ApplicationAvatar = ({
   </div>
 );
 ApplicationAvatar.propTypes = {
-  primaryColor: PropTypes.oneOf(textColors),
-  secondaryColor: PropTypes.oneOf(textColors),
-  isActive: PropTypes.bool,
+  primaryColor: oneOf(textColors),
+  secondaryColor: oneOf(textColors),
+  isActive: bool,
 };
 
 ApplicationAvatar.defaultProps = {
@@ -75,3 +75,5 @@ ApplicationAvatar.defaultProps = {
   primaryColor: 'text-primary',
   secondaryColor: 'text-light',
 };
+
+export default ApplicationAvatar;

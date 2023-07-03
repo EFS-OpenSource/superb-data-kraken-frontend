@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
-import { Tabs } from 'src/components';
-import { Tab } from 'src/types/tabs';
+import { Tabs } from '@components/index';
+import { Tab } from '@customTypes/tabs';
 
-export function HomePage() {
+function HomePage() {
   const { formatMessage } = useIntl();
   const [tabs] = useState<Tab[]>([]);
 
@@ -46,3 +46,5 @@ export function HomePage() {
     </Container>
   );
 }
+
+export default HomePage;

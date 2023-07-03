@@ -1,17 +1,17 @@
 import { forwardRef, LegacyRef, ReactNode } from 'react';
 import { BsPersonFill, BsCaretDownFill } from 'react-icons/bs';
 import { Dropdown } from 'react-bootstrap';
-import PropTypes from 'prop-types';
-import { Icon } from '../Icon/Icon';
-import { textColors, TextColor } from '../../../types/colorTypes';
+import { textColors, TextColor } from '@customTypes/colorTypes';
+import PropTypes, { oneOf } from 'prop-types';
+import { Icon } from '@components/index';
 
-export interface UserAvatarProps {
+interface UserAvatarProps {
   size: number;
   color?: TextColor;
   dropdownItems: ReactNode;
 }
 
-export const UserAvatar = ({ color, size, dropdownItems }: UserAvatarProps) => {
+const UserAvatar = ({ color, size, dropdownItems }: UserAvatarProps) => {
   type CustomToggleProps = {
     children: React.ReactNode;
     onClick: (event: unknown) => void;
@@ -54,9 +54,11 @@ export const UserAvatar = ({ color, size, dropdownItems }: UserAvatarProps) => {
 };
 
 UserAvatar.propTypes = {
-  color: PropTypes.oneOf(textColors),
+  color: oneOf(textColors),
 };
 
 UserAvatar.defaultProps = {
   color: 'text-middle',
 };
+
+export default UserAvatar;

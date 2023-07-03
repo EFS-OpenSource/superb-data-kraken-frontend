@@ -1,11 +1,13 @@
 import { useContext } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { SearchApp } from 'src/components';
-import { ActivePathContextProvider } from 'src/contexts/ActivePathContextProvider';
-import { IntlWrapperContext } from 'src/contexts/IntlProviderWrapper';
-import { IsExpandedContextProvider } from 'src/contexts/IsExpandedContextProvider';
-import { Layout } from 'src/router/Layout/Layout';
-import { HomePage, OpenSearchApp, ArgoWorkflow } from 'src/views/';
+import { SearchApp } from '@components/index';
+import {
+  ActivePathContextProvider,
+  IntlWrapperContext,
+  IsExpandedContextProvider,
+} from '@contexts/index';
+import { Layout } from '@router/index';
+import { HomePage, OpenSearchApp, ArgoWorkflow } from '@views/index';
 
 function SdkRouter() {
   const { setLanguage } = useContext(IntlWrapperContext);

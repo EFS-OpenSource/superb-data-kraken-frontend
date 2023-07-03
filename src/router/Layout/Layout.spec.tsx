@@ -1,10 +1,19 @@
 import { render } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import Layout from './Layout';
+import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 
-import { Layout } from './Layout';
+describe('SdkRouter', () => {
+  it('should redirect unauthenticated request to LoginPage', () => {
+    const onLanguageChange = jest.fn();
 
-describe('Layout', () => {
-  it('should render successfully', () => {
-    const { baseElement } = render(<Layout />);
+    const { baseElement } = render(
+      <MemoryRouter initialEntries={['/home/overview']}>
+        <TestWrapper>
+          <Layout onLanguageChange={onLanguageChange} />
+        </TestWrapper>
+      </MemoryRouter>,
+    );
     expect(baseElement).toBeTruthy();
   });
 });

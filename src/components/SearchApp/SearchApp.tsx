@@ -1,10 +1,9 @@
-/* eslint-disable-next-line */
-export interface SearchAppProps {}
-
-export function SearchApp(props: SearchAppProps) {
+function SearchApp() {
   return (
     <div>
       <h1>Welcome to SearchApp!</h1>
     </div>
   );
 }
+
+export default SearchApp;

@@ -1,4 +1,4 @@
-import { textColors } from '../../../types/colorTypes';
+import { textColors } from '@customTypes/colorTypes';
 
 interface SDKIconsProp {
   type: 'SuperbDataKraken' | 'SDK' | 'Logo';
@@ -6,7 +6,7 @@ interface SDKIconsProp {
   color?: (typeof textColors)[number];
 }
 
-export const DashboardLogos = ({ type, size, color }: SDKIconsProp) => {
+const NavbarLogos = ({ type, size, color }: SDKIconsProp) => {
   const SDKIcon = (
     <div className={`${color} d-flex justify-content-center`}>
       <svg
@@ -123,3 +123,5 @@ export const DashboardLogos = ({ type, size, color }: SDKIconsProp) => {
   }
   return LogoIcon;
 };
+
+export default NavbarLogos;

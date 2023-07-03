@@ -14,7 +14,16 @@
     "skipDefaultLibCheck": true,
     "resolveJsonModule": true,
     "baseUrl": ".",
-    "paths": {},
+    "paths": {
+      "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@customTypes/*": ["src/customTypes/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@router/*": ["./src/router/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@views/*": ["./src/views/*"]
+    },
     "jsx": "react-jsx",
     "allowJs": false,
     "esModuleInterop": false,
@@ -22,6 +31,7 @@
     "strict": true,
     "types": ["vite/client", "vitest"]
   },
+
   "files": [],
   "include": ["src/**/*.{ts, tsx, js, jsx}"],
   "references": [
@@ -30,9 +40,6 @@
     },
     {
       "path": "./tsconfig.spec.json"
-    },
-    {
-      "path": "./.storybook/tsconfig.json"
     }
   ],
   "compileOnSave": false,

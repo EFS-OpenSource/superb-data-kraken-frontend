@@ -1,12 +1,12 @@
 import { Nav } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
-export interface SecondaryTabProps {
+interface SecondaryTabProps {
   tab: string;
   disabled?: boolean;
 }
 
-export const SecondaryTab = ({ tab, disabled }: SecondaryTabProps) => {
+const SecondaryTab = ({ tab, disabled }: SecondaryTabProps) => {
   const { formatMessage } = useIntl();
 
   return (
@@ -21,3 +21,5 @@ export const SecondaryTab = ({ tab, disabled }: SecondaryTabProps) => {
     </Nav.Item>
   );
 };
+
+export default SecondaryTab;

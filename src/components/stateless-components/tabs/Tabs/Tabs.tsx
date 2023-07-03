@@ -1,10 +1,10 @@
 import { Tab, Nav } from 'react-bootstrap';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { PrimaryTab } from '../PrimaryTab/PrimaryTab';
-import { SecondaryTab } from '../SecondaryTab/SecondaryTab';
-import { Tab as TabType } from '../../../../types/tabs';
+import { Tab as TabType } from '@customTypes/tabs';
+import PrimaryTab from '../PrimaryTab/PrimaryTab';
+import SecondaryTab from '../SecondaryTab/SecondaryTab';
 
-export interface TabsProps {
+interface TabsProps {
   tabs: TabType[];
   className?: string | undefined;
   variant?: 'tabs' | 'pills' | undefined;
@@ -13,7 +13,7 @@ export interface TabsProps {
   disabledStyle?: string;
 }
 
-export const Tabs = ({
+const Tabs = ({
   tabs,
   className,
   variant,
@@ -67,3 +67,5 @@ export const Tabs = ({
     </Tab.Container>
   );
 };
+
+export default Tabs;

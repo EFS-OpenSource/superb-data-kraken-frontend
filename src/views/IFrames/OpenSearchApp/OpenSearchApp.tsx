@@ -1,10 +1,9 @@
-/* eslint-disable-next-line */
-export interface OpenSearchAppProps {}
-
-export function OpenSearchApp(props: OpenSearchAppProps) {
+function OpenSearchApp() {
   return (
     <div>
       <h1>Welcome to OpenSearchApp!</h1>
     </div>
   );
 }
+
+export default OpenSearchApp;

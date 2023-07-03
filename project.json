@@ -86,43 +86,7 @@
         "buildTarget": "nx-test2:build"
       }
     },
-    "storybook": {
-      "executor": "@nx/storybook:storybook",
-      "options": {
-        "port": 4400,
-        "configDir": "./.storybook"
-      },
-      "configurations": {
-        "ci": {
-          "quiet": true
-        }
-      }
-    },
-    "build-storybook": {
-      "executor": "@nx/storybook:build",
-      "outputs": ["{options.outputDir}"],
-      "options": {
-        "outputDir": "dist/storybook/nx-test2",
-        "configDir": "./.storybook"
-      },
-      "configurations": {
-        "ci": {
-          "quiet": true
-        }
-      }
-    },
-    "static-storybook": {
-      "executor": "@nx/web:file-server",
-      "options": {
-        "buildTarget": "nx-test2:build-storybook",
-        "staticFilePath": "dist/storybook/nx-test2"
-      },
-      "configurations": {
-        "ci": {
-          "buildTarget": "nx-test2:build-storybook:ci"
-        }
-      }
-    },
+
     "tags": {}
   }
 }

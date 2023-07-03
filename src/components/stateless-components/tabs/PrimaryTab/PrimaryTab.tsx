@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 
-export interface PrimaryTabProps {
+interface PrimaryTabProps {
   tab: string;
   activePath?: string;
   activeStyle: string | undefined;
@@ -14,7 +14,7 @@ export interface PrimaryTabProps {
   tooltipMessage?: string;
 }
 
-export const PrimaryTab = ({
+const PrimaryTab = ({
   tab,
   activePath,
   activeStyle,
@@ -59,3 +59,5 @@ export const PrimaryTab = ({
     TabComponent
   );
 };
+
+export default PrimaryTab;

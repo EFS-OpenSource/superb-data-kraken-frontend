@@ -11,7 +11,8 @@
           "e2e",
           "build-storybook"
         ],
-        "accessToken": "OGQ0MjcyM2ItMTU2NS00ZWM0LTlmODItYjc0NWE1YTA3NzBkfHJlYWQtd3JpdGU="
+        "accessToken": "OGQ0MjcyM2ItMTU2NS00ZWM0LTlmODItYjc0NWE1YTA3NzBkfHJlYWQtd3JpdGU=",
+        "neverConnectToCloud": true
       }
     }
   },

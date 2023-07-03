@@ -5,9 +5,10 @@ interface IsExpandedContextProps {
   updateIsExpanded: (isExpanded: boolean) => void;
 }
 
-export const IsExpandedContext = createContext<IsExpandedContextProps>(
-  {} as any,
-);
+export const IsExpandedContext = createContext<IsExpandedContextProps>({
+  isExpanded: false,
+  updateIsExpanded: (isExpanded = false) => isExpanded,
+});
 
 export const IsExpandedContextProvider = ({
   children,

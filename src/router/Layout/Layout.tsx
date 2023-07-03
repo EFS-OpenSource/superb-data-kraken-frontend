@@ -15,14 +15,9 @@ import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
 // import { useGetAllRoles } from '@e-fs-frontend-applications/apps/sdk-frontend/src/utils/getUserRoles'
 // import { SpaceRoleType } from '@e-fs-frontend-applications/apps/sdk-frontend/src/types/spaceTypes'
-import {
-  UserAvatar,
-  ApplicationAvatar,
-  DashboardLogos,
-} from '../../components';
-import { IsExpandedContext } from '../../contexts/IsExpandedContextProvider';
-import { ActivePathContext } from '../../contexts/ActivePathContextProvider';
-import { appPageInfo } from '../../assets/PagesInfo';
+import { UserAvatar, ApplicationAvatar, NavbarLogos } from '@components/index';
+import { IsExpandedContext, ActivePathContext } from '@contexts/index';
+import { appPageInfo } from '@assets/index';
 // import RestErrorMocker from '../testing/RestErrorMocker'
 // import { FeatureFlags } from '../contexts/FeatureContextProvider'
 
@@ -30,7 +25,7 @@ interface LayoutProps {
   onLanguageChange: (language: string) => void;
 }
 
-export const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
+const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
   // const { featureFlag } = useContext(FeatureFlags)
   // const { keycloak } = useKeycloak()
   const { formatMessage } = useIntl();
@@ -82,14 +77,20 @@ export const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
               onClick={() => onChangeActivePath('/home/*')}
             >
               {isExpanded ? (
-                <DashboardLogos type="SDK" size="133.5px" color="text-light" />
+                <NavbarLogos type="SDK" size="133.5px" color="text-light" />
               ) : (
-                <DashboardLogos type="Logo" size="60px" color="text-light" />
+                <NavbarLogos type="Logo" size="60px" color="text-light" />
               )}
             </Link>
           </Row>
           {/* -- Avatar ------------------------------------------------------------ */}
-          <Row className="mx-0 px-0 mt-4 mb-7 justify-content-center">
+          <Row
+            className={
+              isExpanded
+                ? 'mx-7 px-0 mt-4 mb-7 justify-content-center'
+                : 'mx-2 px-0 mt-4 mb-7 justify-content-center'
+            }
+          >
             <UserAvatar
               size={40}
               color="text-light"
@@ -140,12 +141,14 @@ export const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
                   </Tooltip>
                 }
               >
-                <Row
-                  className={isExpanded ? 'mx-0 mb-4' : 'ml-4 mr-0 pl-2 mb-5'}
-                >
+                <Row className={isExpanded ? 'mx-0 mb-4' : 'mb-5 m-auto'}>
                   <Col
                     className="p-0"
-                    xs={isExpanded ? { span: 2, offset: 2 } : { span: 8 }}
+                    xs={
+                      isExpanded
+                        ? { span: 2, offset: 2 }
+                        : { span: 2, offset: 4 }
+                    }
                   >
                     {Object.keys(spaceRoles).length === 0 &&
                     nameShort === 'Search.name-short' ? (
@@ -168,7 +171,7 @@ export const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
                     )}
                   </Col>
                   {isExpanded && (
-                    <Col className="pl-0 pr-0 text-decoration-none">
+                    <Col className="pl-0 pr-0 pt-1 text-decoration-none">
                       <Link
                         to={path}
                         onClick={() => onChangeActivePath(path)}
@@ -194,7 +197,9 @@ export const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
             >
               <Col
                 className="p-0"
-                xs={isExpanded ? { span: 2, offset: 5 } : { span: 12 }}
+                xs={
+                  isExpanded ? { span: 2, offset: 5 } : { span: 2, offset: 4 }
+                }
               >
                 <div>
                   {isExpanded ? (
@@ -223,3 +228,5 @@ export const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
     </Container>
   );
 };
+
+export default Layout;

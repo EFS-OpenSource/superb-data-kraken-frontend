@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import DashboardLogos from './DashboardLogos';
+import NavbarLogos from './NavbarLogos';
 
 describe('DashboardLogos', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<DashboardLogos />);
+    const { baseElement } = render(<NavbarLogos type="SDK" />);
     expect(baseElement).toBeTruthy();
   });
 });

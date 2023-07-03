@@ -14,7 +14,7 @@ describe('SecondaryTab', () => {
       <IntlProvider
         locale="de"
         defaultLocale="de"
-        messages={(messages['de'] as any) ?? messages.de}
+        messages={(messages['de'] as Record<string, string>) ?? messages.de}
       >
         <SecondaryTab tab="AppPage.Overview" />
       </IntlProvider>,

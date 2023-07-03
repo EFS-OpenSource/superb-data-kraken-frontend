@@ -1,12 +1,12 @@
 import { CSSProperties } from 'react';
 import { IconType } from 'react-icons/lib';
 import { useIntl } from 'react-intl';
-import PropTypes from 'prop-types';
+import PropTypes, { number, oneOf } from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Placement } from 'react-bootstrap/esm/types';
-import { textColors, TextColor } from '../../../types/colorTypes';
+import { textColors, TextColor } from '@customTypes/colorTypes';
 
-export interface IconProps {
+interface IconProps {
   ariaLabel?: string;
   icon: IconType;
   size?: number;
@@ -19,7 +19,7 @@ export interface IconProps {
   toolptipPlacement?: Placement | undefined;
 }
 
-export const Icon = ({
+const Icon = ({
   ariaLabel,
   icon,
   size,
@@ -67,9 +67,9 @@ export const Icon = ({
 };
 
 Icon.propTypes = {
-  size: PropTypes.number,
-  color: PropTypes.oneOf(textColors),
-  type: PropTypes.oneOf(['icon', 'button']),
+  size: number,
+  color: oneOf(textColors),
+  type: oneOf(['icon', 'button']),
 };
 
 Icon.defaultProps = {
@@ -78,3 +78,5 @@ Icon.defaultProps = {
   type: 'icon',
   toolptipPlacement: 'top',
 };
+
+export default Icon;

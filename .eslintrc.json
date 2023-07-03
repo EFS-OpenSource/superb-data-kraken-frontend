@@ -21,13 +21,13 @@
         "namedComponents": ["arrow-function", "function-declaration"]
       }
     ],
-    "import/prefer-default-export": "off"
+    "import/newline-after-import": "off"
+    // "import/prefer-default-export": "off"
   },
   "root": true,
   // ignore test files
   "ignorePatterns": [
     "src/**/*.spec.tsx",
-    "src/**/*.stories.tsx",
     "*.config.ts",
     "*.preset.js",
     "tsconfig.json",
