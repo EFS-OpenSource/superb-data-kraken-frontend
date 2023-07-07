@@ -72,6 +72,7 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
             }
           >
             <Link
+              data-testid="logo"
               to="/home"
               className="pointer text-center w-100"
               onClick={() => onChangeActivePath('/home/*')}
@@ -92,6 +93,7 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
             }
           >
             <UserAvatar
+              dataTestId="user-avatar"
               size={40}
               color="text-light"
               dropdownItems={
@@ -104,6 +106,7 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
                   <Dropdown.Divider />
                   <Dropdown.Item>
                     <Button
+                      aria-label="select-de"
                       className="mr-1"
                       size="sm"
                       variant={languageActive ? 'primary' : 'middle'}
@@ -112,6 +115,7 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
                       DE
                     </Button>
                     <Button
+                      aria-label="select-en"
                       size="sm"
                       variant={!languageActive ? 'primary' : 'middle'}
                       onClick={() => handleLanguageSelect('en')}
@@ -161,7 +165,11 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
                         }}
                       />
                     ) : (
-                      <Link to={path} onClick={() => onChangeActivePath(path)}>
+                      <Link
+                        data-testid="navbar-icon"
+                        to={path}
+                        onClick={() => onChangeActivePath(path)}
+                      >
                         <ApplicationAvatar
                           icon={icon}
                           size={32}
@@ -191,6 +199,7 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
           {/* -- Back button ----------------------------------------------------------- */}
           <Container className="position-absolute" style={{ bottom: 35 }}>
             <Row
+              data-testid="expand-toggler"
               className={isExpanded ? '' : 'ml-3'}
               onClick={() => updateIsExpanded(handleToggler(isExpanded))}
               style={{ minHeight: '30px' }}
