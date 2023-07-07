@@ -6,12 +6,18 @@ import PropTypes, { oneOf } from 'prop-types';
 import { Icon } from '@components/index';
 
 interface UserAvatarProps {
+  dataTestId: string;
   size: number;
   color?: TextColor;
   dropdownItems: ReactNode;
 }
 
-const UserAvatar = ({ color, size, dropdownItems }: UserAvatarProps) => {
+const UserAvatar = ({
+  dataTestId,
+  color,
+  size,
+  dropdownItems,
+}: UserAvatarProps) => {
   type CustomToggleProps = {
     children: React.ReactNode;
     onClick: (event: unknown) => void;
@@ -44,7 +50,7 @@ const UserAvatar = ({ color, size, dropdownItems }: UserAvatarProps) => {
   CustomToggle.displayName = 'CustomToggle';
 
   return (
-    <div className="d-flex align-items-center">
+    <div data-testid={dataTestId} className="d-flex align-items-center">
       <Dropdown>
         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" />
         <Dropdown.Menu>{dropdownItems}</Dropdown.Menu>
