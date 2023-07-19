@@ -5,6 +5,10 @@ import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 import { act } from 'react-dom/test-utils';
 import React from 'react';
 
+jest.mock('@axa-fr/react-oidc', () => ({
+  useOidc: () => ({ logout: jest.fn() }),
+}));
+
 describe('Navbar/Layout', () => {
   it('should render correctly', () => {
     const onLanguageChange = jest.fn();
@@ -137,4 +141,26 @@ describe('Navbar/Layout', () => {
       });
     });
   });
+
+  // it('should logout when the logout button is clicked', async () => {
+  //   const onLanguageChange = jest.fn();
+  //   const { logout } = require('@axa-fr/react-oidc').useOidc();
+
+  //   const { baseElement } = render(
+  //     <MemoryRouter initialEntries={['/home/overview']}>
+  //       <TestWrapper>
+  //         <Layout onLanguageChange={onLanguageChange} />
+  //       </TestWrapper>
+  //     </MemoryRouter>,
+  //   );
+  //   expect(baseElement).toBeTruthy();
+
+  //   const avatar = screen.getByTestId('user-avatar');
+  //   fireEvent.click(avatar);
+
+  //   const logoutButton = await screen.findByTestId('logout-button');
+  //   fireEvent.click(logoutButton);
+
+  //   expect(logout).toHaveBeenCalled();
+  // });
 });

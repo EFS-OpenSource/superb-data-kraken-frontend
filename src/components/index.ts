@@ -4,5 +4,14 @@ import UserAvatar from './stateless-components/UserAvatar/UserAvatar';
 import Tabs from './stateless-components/tabs/Tabs/Tabs';
 import NavbarLogos from './stateless-components/NavbarLogos/NavbarLogos';
 import SearchApp from './SearchApp/SearchApp';
+import LoadingIndicator from './stateless-components/LoadingIndicator/LoadingIndicator';
 
-export { ApplicationAvatar, Icon, UserAvatar, Tabs, NavbarLogos, SearchApp };
+export {
+  ApplicationAvatar,
+  Icon,
+  UserAvatar,
+  Tabs,
+  NavbarLogos,
+  SearchApp,
+  LoadingIndicator,
+};

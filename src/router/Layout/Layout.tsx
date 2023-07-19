@@ -8,8 +8,8 @@ import {
   OverlayTrigger,
   Tooltip,
 } from 'react-bootstrap';
-import { Link, Outlet } from 'react-router-dom';
-// import { useKeycloak } from '@react-keycloak/web'
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useOidc } from '@axa-fr/react-oidc';
 import { useIntl } from 'react-intl';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 
@@ -33,9 +33,11 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
 
   // CAUTION: Placeholder
   const spaceRoles: Record<string, any> = ['hello'];
+  const { logout } = useOidc();
+  const location = useLocation();
 
   // const logout = useCallback(() => {
-  //   keycloak?.logout();
+  //   logout();
   // }, [keycloak]);
 
   const { isExpanded, updateIsExpanded } = useContext(IsExpandedContext);
@@ -50,7 +52,7 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
   const handleToggler = (value: boolean): boolean => !value;
 
   return (
-    <Container fluid className="m-0 p-0">
+    <Container fluid className="m-0 p-0" data-testid="layout">
       <Row className="m-0 p-0">
         {/* -- Navigation Bar ----------------------------------------------------------- */}
         <Col
@@ -98,11 +100,14 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
               color="text-light"
               dropdownItems={
                 <>
-                  {/* <Dropdown.Item onClick={logout}>
+                  <Dropdown.Item
+                    data-testid="logout-button"
+                    onClick={() => logout(`${location.pathname}`)}
+                  >
                     {formatMessage({
                       id: 'MainHeader.logout-button',
                     })}
-                  </Dropdown.Item> */}
+                  </Dropdown.Item>
                   <Dropdown.Divider />
                   <Dropdown.Item>
                     <Button
