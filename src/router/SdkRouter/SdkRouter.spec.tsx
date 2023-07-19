@@ -3,6 +3,9 @@ import { MemoryRouter } from 'react-router-dom';
 import SdkRouter from './SdkRouter';
 import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 
+jest.mock('@axa-fr/react-oidc', () => ({
+  useOidc: () => ({ useOidc: jest.fn() }),
+}));
 describe('SdkRouter', () => {
   it('should render successfully', () => {
     const { baseElement } = render(

@@ -16,11 +16,12 @@ jest.mock('react-router-dom', () => ({
 describe('LoginPage Component', () => {
   const loginMock = jest.fn();
   const navigateMock = jest.fn();
+  const { login } = require('@axa-fr/react-oidc').useOidc();
 
   beforeEach(() => {
     (useOidc as jest.Mock).mockReturnValue({
       isAuthenticated: false,
-      login: loginMock,
+      login,
     });
     (useNavigate as jest.Mock).mockReturnValue(navigateMock);
   });

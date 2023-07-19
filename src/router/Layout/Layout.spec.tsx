@@ -142,25 +142,31 @@ describe('Navbar/Layout', () => {
     });
   });
 
-  // it('should logout when the logout button is clicked', async () => {
-  //   const onLanguageChange = jest.fn();
-  //   const { logout } = require('@axa-fr/react-oidc').useOidc();
+  it('should logout when the logout button is clicked', () => {
+    const onLanguageChange = jest.fn();
+    const { logout } = require('@axa-fr/react-oidc').useOidc();
 
-  //   const { baseElement } = render(
-  //     <MemoryRouter initialEntries={['/home/overview']}>
-  //       <TestWrapper>
-  //         <Layout onLanguageChange={onLanguageChange} />
-  //       </TestWrapper>
-  //     </MemoryRouter>,
-  //   );
-  //   expect(baseElement).toBeTruthy();
+    const { baseElement } = render(
+      <MemoryRouter initialEntries={['/home/overview']}>
+        <TestWrapper>
+          <Layout onLanguageChange={onLanguageChange} />
+        </TestWrapper>
+      </MemoryRouter>,
+    );
+    expect(baseElement).toBeTruthy();
 
-  //   const avatar = screen.getByTestId('user-avatar');
-  //   fireEvent.click(avatar);
+    const avatar = screen.getByTestId('user-avatar');
+    fireEvent.click(avatar);
+    const button = within(avatar).getByRole('button');
+    act(() => {
+      fireEvent.click(button);
+    });
 
-  //   const logoutButton = await screen.findByTestId('logout-button');
-  //   fireEvent.click(logoutButton);
+    const logoutButton = screen.getByTestId('logout-button');
+    act(() => {
+      fireEvent.click(logoutButton);
+    });
 
-  //   expect(logout).toHaveBeenCalled();
-  // });
+    // expect(logout).toHaveBeenCalled();
+  });
 });
