@@ -1,15 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useOidcUser } from '@axa-fr/react-oidc';
 import { Container } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { Tabs } from '@components/index';
 import { Tab } from '@customTypes/tabs';
-import { useOidcUser, useOidc } from '@axa-fr/react-oidc';
+import { getOrganizationsWithSpaces } from 'src/lib/organizationManager';
+import { Organization } from '@customTypes/index';
 
-function HomePage() {
+const HomePage: React.FC = () => {
   const { formatMessage } = useIntl();
   const [tabs] = useState<Tab[]>([]);
 
-  const { oidcUser, oidcUserLoadingState } = useOidcUser();
+  const { oidcUser } = useOidcUser();
+
+  const [orgs, setOrgs] = useState<Organization[]>([]);
+  useEffect(() => {
+    const fetchOrgsAndSpaces = async () => {
+      const organizationsWithSpaces = await getOrganizationsWithSpaces();
+      setOrgs(organizationsWithSpaces);
+    };
+
+    fetchOrgsAndSpaces();
+  }, []);
+
+  // const { data, isLoading, isError, error } = useQuery(
+  //   ['orgasWithSpaces'],
+  //   () => getOrganizationsWithSpaces(),
+  // );
 
   const theTabs = [
     {
@@ -17,14 +34,19 @@ function HomePage() {
       id: 'HomePage.overview',
       level: 'primary',
       content: (
-        <div className="w-100 d-flex">
-          <p className="m-auto pt-6">Test</p>
-          <div className="card text-white bg-success mb-3">
-            <div className="card-body">
-              <h5 className="card-title">User information</h5>
-              <p className="card-text">
-                {oidcUser ? JSON.stringify(oidcUser) : 'nicht eingeloggt'}
-              </p>
+        <div className="w-full">
+          <div className="w-100 d-flex">
+            <p className="m-auto pt-6">Test</p>
+          </div>
+          <div className="w-full">
+            <div className="card text-white bg-success mb-3">
+              <div className="card-body">
+                <h5 className="card-title">User information</h5>
+                <p className="card-text">
+                  {oidcUser ? JSON.stringify(oidcUser) : 'nicht eingeloggt'}
+                </p>
+                <p className="card-text">{orgs && JSON.stringify(orgs)}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -56,6 +78,6 @@ function HomePage() {
       )}
     </Container>
   );
-}
+};
 
 export default HomePage;
