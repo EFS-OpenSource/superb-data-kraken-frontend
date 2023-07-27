@@ -1,6 +1,5 @@
 import { IntlProvider } from 'react-intl';
-// import { ReactKeycloakProvider } from '@react-keycloak/web'
-// import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { OidcProvider } from '@axa-fr/react-oidc';
 import { oidcConfiguration, oidcProps } from '@utils/authConf';
 import { messagesDe, messagesEn } from '../../translations';
@@ -11,7 +10,7 @@ const messages: Record<string, unknown> = {
   en: messagesEn,
 };
 
-// const client = new QueryClient()
+// const client = new QueryClient();
 
 const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   <OidcProvider
@@ -20,8 +19,7 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
     callbackSuccessComponent={oidcProps.callbackSuccessComponent}
     authenticatingComponent={oidcProps.authenticatingComponent}
   >
-    {/* <QueryClientProvider client={client}>
-          <FeatureContextProvider> */}
+    {/* <QueryClientProvider client={client}> */}
     <IntlProvider
       locale="de"
       defaultLocale="de"
@@ -29,8 +27,7 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
     >
       {children}
     </IntlProvider>
-    {/* </FeatureContextProvider>
-     </QueryClientProvider> */}
+    {/* </QueryClientProvider> */}
   </OidcProvider>
 );
 

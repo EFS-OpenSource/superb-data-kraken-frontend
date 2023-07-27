@@ -1,5 +1,5 @@
 {
-  "name": "nx-test2",
+  "name": "SDK_Open_Source_Frontend",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "./src",
   "projectType": "application",
@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "development",
       "options": {
-        "outputPath": "dist/nx-test2"
+        "outputPath": "dist/SDK_Open_Source_Frontend"
       },
       "configurations": {
         "development": {
@@ -32,16 +32,16 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "nx-test2:build",
+        "buildTarget": "SDK_Open_Source_Frontend:build",
         "hmr": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "nx-test2:build:development",
+          "buildTarget": "SDK_Open_Source_Frontend:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "nx-test2:build:production",
+          "buildTarget": "SDK_Open_Source_Frontend:build:production",
           "hmr": false
         }
       }
@@ -50,22 +50,22 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "nx-test2:build"
+        "buildTarget": "SDK_Open_Source_Frontend:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "nx-test2:build:development"
+          "buildTarget": "SDK_Open_Source_Frontend:build:development"
         },
         "production": {
-          "buildTarget": "nx-test2:build:production"
+          "buildTarget": "SDK_Open_Source_Frontend:build:production"
         }
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["coverage/nx-test2"],
+      "outputs": ["coverage/SDK_Open_Source_Frontend"],
       "options": {
-        "reportsDirectory": "coverage/nx-test2",
+        "reportsDirectory": "coverage/SDK_Open_Source_Frontend",
         "jestConfig": "jest.config.ts",
         "passWithNoTests": true,
         "codeCoverage": true,
@@ -83,7 +83,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "nx-test2:build"
+        "buildTarget": "SDK_Open_Source_Frontend:build"
       }
     },
 

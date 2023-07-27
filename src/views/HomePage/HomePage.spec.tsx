@@ -1,11 +1,12 @@
 import { render } from '@testing-library/react';
 import TestWrapper from 'src/utils/TestWrapper/TestWrapper.spec';
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import HomePage from './HomePage';
 import { MemoryRouter } from 'react-router-dom';
 import Tabs from 'src/components/stateless-components/tabs/Tabs/Tabs';
 
 const disabledStyle = 'none';
+const client = new QueryClient();
 
 jest.mock('@axa-fr/react-oidc', () => ({
   useOidc: () => ({
@@ -45,9 +46,11 @@ describe('HomePage', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <MemoryRouter initialEntries={['/org/2/Overview']}>
-          <HomePage />
-        </MemoryRouter>
+        <QueryClientProvider client={client}>
+          <MemoryRouter initialEntries={['/org/2/Overview']}>
+            <HomePage />
+          </MemoryRouter>
+        </QueryClientProvider>
       </TestWrapper>,
     );
     expect(baseElement).toBeTruthy();
