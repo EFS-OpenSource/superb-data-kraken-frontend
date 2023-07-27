@@ -22,7 +22,8 @@
       "@hooks/*": ["./src/hooks/*"],
       "@router/*": ["./src/router/*"],
       "@utils/*": ["./src/utils/*"],
-      "@views/*": ["./src/views/*"]
+      "@views/*": ["./src/views/*"],
+      "@services/*": ["./src/services/*"]
     },
     "jsx": "react-jsx",
     "allowJs": false,

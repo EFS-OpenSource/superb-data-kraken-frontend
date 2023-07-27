@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { Tabs } from '@components/index';
 import { Tab } from '@customTypes/tabs';
-import { getOrganizationsWithSpaces } from 'src/lib/organizationManager';
+import { getOrganizationsWithSpaces } from '@services/index';
 import { Organization } from '@customTypes/index';
 
 const HomePage: React.FC = () => {

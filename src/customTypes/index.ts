@@ -4,4 +4,4 @@ export * from './tabs';
 export * from './spaceTypes';
 export * from './organizationTypes';
 export * from './userTypes';
-export * from './factories';
+export * from './factoryTypes';

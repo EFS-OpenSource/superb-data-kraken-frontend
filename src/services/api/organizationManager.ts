@@ -16,13 +16,13 @@ import {
   UserOrgaRoleType,
   Space,
   UserSpaceRoleType,
-} from '../customTypes/index';
+} from '@customTypes/index';
 import {
   postFactory,
   getFactory,
   putFactory,
   deleteFactory,
-} from '../services/api/factories';
+} from './factories';
 
 // TODO: Enviroment Variables
 // const baseURL = process.env.NX_SDK_BACKEND_URL;

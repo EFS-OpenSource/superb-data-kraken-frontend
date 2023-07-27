@@ -4,7 +4,6 @@ import { IntlProvider } from 'react-intl';
 import { OidcProvider } from '@axa-fr/react-oidc';
 import { oidcConfiguration, oidcProps } from '@utils/authConf';
 import { messagesDe, messagesEn } from '../../translations';
-// import keycloak from '../keycloak.js'
 // import { FeatureContextProvider } from '../contexts/FeatureContextProvider'
 
 const messages: Record<string, unknown> = {

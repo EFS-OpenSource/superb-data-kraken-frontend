@@ -1,4 +1,4 @@
-import { FC, useCallback, useContext, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import {
   Container,
   Row,
@@ -27,7 +27,6 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
   // const { featureFlag } = useContext(FeatureFlags)
-  // const { keycloak } = useKeycloak()
   const { formatMessage } = useIntl();
   // const spaceRoles = useGetAllRoles<SpaceRoleType>('space')
 
@@ -35,10 +34,6 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
   const spaceRoles: Record<string, any> = ['hello'];
   const { logout } = useOidc();
   const location = useLocation();
-
-  // const logout = useCallback(() => {
-  //   logout();
-  // }, [keycloak]);
 
   const { isExpanded, updateIsExpanded } = useContext(IsExpandedContext);
   const { activePath, onChangeActivePath } = useContext(ActivePathContext);

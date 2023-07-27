@@ -1,4 +1,3 @@
-import { getAxiosInstance } from './axiosService';
 import {
   AxiosOptions,
   DeleteMethod,
@@ -6,7 +5,8 @@ import {
   Params,
   PostMethod,
   ResponseError,
-} from '../../customTypes';
+} from '@customTypes/index';
+import { getAxiosInstance } from './axiosService';
 
 const getUrlHeaders = (baseURL: string | undefined): any => ({
   baseURL,

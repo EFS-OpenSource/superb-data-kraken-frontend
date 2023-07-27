@@ -1,4 +1,3 @@
-import React from 'react';
 import { useOidc } from '@axa-fr/react-oidc';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 

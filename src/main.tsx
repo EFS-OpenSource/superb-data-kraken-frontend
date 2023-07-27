@@ -10,21 +10,25 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
-root.render(
-  <OidcProvider
-    configuration={oidcConfiguration}
-    loadingComponent={oidcProps.loadingComponent}
-    callbackSuccessComponent={oidcProps.callbackSuccessComponent}
-    authenticatingComponent={oidcProps.authenticatingComponent}
-  >
-    <BrowserRouter basename={import.meta.env.DEV ? '/' : '/bla'}>
-      <StrictMode>
-        <IntlWrapper>
-          <Routes>
-            <Route path="/*" element={<SdkRouter />} />
-          </Routes>
-        </IntlWrapper>
-      </StrictMode>
-    </BrowserRouter>{' '}
-  </OidcProvider>,
-);
+if (navigator.serviceWorker.controller) {
+  root.render(
+    <OidcProvider
+      configuration={oidcConfiguration}
+      loadingComponent={oidcProps.loadingComponent}
+      callbackSuccessComponent={oidcProps.callbackSuccessComponent}
+      authenticatingComponent={oidcProps.authenticatingComponent}
+    >
+      <BrowserRouter basename={import.meta.env.DEV ? '/' : '/bla'}>
+        <StrictMode>
+          <IntlWrapper>
+            <Routes>
+              <Route path="/*" element={<SdkRouter />} />
+            </Routes>
+          </IntlWrapper>
+        </StrictMode>
+      </BrowserRouter>{' '}
+    </OidcProvider>,
+  );
+} else {
+  window.location.reload();
+}

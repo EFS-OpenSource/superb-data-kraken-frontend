@@ -17,6 +17,7 @@ export default defineConfig({
       '@router': resolve(__dirname, './src/router'),
       '@utils': resolve(__dirname, './src/utils'),
       '@views': resolve(__dirname, './src/views'),
+      '@services': resolve(__dirname, './src/services'),
     },
   },
 
