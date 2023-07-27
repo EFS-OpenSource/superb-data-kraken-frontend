@@ -3,10 +3,13 @@ import { Container } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { Tabs } from '@components/index';
 import { Tab } from '@customTypes/tabs';
+import { useOidcUser, useOidc } from '@axa-fr/react-oidc';
 
 function HomePage() {
   const { formatMessage } = useIntl();
   const [tabs] = useState<Tab[]>([]);
+
+  const { oidcUser, oidcUserLoadingState } = useOidcUser();
 
   const theTabs = [
     {
@@ -16,6 +19,14 @@ function HomePage() {
       content: (
         <div className="w-100 d-flex">
           <p className="m-auto pt-6">Test</p>
+          <div className="card text-white bg-success mb-3">
+            <div className="card-body">
+              <h5 className="card-title">User information</h5>
+              <p className="card-text">
+                {oidcUser ? JSON.stringify(oidcUser) : 'nicht eingeloggt'}
+              </p>
+            </div>
+          </div>
         </div>
       ),
       // content: isLoading ? (

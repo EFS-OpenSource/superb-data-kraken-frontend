@@ -31,7 +31,6 @@
     "strict": true,
     "types": ["vite/client", "vitest"]
   },
-
   "files": [],
   "include": ["src/**/*.{ts, tsx, js, jsx}"],
   "references": [
