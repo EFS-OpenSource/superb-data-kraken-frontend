@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useOidcUser } from '@axa-fr/react-oidc';
 import { Container } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
-import { Tabs } from '@components/index';
+import { LoadingIndicator, Tabs } from '@components/index';
 import { Tab } from '@customTypes/tabs';
 import { getOrganizationsWithSpaces } from '@services/index';
-import { Organization } from '@customTypes/index';
+import { useQuery } from '@tanstack/react-query';
 
 const HomePage: React.FC = () => {
   const { formatMessage } = useIntl();
@@ -13,27 +13,21 @@ const HomePage: React.FC = () => {
 
   const { oidcUser } = useOidcUser();
 
-  const [orgs, setOrgs] = useState<Organization[]>([]);
-  useEffect(() => {
-    const fetchOrgsAndSpaces = async () => {
-      const organizationsWithSpaces = await getOrganizationsWithSpaces();
-      setOrgs(organizationsWithSpaces);
-    };
-
-    fetchOrgsAndSpaces();
-  }, []);
-
-  // const { data, isLoading, isError, error } = useQuery(
-  //   ['orgasWithSpaces'],
-  //   () => getOrganizationsWithSpaces(),
-  // );
+  const { data, isLoading, isError, error } = useQuery(
+    ['orgasWithSpaces'],
+    () => getOrganizationsWithSpaces(),
+  );
 
   const theTabs = [
     {
       name: 'HomePage.overview',
       id: 'HomePage.overview',
       level: 'primary',
-      content: (
+
+      content: isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        // <OrgGrid username={memoToken.name} orgasWithSpaces={orgs} />
         <div className="w-full">
           <div className="w-100 d-flex">
             <p className="m-auto pt-6">Test</p>
@@ -45,17 +39,12 @@ const HomePage: React.FC = () => {
                 <p className="card-text">
                   {oidcUser ? JSON.stringify(oidcUser) : 'nicht eingeloggt'}
                 </p>
-                <p className="card-text">{orgs && JSON.stringify(orgs)}</p>
+                <p className="card-text">{data && JSON.stringify(data)}</p>
               </div>
             </div>
           </div>
         </div>
       ),
-      // content: isLoading ? (
-      //   <LoadingIndicator />
-      // ) : (
-      //   <OrgGrid username={memoToken.name} orgasWithSpaces={orgs} />
-      // ),
       path: 'overview',
     },
   ];
@@ -66,7 +55,7 @@ const HomePage: React.FC = () => {
         {formatMessage({
           id: 'HomePage.title',
         })}
-        {/* , {memoToken && memoToken.name} */}
+        {oidcUser && `, ${oidcUser.name}`}
       </h1>
       {tabs && (
         <Tabs
@@ -75,6 +64,9 @@ const HomePage: React.FC = () => {
           inactiveStyle="none ml-3 mr-4"
           className="h2"
         />
+      )}
+      {isError && error instanceof Error && (
+        <div className="w-50 text-right">Could not load data</div>
       )}
     </Container>
   );

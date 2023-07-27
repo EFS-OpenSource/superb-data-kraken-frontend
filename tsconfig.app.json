@@ -4,8 +4,6 @@
     "outDir": "./dist/out-tsc",
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    // passing the types Array empty prevents type errors from node_modules.
-    // Excluding node_modules in eslintignore and the ts.configs unfortunately doesn't do the work
     "types": ["node", "vite/client"]
   },
   // including the following files prevents "...module.scss not found" error when typechecking

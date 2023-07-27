@@ -8,15 +8,15 @@
       "executor": "@nx/cypress:cypress",
       "options": {
         "cypressConfig": "e2e/cypress.config.ts",
-        "devServerTarget": "nx-test2:serve:development",
+        "devServerTarget": "SDK_Open_Source_Frontend:serve:development",
         "testingType": "e2e"
       },
       "configurations": {
         "production": {
-          "devServerTarget": "nx-test2:serve:production"
+          "devServerTarget": "SDK_Open_Source_Frontend:serve:production"
         },
         "ci": {
-          "devServerTarget": "nx-test2:serve-static"
+          "devServerTarget": "SDK_Open_Source_Frontend:serve-static"
         }
       }
     },
@@ -29,5 +29,5 @@
     }
   },
   "tags": [],
-  "implicitDependencies": ["nx-test2"]
+  "implicitDependencies": ["SDK_Open_Source_Frontend"]
 }
