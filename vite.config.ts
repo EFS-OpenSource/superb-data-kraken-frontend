@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  cacheDir: './node_modules/.vite/nx-test2',
+  cacheDir: './node_modules/.vite/sdk-frontend-open-source',
 
   resolve: {
     alias: {
