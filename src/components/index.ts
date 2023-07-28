@@ -5,6 +5,9 @@ import Tabs from './stateless-components/tabs/Tabs/Tabs';
 import NavbarLogos from './stateless-components/NavbarLogos/NavbarLogos';
 import SearchApp from './SearchApp/SearchApp';
 import LoadingIndicator from './stateless-components/LoadingIndicator/LoadingIndicator';
+import Chip from './stateless-components/Chip/Chip';
+import CustomCardTitle from './stateless-components/CustomCard/CustomCardTitle/CustomCardTitle';
+import CustomCardBody from './stateless-components/CustomCard/CustomCardBody/CustomCardBody';
 
 export {
   ApplicationAvatar,
@@ -14,4 +17,7 @@ export {
   NavbarLogos,
   SearchApp,
   LoadingIndicator,
+  Chip,
+  CustomCardTitle,
+  CustomCardBody,
 };

@@ -21,9 +21,9 @@
       "@customTypes/*": ["src/customTypes/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@router/*": ["./src/router/*"],
+      "@services/*": ["./src/services/*"],
       "@utils/*": ["./src/utils/*"],
-      "@views/*": ["./src/views/*"],
-      "@services/*": ["./src/services/*"]
+      "@views/*": ["./src/views/*"]
     },
     "jsx": "react-jsx",
     "allowJs": false,
