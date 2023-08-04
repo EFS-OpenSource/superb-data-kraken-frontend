@@ -1,6 +1,5 @@
 import { IntlProvider } from 'react-intl';
 // import { ReactKeycloakProvider } from '@react-keycloak/web'
-
 import { messagesDe, messagesEn } from '../../translations';
 
 const messages: Record<string, unknown> = {

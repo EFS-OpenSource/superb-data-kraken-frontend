@@ -1,5 +1,4 @@
 import { IntlProvider } from 'react-intl';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { messagesDe, messagesEn } from '../../translations';
 // import { FeatureContextProvider } from '../contexts/FeatureContextProvider'
 
@@ -10,7 +9,7 @@ const messages: Record<string, unknown> = {
 
 // const client = new QueryClient();
 
-const TestWrapper = ({ children }: { children: React.ReactNode }) => (
+const TestWrapperNoOIDC = ({ children }: { children: React.ReactNode }) => (
   /* <QueryClientProvider client={client}> */
   <IntlProvider
     locale="de"
@@ -22,4 +21,4 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
   /* </QueryClientProvider> */
 );
 
-export default TestWrapper;
+export default TestWrapperNoOIDC;

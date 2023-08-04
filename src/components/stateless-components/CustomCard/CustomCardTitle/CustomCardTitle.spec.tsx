@@ -1,9 +1,10 @@
 import { Icon, Chip } from '@components/index';
 import { render } from '@testing-library/react';
-import { BsLock } from 'react-icons/bs';
+import { BsLock, BsUnlock } from 'react-icons/bs';
 import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 import CustomCardTitle from './CustomCardTitle';
 import MockOrganization from '../../../../assets/UserData';
+import { Space } from '@customTypes/index';
 
 const data = {
   name: 'Peter Parker',

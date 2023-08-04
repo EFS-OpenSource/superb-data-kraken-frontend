@@ -11,17 +11,17 @@
 /*-------------------------------------------------------------------*/
 /* Change theme-colors */
 $theme-colors: (
-    primary: $primary,
-    secondary: $secondary,
-    success: $success,
-    info: $info,
-    warning: $warning,
-    danger: $danger,
-    dark: $dark,
-    darker: $darker,
-    middle: $middle,
-    light: $light,
-    accent: $accent,
+  primary: $primary,
+  secondary: $secondary,
+  success: $success,
+  info: $info,
+  warning: $warning,
+  danger: $danger,
+  dark: $dark,
+  darker: $darker,
+  middle: $middle,
+  light: $light,
+  accent: $accent,
 );
 
 /*-------------------------------------------------------------------*/
@@ -53,11 +53,11 @@ $font-weight-base: $font-weight-local;
 $headings-font-weight: $font-weight-local;
 
 .font-weight-medium {
-    font-family: $font-family-medium-local;
+  font-family: $font-family-medium-local;
 }
 
 h1 {
-    font-family: $font-family-medium-local;
+  font-family: $font-family-medium-local;
 }
 
 $line-height-lg: $line-height-local;
@@ -68,93 +68,65 @@ $headings-line-height: $line-height-local; /* According to efs design specs */
 /*-------------------------------------------------------------------*/
 /* Change grid breakpoint */
 $grid-breakpoints: (
-    xs: $grid-breakpoint-xs,
-    sm: $grid-breakpoint-sm,
-    md: $grid-breakpoint-md,
-    lg: $grid-breakpoint-lg,
-    xl: $grid-breakpoint-xl,
-    xxl: $grid-breakpoint-xxl,
+  xs: $grid-breakpoint-xs,
+  sm: $grid-breakpoint-sm,
+  md: $grid-breakpoint-md,
+  lg: $grid-breakpoint-lg,
+  xl: $grid-breakpoint-xl,
+  xxl: $grid-breakpoint-xxl,
 );
 
 $container-max-widths: (
-    sm: 540px,
-    md: 720px,
-    lg: 960px,
-    xl: 1312px,
-    xxl: 1531px,
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1312px,
+  xxl: 1531px,
 );
 
 /*-------------------------------------------------------------------*/
 /* Add spacer values */
 $spacers: (
-    0: 0,
-    1: (
-        $spacer * 0.25,
-    ),
-    2: (
-        $spacer * 0.5,
-    ),
-    3: $spacer,
-    4: (
-        $spacer * 1.5,
-    ),
-    5: (
-        $spacer * 3,
-    ),
-    6: (
-        $spacer * 4,
-    ),
-    7: (
-        $spacer * 5,
-    ),
-    8: (
-        $spacer * 6.25,
-    ),
-    9: (
-        $spacer * 7.5,
-    ),
-    10: (
-        $spacer * 9.375,
-    ),
-    11: (
-        $spacer * 11.719,
-    ),
-    12: (
-        $spacer * 14.648,
-    ),
-    13: (
-        $spacer * 18.311,
-    ),
-    14: (
-        $spacer * 22.888,
-    ),
-    15: (
-        $spacer * 28.61,
-    ),
+  0: 0,
+  1: $spacer * 0.25,
+  2: $spacer * 0.5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+  6: $spacer * 4,
+  7: $spacer * 5,
+  8: $spacer * 6.25,
+  9: $spacer * 7.5,
+  10: $spacer * 9.375,
+  11: $spacer * 11.719,
+  12: $spacer * 14.648,
+  13: $spacer * 18.311,
+  14: $spacer * 22.888,
+  15: $spacer * 28.61,
 );
 
 $sizes: (
-    5: 5%,
-    10: 12%,
-    15: 15%,
-    20: 20%,
-    25: 25%,
-    30: 30%,
-    35: 35%,
-    40: 40%,
-    45: 45%,
-    50: 50%,
-    55: 55%,
-    60: 60%,
-    65: 65%,
-    70: 70%,
-    75: 75%,
-    80: 80%,
-    85: 85%,
-    90: 90%,
-    95: 95%,
-    100: 100%,
-    auto: auto,
+  5: 5%,
+  10: 12%,
+  15: 15%,
+  20: 20%,
+  25: 25%,
+  30: 30%,
+  35: 35%,
+  40: 40%,
+  45: 45%,
+  50: 50%,
+  55: 55%,
+  60: 60%,
+  65: 65%,
+  70: 70%,
+  75: 75%,
+  80: 80%,
+  85: 85%,
+  90: 90%,
+  95: 95%,
+  100: 100%,
+  auto: auto,
 );
 
 /*-------------------------------------------------------------------*/
@@ -169,9 +141,9 @@ $sizes: (
 /* Changing global css parameter */
 
 body {
-    overflow-x: hidden;
+  overflow-x: hidden;
 }
 
 h6 {
-    margin: 0px;
+  margin: 0px;
 }
