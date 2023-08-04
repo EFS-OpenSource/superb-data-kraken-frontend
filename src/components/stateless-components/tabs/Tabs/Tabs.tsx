@@ -26,7 +26,7 @@ const Tabs = ({
   return (
     <Tab.Container>
       <Nav
-        className={`ml-0 text-primary flex-nowrap pl-lg-0 pl-0 ${className}`}
+        className={`ms-0 text-primary flex-nowrap ps-lg-0 ps-0 ${className}`}
         variant={variant}
         defaultActiveKey={tabs[0].path}
       >
@@ -54,7 +54,7 @@ const Tabs = ({
         )}
       </Nav>
       <Tab.Content
-        className="ml-0 flex-grow-1"
+        className="ms-0 flex-grow-1"
         style={{ height: `calc(100%-60px)` }}
       >
         <Routes>

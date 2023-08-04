@@ -107,7 +107,7 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
                   <Dropdown.Item>
                     <Button
                       aria-label="select-de"
-                      className="mr-1"
+                      className="me-1"
                       size="sm"
                       variant={languageActive ? 'primary' : 'middle'}
                       onClick={() => handleLanguageSelect('de')}
@@ -179,7 +179,7 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
                     )}
                   </Col>
                   {isExpanded && (
-                    <Col className="pl-0 pr-0 pt-1 text-decoration-none">
+                    <Col className="ps-0 pe-0 pt-1 text-decoration-none">
                       <Link
                         to={path}
                         onClick={() => onChangeActivePath(path)}
@@ -200,14 +200,14 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
           <Container className="position-absolute" style={{ bottom: 35 }}>
             <Row
               data-testid="expand-toggler"
-              className={isExpanded ? '' : 'ml-3'}
+              className={isExpanded ? '' : 'ms-3'}
               onClick={() => updateIsExpanded(handleToggler(isExpanded))}
               style={{ minHeight: '30px' }}
             >
               <Col
                 className="p-0"
                 xs={
-                  isExpanded ? { span: 2, offset: 5 } : { span: 2, offset: 4 }
+                  isExpanded ? { span: 2, offset: 5 } : { span: 2, offset: 1 }
                 }
               >
                 <div>

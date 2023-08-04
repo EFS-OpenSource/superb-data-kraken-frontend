@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import PropTypes, { bool, oneOf, shape, string } from 'prop-types';
+import { bool, oneOf, shape, string } from 'prop-types';
 import { useIntl } from 'react-intl';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { colors } from '@customTypes/colorTypes';
@@ -79,7 +79,7 @@ const Chip: FC<ChipProps> = ({
       aria-label={ariaLabel}
       variant={state?.isActive ? activeColor : inactiveColor}
       onClick={onClick}
-      className={`${className} mr-3 py-0 px-2`}
+      className={`${className} me-3 py-0 px-2`}
       disabled={disabled}
       style={
         disabled
@@ -95,13 +95,13 @@ const Chip: FC<ChipProps> = ({
     >
       {iconLeft ? (
         <div className="d-flex align-items-center justify-content-center">
-          {icon && <span className="mr-1">{icon}</span>}
+          {icon && <span className="me-1">{icon}</span>}
           <span>{`${text || 'ChipText'}`}</span>
         </div>
       ) : (
         <div className="d-flex align-items-center justify-content-center">
           <span>{`${text || 'ChipText'} `}</span>
-          {icon && <span className="ml-1">{icon}</span>}
+          {icon && <span className="ms-1">{icon}</span>}
         </div>
       )}
     </Button>

@@ -72,7 +72,7 @@ const CustomCardTitleLayout = ({
   return (
     <>
       <div className="mt-2 mb-3 d-flex align-items-center">
-        <h3 className="font-weight-medium mb-0 mr-4">
+        <h3 className="font-weight-medium mb-0 me-4">
           {data.displayName && (
             <div>
               {data.displayName.length > 20
@@ -93,7 +93,7 @@ const CustomCardTitleLayout = ({
             icon={iconState}
             tooltip={tooltipState}
             size={26}
-            className="ml-1 mr-4"
+            className="ms-1 me-4"
             color={
               dataForState().state === 'DELETION'
                 ? 'text-danger'
@@ -120,7 +120,7 @@ const CustomCardTitleLayout = ({
           disabled
         />
         {/* {featureFlag.requestPermissions && (
-          <div className="ml-auto mr-2">
+          <div className="ms-auto me-2">
             <InputSelectPopover
               id="accessPopover"
               placement="bottom"
@@ -139,7 +139,7 @@ const CustomCardTitleLayout = ({
               })}
               handleShow={handleShow}
               popoverOpenButton={openPopoverButton}
-              openButtonClassName="p-0 ml-auto mr-0"
+              openButtonClassName="p-0 ms-auto me-0"
               dropdownOptions={
                 cardType === 'space' ? userSpaceRoleTypes : userOrgaRoleTypes
               }

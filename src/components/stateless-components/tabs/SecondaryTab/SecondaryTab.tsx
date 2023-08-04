@@ -10,7 +10,7 @@ const SecondaryTab = ({ tab, disabled }: SecondaryTabProps) => {
   const { formatMessage } = useIntl();
 
   return (
-    <Nav.Item className="text-left mr-4 tab-width">
+    <Nav.Item className="text-left me-4 tab-width">
       <Nav.Link disabled={disabled}>
         <div>
           {formatMessage({

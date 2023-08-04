@@ -8,6 +8,9 @@ import LoadingIndicator from './stateless-components/LoadingIndicator/LoadingInd
 import Chip from './stateless-components/Chip/Chip';
 import CustomCardTitle from './stateless-components/CustomCard/CustomCardTitle/CustomCardTitle';
 import CustomCardBody from './stateless-components/CustomCard/CustomCardBody/CustomCardBody';
+import CustomCard from './stateless-components/CustomCard/CustomCard/CustomCard';
+import InputText from './stateless-components/InputText/InputText';
+import ChipGroup from './stateless-components/ChipGroup/ChipGroup';
 
 export {
   ApplicationAvatar,
@@ -20,4 +23,7 @@ export {
   Chip,
   CustomCardTitle,
   CustomCardBody,
+  CustomCard,
+  InputText,
+  ChipGroup,
 };
