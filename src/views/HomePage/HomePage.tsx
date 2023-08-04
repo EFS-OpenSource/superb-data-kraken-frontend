@@ -37,9 +37,7 @@ const HomePage = () => {
           name: 'HomePage.overview',
           id: 'HomePage.overview',
           level: 'primary',
-          content: isLoading ? (
-            <LoadingIndicator />
-          ) : (
+          content: (
             <OrgGrid
               username={memoToken.name as string}
               orgasWithSpaces={orgs}
@@ -68,6 +66,7 @@ const HomePage = () => {
       // }
       setTabs([...theTabs]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, orgs]);
 
   return (
@@ -86,6 +85,7 @@ const HomePage = () => {
           className="h2"
         />
       )}
+      {isLoading && <LoadingIndicator />}
       {isError && error instanceof Error && (
         <div className="w-50 text-right">Could not load data</div>
       )}
