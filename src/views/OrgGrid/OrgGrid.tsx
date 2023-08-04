@@ -297,7 +297,7 @@ const OrgGrid = ({ username, orgasWithSpaces, userInfo }: OrgGridProps) => {
           onChange={onFilterChipHandler}
         />
       </Col>
-      <Row className="container ps-3">
+      <Row className="ps-3">
         {filteredOrganizations.length < 1 && filteredSpaces.length < 1 && (
           <h1 className="text-center pt-8 text-lg">NO DATA FOUND</h1>
         )}
