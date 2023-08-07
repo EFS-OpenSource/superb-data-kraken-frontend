@@ -6,6 +6,18 @@ import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   cacheDir: './node_modules/.vite/sdk-frontend-open-source',
+  //TODO: Following fixes use of process.env rather than import.meta.env, which fails in test with jest,
+  // but seems to work only in development and not after build (process.env is undefined)
+  define: {
+    'process.env': process.env,
+    // Does the following fix the process.env is undefined after build?
+    'import.meta.env.VITE_WORKFLOW_URL': JSON.stringify(
+      process.env.VITE_WORKFLOW_URL,
+    ),
+    'import.meta.env.VITE_DASHBOARD_URL': JSON.stringify(
+      process.env.VITE_DASHBOARD_URL,
+    ),
+  },
 
   resolve: {
     alias: {

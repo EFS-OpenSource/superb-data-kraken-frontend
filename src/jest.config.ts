@@ -3,6 +3,7 @@ import type { JestConfigWithTsJest } from 'ts-jest';
 const config: JestConfigWithTsJest = {
   displayName: 'nx-test2',
   preset: '../jest.preset.js',
+
   transform: {
     '^.+\\.[tj]sx?$': [
       'ts-jest',
