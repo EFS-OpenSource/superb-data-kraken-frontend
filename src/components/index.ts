@@ -11,6 +11,8 @@ import CustomCardBody from './stateless-components/CustomCard/CustomCardBody/Cus
 import CustomCard from './stateless-components/CustomCard/CustomCard/CustomCard';
 import InputText from './stateless-components/InputText/InputText';
 import ChipGroup from './stateless-components/ChipGroup/ChipGroup';
+import CustomHeader from './stateless-components/CustomHeader/CustomHeader';
+import DashboardLogos from './stateless-components/DashboardLogos/DashboardLogos';
 
 export {
   ApplicationAvatar,
@@ -26,4 +28,6 @@ export {
   CustomCard,
   InputText,
   ChipGroup,
+  CustomHeader,
+  DashboardLogos,
 };

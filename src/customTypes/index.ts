@@ -6,3 +6,4 @@ export * from './organizationTypes';
 export * from './userTypes';
 export * from './factoryTypes';
 export * from './appTypes';
+export * from './ManageOrgaSpaceModal';
