@@ -146,6 +146,7 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
     !spaceData?.displayName && spaceData?.name && spaceData.name.length > 40
       ? `${spaceData.name.substring(0, 40)}...`
       : spaceData?.name;
+
   const userOrgaRoles = useGetRoles<OrgaRoleType>(
     orgData?.name,
     'organization',

@@ -25,7 +25,7 @@ const OverviewApp: React.FC<OverviewAppType> = ({ orgData, spaceData }) => {
   };
 
   return (
-    <Container fluid className="my-6 px-8 overflow-hidden">
+    <Container fluid className="my-6 px-8">
       <Col md="auto">
         <Row className="mb-3">
           <Col>

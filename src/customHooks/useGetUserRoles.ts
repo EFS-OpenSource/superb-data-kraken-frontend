@@ -60,11 +60,9 @@ export const useGetRoles = <T>(name: string | undefined, type: StorageType) => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      setUserRoles(
-        parseRoles<T>(idTokenPayload.roles, idTokenPayload.name, type),
-      );
+      setUserRoles(parseRoles<T>(idTokenPayload.roles, name as string, type));
     }
-  }, [idTokenPayload.name, idTokenPayload.roles, isAuthenticated, name, type]);
+  }, [idTokenPayload.roles, isAuthenticated, name, type]);
 
   if (name) {
     return userRoles;

@@ -255,7 +255,7 @@ const AppPage = () => {
   }, [handleAppTabs, spaceID, orgData, orgaSpacesData]);
 
   return (
-    <div className="container-fluid p-0">
+    <div>
       {orgData && <AppPageHeader orgData={orgData} spaceData={spaceData} />}
       <div className="justify-content-center m-0 p-0">
         {appTabs && (

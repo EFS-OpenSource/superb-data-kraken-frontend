@@ -1,6 +1,6 @@
 function SearchApp() {
   return (
-    <div>
+    <div className="m-auto">
       <h1>Welcome to SearchApp!</h1>
     </div>
   );
