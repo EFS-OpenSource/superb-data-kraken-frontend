@@ -1,15 +1,41 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import AppPageHeader from './AppPageHeader';
-import TestWrapperNoOIDC from '@utils/TestWrapper/TestWrapperNoOIDC';
+import TestWrapper from '@utils/TestWrapper/TestWrapper';
 import MockOrganization from '../../../assets/UserData';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import 'cross-fetch/polyfill';
 
 const client = new QueryClient();
+
 describe('CustomHeader', () => {
+  jest.mock('@axa-fr/react-oidc', () => ({
+    useOidc: () => ({
+      oidcUser: {
+        profile: { sub: '123' },
+        tokens: {
+          id_token: 'abc123',
+          access_token: 'xyz456',
+          access_token_invalid: 'asd',
+        },
+      },
+      login: jest.fn(),
+      oidcLogout: jest.fn(),
+    }),
+    useOidcIdToken: () => ({
+      oidcUser: {
+        profile: { sub: '123' },
+        tokens: {
+          id_token: 'abc123',
+          access_token: 'xyz456',
+          access_token_invalid: 'asd',
+        },
+      },
+    }),
+  }));
   it('should render successfully', () => {
     const { baseElement } = render(
-      <TestWrapperNoOIDC>
+      <TestWrapper>
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/overview']}>
             <Routes>
@@ -25,13 +51,14 @@ describe('CustomHeader', () => {
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapperNoOIDC>,
+      </TestWrapper>,
     );
+
     expect(baseElement).toBeTruthy();
   });
-  it('Collapse Icon/Button should be clickable', () => {
+  it('Collapse Icon/Button should be clickable', (done) => {
     const { baseElement } = render(
-      <TestWrapperNoOIDC>
+      <TestWrapper>
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/3/overview']}>
             <Routes>
@@ -47,13 +74,16 @@ describe('CustomHeader', () => {
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapperNoOIDC>,
+      </TestWrapper>,
     );
 
-    const buttons = screen.getAllByRole('button');
-
-    buttons.forEach((button) => {
-      fireEvent.click(button);
+    waitFor(() => {
+      done();
+      expect(baseElement).toBeTruthy();
+      const buttons = screen.getAllByRole('button');
+      buttons.forEach((button) => {
+        fireEvent.click(button);
+      });
     });
   });
 });

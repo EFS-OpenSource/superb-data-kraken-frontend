@@ -1,5 +1,4 @@
 import { IntlProvider } from 'react-intl';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { OidcProvider } from '@axa-fr/react-oidc';
 import { oidcConfiguration, oidcProps } from '@utils/authConf';
 import { messagesDe, messagesEn } from '../../translations';
@@ -19,7 +18,6 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
     callbackSuccessComponent={oidcProps.callbackSuccessComponent}
     authenticatingComponent={oidcProps.authenticatingComponent}
   >
-    {/* <QueryClientProvider client={client}> */}
     <IntlProvider
       locale="de"
       defaultLocale="de"
@@ -27,7 +25,6 @@ const TestWrapper = ({ children }: { children: React.ReactNode }) => (
     >
       {children}
     </IntlProvider>
-    {/* </QueryClientProvider> */}
   </OidcProvider>
 );
 

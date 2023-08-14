@@ -1,21 +1,11 @@
-import { useState, useContext, Key } from 'react';
+import { useState, useContext, Key, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
+
 import { useIntl } from 'react-intl';
-import { ActivePathContext, UserInfoContext } from '@contexts/index';
+import { ActivePathContext } from '@contexts/index';
 import { Chip, CustomHeader, Icon } from '@components/index';
-// import { HomeButton } from '@e-fs-frontend-applications/shared/stateless-components-bootstrap';
-import { Row, Spinner } from 'react-bootstrap';
-import {
-  BsChevronRight,
-  BsChevronUp,
-  BsChevronDown,
-  BsLock,
-  BsUnlock,
-  BsDoorClosed,
-} from 'react-icons/bs';
-import { MdEdit } from 'react-icons/md';
-import { RiDeleteBin6Line, RiDeleteBin2Line } from 'react-icons/ri';
 import { useGetRoles, useGetOwners } from '@customHooks/index';
 import {
   OrgaRoleType,
@@ -37,13 +27,25 @@ import {
   getSpaceUsers,
   setDeletionStateSpace,
 } from '@services/index';
+import { SuccessToast, ErrorToast } from '@notifications/index';
+// import { HomeButton } from '@e-fs-frontend-applications/shared/stateless-components-bootstrap';
+import { Col, Row, Spinner } from 'react-bootstrap';
+import {
+  BsChevronRight,
+  BsChevronUp,
+  BsChevronDown,
+  BsLock,
+  BsUnlock,
+  BsDoorClosed,
+} from 'react-icons/bs';
+import { MdEdit } from 'react-icons/md';
+import { RiDeleteBin6Line, RiDeleteBin2Line } from 'react-icons/ri';
 
 // import {
 //   OrganizationTabs,
 //   SpaceTabs,
 // } from '@e-fs-frontend-applications/apps/sdk-frontend/src/components/manage-orgas-spaces/tabComponents';
 // import { ManageOrgaSpaceModal } from '@e-fs-frontend-applications/apps/sdk-frontend/src/components/manage-orgas-spaces/ManageOrgaSpaceModal';
-import { SuccessToast, ErrorToast } from '@notifications/index';
 // import { ConfirmationModal } from '@e-fs-frontend-applications/apps/sdk-frontend/src/parts/popovers/generic-popovers/ConfirmationModal';
 
 const lockBsClasses = 'mx-3 mt-1';
@@ -53,19 +55,23 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
   const queryClient = useQueryClient();
   const { formatMessage } = useIntl();
   const { orgID, spaceID } = useParams();
-  // const { token, tokenParsed } = useKeycloak().keycloak; // replace with OIDC
-  const { oidcUser } = useContext(UserInfoContext);
   const [headerIsCollapsed, setHeaderIsCollapsed] = useState<boolean>(true);
   const { activePath, onChangeActivePath } = useContext(ActivePathContext);
   const [show, setShow] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [fetchActive, setFetchActive] = useState<boolean>(false);
+  const { idTokenPayload } = useOidcIdToken();
+  const [isOwner, setIsOwner] = useState(false);
 
   const owners = useGetOwners(orgID as string, spaceID as string);
-  const isOwner =
-    oidcUser && oidcUser.sub
-      ? owners.map((owner: Owner) => owner.id).includes(oidcUser.sub)
-      : false;
+
+  useEffect(() => {
+    if (idTokenPayload.sub) {
+      setIsOwner(
+        owners.map((owner: Owner) => owner.id).includes(idTokenPayload.sub),
+      );
+    }
+  }, [idTokenPayload, isOwner, owners]);
 
   const { data } = useQuery({
     queryKey: spaceData
@@ -201,7 +207,7 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
   ) : (
     <>
       {iconState && (
-        <span className="ml-2 mt-3">
+        <span className="ms-2 mt-3">
           <Icon
             icon={iconState}
             tooltip={tooltipState}
@@ -212,7 +218,7 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
           />
         </span>
       )}
-      <span className="ml-2 mt-3">
+      <span className="ms-2 mt-3">
         <Chip
           text={orgData ? orgData.confidentiality : ''}
           activeColor="outline-accent"
@@ -258,15 +264,11 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
         )}
       </> */}
       <Row className="justify-content-between ml-2">
-        {!headerIsCollapsed && <div>HELLO</div>}
         {headerIsCollapsed && (
           <div className="d-flex align-items-center">
-            <div style={{ marginTop: '-3' }}>
-              <div>HELLO</div>
-            </div>
-            <div className="d-flex ml-3 pb-1" style={{ paddingTop: '2px' }}>
+            <div className="d-flex ms-3 pb-1" style={{ paddingTop: '2px' }}>
               {spaceID ? (
-                <div className="ml-2 mt-3 pb-3">
+                <div className="ms-2 mt-3 pb-3">
                   <Link
                     to={`/org/${orgData?.id}`}
                     className="text-primary text-decoration-none"
@@ -275,16 +277,16 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
                   </Link>
                 </div>
               ) : (
-                <div className="ml-2 mt-3 pb-3">
+                <div className="ms-2 mt-3 pb-3">
                   {orgData?.displayName ? orgDisplayName : orgContainerName}
                 </div>
               )}
               {spaceID ? (
-                <span className="ml-2 mt-3 font-weight-medium">
+                <span className="ms-2 mt-3 font-weight-medium">
                   <Icon
                     icon={BsChevronRight}
                     type="icon"
-                    className="pb-1 pr-2"
+                    className="pb-1 pe-2"
                     size={24}
                   />
                   {spaceData?.displayName
@@ -296,69 +298,68 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
               )}
               {stateAndConfidentiality}
             </div>
-          </div>
-        )}
-        <div className="mr-4 mt-3">
-          <Icon
-            ariaLabel="collapseHeaderIcon"
-            icon={headerIsCollapsed ? BsChevronDown : BsChevronUp}
-            type="button"
-            size={30}
-            className="mr-5"
-            onClick={onHeaderCollapseHandler}
-          />
-          {((!spaceData && (userOrgaRoles?.includes('admin') || isOwner)) ||
-            (spaceData &&
-              spaceData.state !== 'DELETION' &&
-              userOrgaRoles?.includes('admin')) ||
-            isOwner) &&
-            (!fetchActive ? (
+            <Col className="d-flex align-items-center justify-content-end">
               <Icon
-                ariaLabel="editIcon"
-                icon={MdEdit}
+                ariaLabel="collapseHeaderIcon"
+                icon={headerIsCollapsed ? BsChevronDown : BsChevronUp}
                 type="button"
                 size={30}
-                className="mr-3"
-                onClick={() => setShowModal(true)}
-              />
-            ) : (
-              <Spinner
-                className="mt-3 mr-4"
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-              />
-            ))}
-
-          {spaceData && isOwner && (
-            <>
-              <Icon
-                ariaLabel="deleteIcon"
-                icon={
-                  spaceData.state === 'DELETION'
-                    ? RiDeleteBin2Line
-                    : RiDeleteBin6Line
-                }
-                type="button"
-                size={28}
-                className="mr-5"
-                onClick={() => setShow(true)}
-                color={
-                  spaceData.state === 'DELETION'
-                    ? 'text-danger'
-                    : 'text-primary'
-                }
-                tooltip={
-                  spaceData.state === 'DELETION'
-                    ? 'AppPageHeader.space-state-deletion-tooltip'
-                    : undefined
-                }
-                toolptipPlacement="bottom"
+                className="me-5"
+                onClick={onHeaderCollapseHandler}
               />
 
-              {/* <ConfirmationModal
+              {((!spaceData && (userOrgaRoles?.includes('admin') || isOwner)) ||
+                (spaceData &&
+                  spaceData.state !== 'DELETION' &&
+                  userOrgaRoles?.includes('admin')) ||
+                isOwner) &&
+                (!fetchActive ? (
+                  <Icon
+                    ariaLabel="editIcon"
+                    icon={MdEdit}
+                    type="button"
+                    size={30}
+                    className="me-3"
+                    onClick={() => setShowModal(true)}
+                  />
+                ) : (
+                  <Spinner
+                    className="mt-3 me-4"
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                ))}
+
+              {spaceData && isOwner && (
+                <>
+                  <Icon
+                    ariaLabel="deleteIcon"
+                    icon={
+                      spaceData.state === 'DELETION'
+                        ? RiDeleteBin2Line
+                        : RiDeleteBin6Line
+                    }
+                    type="button"
+                    size={28}
+                    className="me-5"
+                    onClick={() => setShow(true)}
+                    color={
+                      spaceData.state === 'DELETION'
+                        ? 'text-danger'
+                        : 'text-primary'
+                    }
+                    tooltip={
+                      spaceData.state === 'DELETION'
+                        ? 'AppPageHeader.space-state-deletion-tooltip'
+                        : undefined
+                    }
+                    toolptipPlacement="bottom"
+                  />
+
+                  {/* <ConfirmationModal
                 show={show}
                 onSetShow={setShow}
                 onHandleSubmit={handleDeletionStateSpace}
@@ -373,16 +374,18 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
                     : 'AppPageHeader.confirmation-modal-delete-message'
                 }
               /> */}
-            </>
-          )}
-        </div>
+                </>
+              )}
+            </Col>
+          </div>
+        )}
       </Row>
-      <Row className={headerIsCollapsed ? 'd-none ml-1' : 'd-flex ml-1'}>
+      <Row className={headerIsCollapsed ? 'd-none ms-1' : 'd-flex ms-1'}>
         <div className="d-flex pb-4">
           <div>
             <div className="d-flex">
               {spaceID ? (
-                <div className="ml-4 mt-3 pb-3">
+                <div className="ms-2 mt-3 pb-3">
                   <Link
                     to={`/org/${orgData?.id}`}
                     className="text-primary text-decoration-none"
@@ -391,16 +394,16 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
                   </Link>
                 </div>
               ) : (
-                <div className="ml-4 mt-3 pb-3">
+                <div className="ms-2 mt-3 pb-3">
                   {orgData?.displayName ? orgDisplayName : orgContainerName}
                 </div>
               )}
               {spaceID ? (
-                <span className="ml-2 mt-3 font-weight-medium">
+                <span className="ms-2 mt-3 font-weight-medium">
                   <Icon
                     icon={BsChevronRight}
                     type="icon"
-                    className="pb-1 pr-2"
+                    className="pb-1 pe-2"
                     size={24}
                   />
                   {spaceData?.displayName
@@ -412,7 +415,7 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
               )}
               {stateAndConfidentiality}
             </div>
-            <div className="d-flex ml-4">
+            <div className="d-flex ms-2">
               <span className="mt-1">
                 <Chip
                   text={orgData ? orgData.name : ''}

@@ -4,6 +4,10 @@ import { MemoryRouter } from 'react-router-dom';
 import RequireAuthorization from './RequireAuthorization';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+jest.mock('@axa-fr/react-oidc', () => ({
+  useOidc: () => ({ isAuthenticated: true }),
+}));
+
 const client = new QueryClient();
 describe('RequireAuthorization', () => {
   it('should render successfully', () => {

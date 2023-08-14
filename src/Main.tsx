@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { OidcProvider } from '@axa-fr/react-oidc';
 import { SdkRouter } from '@router/index';
-import { IntlWrapper, UserInfoContextProvider } from '@contexts/index';
+import { IntlWrapper } from '@contexts/index';
 import { oidcConfiguration, oidcProps } from '@utils/authConf';
 
 const root = ReactDOM.createRoot(
@@ -27,19 +27,17 @@ if (navigator.serviceWorker.controller) {
       callbackSuccessComponent={oidcProps.callbackSuccessComponent}
       authenticatingComponent={oidcProps.authenticatingComponent}
     >
-      <UserInfoContextProvider>
-        <BrowserRouter basename={import.meta.env.DEV ? '/' : '/bla'}>
-          <StrictMode>
-            <IntlWrapper>
-              <QueryClientProvider client={queryClient}>
-                <Routes>
-                  <Route path="/*" element={<SdkRouter />} />
-                </Routes>
-              </QueryClientProvider>
-            </IntlWrapper>
-          </StrictMode>
-        </BrowserRouter>
-      </UserInfoContextProvider>
+      <BrowserRouter basename={import.meta.env.DEV ? '/' : '/bla'}>
+        <StrictMode>
+          <IntlWrapper>
+            <QueryClientProvider client={queryClient}>
+              <Routes>
+                <Route path="/*" element={<SdkRouter />} />
+              </Routes>
+            </QueryClientProvider>
+          </IntlWrapper>
+        </StrictMode>
+      </BrowserRouter>
     </OidcProvider>,
   );
 } else {

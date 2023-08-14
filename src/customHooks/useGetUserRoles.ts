@@ -1,8 +1,6 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { StorageType, SpaceRoleType, spaceRoleTypes } from '@customTypes/index';
-import { useOidcUser } from '@axa-fr/react-oidc';
-import { UserInfoContext } from '@contexts/UserInfoContextProvider';
-// import { useKeycloak } from '@react-keycloak/web';
+import { useOidc, useOidcIdToken } from '@axa-fr/react-oidc';
 
 export const parseRoles = <T>(
   roles: string[],
@@ -56,15 +54,17 @@ export const parseAllRoles = <T>(
 };
 
 export const useGetRoles = <T>(name: string | undefined, type: StorageType) => {
-  //   const { tokenParsed, token } = useKeycloak().keycloak;
-  const { oidcUser } = useContext(UserInfoContext);
   const [userRoles, setUserRoles] = useState([] as unknown as T[]);
+  const { idTokenPayload } = useOidcIdToken();
+  const { isAuthenticated } = useOidc();
 
   useEffect(() => {
-    if (oidcUser && name) {
-      setUserRoles(parseRoles<T>(oidcUser.roles, name, type));
+    if (isAuthenticated) {
+      setUserRoles(
+        parseRoles<T>(idTokenPayload.roles, idTokenPayload.name, type),
+      );
     }
-  }, [name, oidcUser, type]);
+  }, [idTokenPayload.name, idTokenPayload.roles, isAuthenticated, name, type]);
 
   if (name) {
     return userRoles;
@@ -73,17 +73,17 @@ export const useGetRoles = <T>(name: string | undefined, type: StorageType) => {
 };
 
 export const useGetAllRoles = <T>(type: StorageType) => {
-  // const { tokenParsed, token } = useKeycloak().keycloak;
-  const { oidcUser } = useContext(UserInfoContext);
   const [userRoles, setUserRoles] = useState(
     [] as unknown as Record<string, T>,
   );
+  const { idTokenPayload } = useOidcIdToken();
+  const { isAuthenticated } = useOidc();
 
   useEffect(() => {
-    if (oidcUser) {
-      setUserRoles(parseAllRoles<T>(type, oidcUser.roles));
+    if (isAuthenticated) {
+      setUserRoles(parseAllRoles<T>(type, idTokenPayload.roles));
     }
-  }, [oidcUser, type]);
+  }, [idTokenPayload.roles, isAuthenticated, type]);
 
   return userRoles;
 };
