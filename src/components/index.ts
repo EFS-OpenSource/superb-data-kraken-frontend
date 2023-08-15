@@ -13,6 +13,7 @@ import InputText from './stateless-components/InputText/InputText';
 import ChipGroup from './stateless-components/ChipGroup/ChipGroup';
 import CustomHeader from './stateless-components/CustomHeader/CustomHeader';
 import DashboardLogos from './stateless-components/DashboardLogos/DashboardLogos';
+import FileFolderInput from './stateless-components/FileFolderInput/FileFolderInput';
 
 export {
   ApplicationAvatar,
@@ -30,4 +31,5 @@ export {
   ChipGroup,
   CustomHeader,
   DashboardLogos,
+  FileFolderInput,
 };

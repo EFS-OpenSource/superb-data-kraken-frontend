@@ -380,6 +380,8 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
             </Col>
           </div>
         )}
+
+        {/* TESSSST */}
       </Row>
       <Row className={headerIsCollapsed ? 'd-none ms-1' : 'd-flex ms-1'}>
         <div className="d-flex pb-4">
@@ -447,6 +449,87 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
               </span>
             </div>
           </div>
+          {!headerIsCollapsed && (
+            <Col className="d-flex align-items-center justify-content-end h-50 mt-3">
+              <Icon
+                ariaLabel="collapseHeaderIcon"
+                icon={headerIsCollapsed ? BsChevronDown : BsChevronUp}
+                type="button"
+                size={30}
+                className="me-5"
+                onClick={onHeaderCollapseHandler}
+              />
+
+              {((!spaceData && (userOrgaRoles?.includes('admin') || isOwner)) ||
+                (spaceData &&
+                  spaceData.state !== 'DELETION' &&
+                  userOrgaRoles?.includes('admin')) ||
+                isOwner) &&
+                (!fetchActive ? (
+                  <Icon
+                    ariaLabel="editIcon"
+                    icon={MdEdit}
+                    type="button"
+                    size={30}
+                    className="me-3"
+                    onClick={() => setShowModal(true)}
+                  />
+                ) : (
+                  <Spinner
+                    className="mt-3 me-4"
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                ))}
+
+              {spaceData && isOwner && (
+                <>
+                  <Icon
+                    ariaLabel="deleteIcon"
+                    icon={
+                      spaceData.state === 'DELETION'
+                        ? RiDeleteBin2Line
+                        : RiDeleteBin6Line
+                    }
+                    type="button"
+                    size={28}
+                    className="me-5"
+                    onClick={() => setShow(true)}
+                    color={
+                      spaceData.state === 'DELETION'
+                        ? 'text-danger'
+                        : 'text-primary'
+                    }
+                    tooltip={
+                      spaceData.state === 'DELETION'
+                        ? 'AppPageHeader.space-state-deletion-tooltip'
+                        : undefined
+                    }
+                    toolptipPlacement="bottom"
+                  />
+
+                  {/* <ConfirmationModal
+                show={show}
+                onSetShow={setShow}
+                onHandleSubmit={handleDeletionStateSpace}
+                confirmButtonText={
+                  spaceData.state === 'DELETION'
+                    ? 'Button.delete-revoke'
+                    : 'Button.delete'
+                }
+                message={
+                  spaceData.state === 'DELETION'
+                    ? 'AppPageHeader.confirmation-modal-revoke-deletion-message'
+                    : 'AppPageHeader.confirmation-modal-delete-message'
+                }
+              /> */}
+                </>
+              )}
+            </Col>
+          )}
         </div>
       </Row>
     </CustomHeader>

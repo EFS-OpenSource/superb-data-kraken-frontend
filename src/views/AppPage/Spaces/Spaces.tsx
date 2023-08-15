@@ -9,6 +9,7 @@ import {
   CustomCardTitle,
   CustomCardBody,
   Icon,
+  LoadingIndicator,
 } from '@components/index';
 import {
   OrgaRoleType,
@@ -72,7 +73,7 @@ function Spaces({ orgData, userDataState }: SpaceType) {
     'organization',
   );
 
-  const { data } = useQuery(['spaces', `o_${orgID}`], () =>
+  const { data, isLoading } = useQuery(['spaces', `o_${orgID}`], () =>
     getSpaces(orgID as string),
   );
 
@@ -103,47 +104,49 @@ function Spaces({ orgData, userDataState }: SpaceType) {
 
   return (
     <Container fluid className="mx-7 my-6">
-      <Row className="ms-1 mb-0 flex">
-        <h3 className="d-flex align-items-center font-weight-medium m-0">
-          {formatMessage({
-            id: 'AppPage.Spaces',
-          })}
-        </h3>
-        {(isOwner() ||
-          (userOrgaRoles !== undefined && userOrgaRoles.includes('admin'))) && (
-          <>
-            <OverlayTrigger
-              placement="right"
-              overlay={
-                <Tooltip id="addSpaceTooltip">
-                  {formatMessage({
-                    id: 'AddEditOrgSpacesModal.add-space',
-                  })}
-                </Tooltip>
-              }
-            >
-              <div className="ms-2">
-                {!fetchActive ? (
-                  <Icon
-                    ariaLabel="openManageOrgaSpaceModal"
-                    icon={IoAdd}
-                    size={28}
-                    type="button"
-                    onClick={onAddNewSpaceHandler}
-                  />
-                ) : (
-                  <Spinner
-                    className="mt-1 ms-2"
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
-            </OverlayTrigger>
-            {/* {show &&
+      <Row className="ms-1 mb-0">
+        <Col className="d-flex">
+          <h3 className="align-items-center font-weight-medium m-0">
+            {formatMessage({
+              id: 'AppPage.Spaces',
+            })}
+          </h3>
+          {(isOwner() ||
+            (userOrgaRoles !== undefined &&
+              userOrgaRoles.includes('admin'))) && (
+            <>
+              <OverlayTrigger
+                placement="right"
+                overlay={
+                  <Tooltip id="addSpaceTooltip">
+                    {formatMessage({
+                      id: 'AddEditOrgSpacesModal.add-space',
+                    })}
+                  </Tooltip>
+                }
+              >
+                <div className="ms-2">
+                  {!fetchActive ? (
+                    <Icon
+                      ariaLabel="openManageOrgaSpaceModal"
+                      icon={IoAdd}
+                      size={28}
+                      type="button"
+                      onClick={onAddNewSpaceHandler}
+                    />
+                  ) : (
+                    <Spinner
+                      className="mt-1 ms-2"
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true"
+                    />
+                  )}
+                </div>
+              </OverlayTrigger>
+              {/* {show &&
               orgData &&
               (isOwner() ||
                 (userOrgaRoles !== undefined &&
@@ -160,8 +163,9 @@ function Spaces({ orgData, userDataState }: SpaceType) {
                   onMutation={setFetchActive}
                 />
               )} */}
-          </>
-        )}
+            </>
+          )}
+        </Col>
       </Row>
       <Row className="ms-1 mt-3 mb-0">
         <InputText
@@ -171,6 +175,7 @@ function Spaces({ orgData, userDataState }: SpaceType) {
           onChange={filterSpacesData}
         />
       </Row>
+      {isLoading && <LoadingIndicator />}
       <Col className="d-flex flex-row flex-wrap mt-2 gap-3">
         {filteredSpaces &&
           filteredSpaces.map((space: Space) => (

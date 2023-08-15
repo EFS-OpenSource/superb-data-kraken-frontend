@@ -7,7 +7,7 @@ import {
 // import { SiJupyter } from 'react-icons/si';
 import { HomePage, OpenSearchApp, ArgoWorkflow } from 'src/views';
 import { SearchApp } from 'src/components';
-import { PageInfo } from '../customTypes/pageInfo';
+import { PageInfo } from '../customTypes/pageInfoTypes';
 
 // import { ArgoWorkflow } from '../../pages/ArgoWorkflow';
 // import SearchApp from '../../parts/search-app/SearchApp';
