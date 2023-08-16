@@ -266,8 +266,8 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
       </> */}
       <Row className="justify-content-between ml-2">
         {headerIsCollapsed && (
-          <div className="d-flex align-items-center">
-            <div className="d-flex ms-3 pb-1" style={{ paddingTop: '2px' }}>
+          <div className="d-flex align-items-center ">
+            <div className="d-flex ms-3 pb-1">
               {spaceID ? (
                 <div className="ms-2 mt-3 pb-3">
                   <Link
@@ -450,7 +450,7 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
             </div>
           </div>
           {!headerIsCollapsed && (
-            <Col className="d-flex align-items-center justify-content-end h-50 mt-3">
+            <Col className="d-flex align-items-center justify-content-end h-50 mt-2">
               <Icon
                 ariaLabel="collapseHeaderIcon"
                 icon={headerIsCollapsed ? BsChevronDown : BsChevronUp}
