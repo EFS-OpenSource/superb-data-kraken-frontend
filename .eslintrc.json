@@ -21,7 +21,8 @@
         "namedComponents": ["arrow-function", "function-declaration"]
       }
     ],
-    "import/newline-after-import": "off"
+    "import/newline-after-import": "off",
+    "no-underscore-dangle": "off"
     // "import/prefer-default-export": "off"
   },
   "root": true,

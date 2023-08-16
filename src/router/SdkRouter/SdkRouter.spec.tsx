@@ -1,19 +1,36 @@
 import { render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import SdkRouter from './SdkRouter';
-import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
+import TestWrapper from '@utils/TestWrapper/TestWrapper';
 import '@testing-library/jest-dom';
-
-jest.mock('@axa-fr/react-oidc', () => ({
-  useOidc: () => ({
-    oidcUser: { profile: { sub: '123' } },
-    login: jest.fn(),
-    oidcLogout: jest.fn(),
-  }),
-}));
-
+import 'cross-fetch/polyfill';
+// global.fetch = jest.fn();
 describe('SdkRouter', () => {
-  it('should render successfully', () => {
+  jest.mock('@axa-fr/react-oidc', () => ({
+    useOidc: () => ({
+      oidcUser: {
+        profile: { sub: '123' },
+        tokens: {
+          id_token: 'abc123',
+          access_token: 'xyz456',
+          access_token_invalid: 'asd',
+        },
+      },
+      login: jest.fn(),
+      oidcLogout: jest.fn(),
+    }),
+    useOidcUser: () => ({
+      oidcUser: {
+        profile: { sub: '123' },
+        tokens: {
+          id_token: 'abc123',
+          access_token: 'xyz456',
+          access_token_invalid: 'asd',
+        },
+      },
+    }),
+  }));
+  it('should render successfully', async () => {
     const { baseElement } = render(
       <TestWrapper>
         <MemoryRouter initialEntries={['/home/overview']}>
@@ -21,7 +38,9 @@ describe('SdkRouter', () => {
         </MemoryRouter>
       </TestWrapper>,
     );
-    expect(baseElement).toBeTruthy();
+    await waitFor(() => {
+      expect(baseElement).toBeTruthy();
+    });
   });
 });
 // it('should redirect unauthenticated request to LoginPage', () => {

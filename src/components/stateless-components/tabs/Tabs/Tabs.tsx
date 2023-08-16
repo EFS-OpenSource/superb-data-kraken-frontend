@@ -1,6 +1,6 @@
 import { Tab, Nav } from 'react-bootstrap';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { Tab as TabType } from '@customTypes/tabs';
+import { Tab as TabType } from '@customTypes/index';
 import PrimaryTab from '../PrimaryTab/PrimaryTab';
 import SecondaryTab from '../SecondaryTab/SecondaryTab';
 
