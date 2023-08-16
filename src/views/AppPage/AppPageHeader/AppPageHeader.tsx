@@ -28,7 +28,6 @@ import {
   setDeletionStateSpace,
 } from '@services/index';
 import { SuccessToast, ErrorToast } from '@notifications/index';
-// import { HomeButton } from '@e-fs-frontend-applications/shared/stateless-components-bootstrap';
 import { Col, Row, Spinner } from 'react-bootstrap';
 import {
   BsChevronRight,
@@ -380,8 +379,6 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
             </Col>
           </div>
         )}
-
-        {/* TESSSST */}
       </Row>
       <Row className={headerIsCollapsed ? 'd-none ms-1' : 'd-flex ms-1'}>
         <div className="d-flex pb-4">

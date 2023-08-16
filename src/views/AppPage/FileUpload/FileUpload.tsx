@@ -13,7 +13,7 @@ import {
   S3_CLIENT_ID,
   S3_GRANT_TYPE,
   uploadFileToBlob,
-  // uploadFileToS3,
+  uploadFileToS3,
   getSasTokenUpload,
   accessmanagerCommit,
   getS3JwtToken,
@@ -38,7 +38,7 @@ interface CustomTagProps {
   spaceData: Space;
 }
 
-const FileUpload: React.FC<CustomTagProps> = ({ orgData, spaceData }) => {
+function FileUpload({ orgData, spaceData }: CustomTagProps) {
   const { formatMessage } = useIntl();
   const [uploadFiles, setUploadFiles] = useState<File[]>([]);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
@@ -254,14 +254,14 @@ const FileUpload: React.FC<CustomTagProps> = ({ orgData, spaceData }) => {
 
       setUploading(true);
 
-      // await uploadFileToS3(
-      //   uploadFiles,
-      //   s3Credentials,
-      //   setUploadProgress,
-      //   datestring,
-      // ).then((uploadResponse: string[]) =>
-      //   handleUploadResponse(uploadResponse, data),
-      // );
+      await uploadFileToS3(
+        uploadFiles,
+        s3Credentials,
+        setUploadProgress,
+        datestring,
+      ).then((uploadResponse: string[]) =>
+        handleUploadResponse(uploadResponse, data),
+      );
     }
   };
 
@@ -390,6 +390,6 @@ const FileUpload: React.FC<CustomTagProps> = ({ orgData, spaceData }) => {
       )}
     </section>
   );
-};
+}
 
 export default FileUpload;
