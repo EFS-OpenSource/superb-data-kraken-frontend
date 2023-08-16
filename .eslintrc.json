@@ -23,7 +23,6 @@
     ],
     "import/newline-after-import": "off",
     "no-underscore-dangle": "off"
-    // "import/prefer-default-export": "off"
   },
   "root": true,
   // ignore test files

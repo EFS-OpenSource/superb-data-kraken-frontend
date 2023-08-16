@@ -3,8 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getOrganizationOwners, getSpaceOwners } from '@services/index';
 import { Owner, ResponseError, Response } from '@customTypes/index';
 
-// eslint-disable-next-line import/prefer-default-export
-export const useGetOwners = (orgaId?: string, spaceId?: string) => {
+const useGetOwners = (orgaId?: string, spaceId?: string) => {
   const [owners, setOwners] = useState<Owner[]>([]);
 
   const { data } = useQuery(
@@ -31,3 +30,5 @@ export const useGetOwners = (orgaId?: string, spaceId?: string) => {
 
   return owners;
 };
+
+export default useGetOwners;

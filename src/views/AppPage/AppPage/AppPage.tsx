@@ -46,7 +46,6 @@ const components: MapType = {
   ),
   Overview: React.lazy(() => import('../Overview/Overview')),
   Description: React.lazy(() => import('../Description/Description')),
-  // CalculatorApp: React.lazy(() => import('../parts/calc-app/CalculatorApp')),
   Spaces: React.lazy(() => import('../Spaces/Spaces')),
   FileUpload: React.lazy(() => import('../FileUpload/FileUpload')),
 };
@@ -238,9 +237,7 @@ const AppPage = () => {
 
   useEffect(() => {
     const orgAppConfig = ['Overview', 'Spaces', 'Search', 'Dashboard'];
-    if (orgData && orgData.name === 'nqyerxmedia') {
-      orgAppConfig.push('CalculatorApp');
-    }
+
     const spcAppConfig = ['Overview', 'Search', 'Dashboard', 'FileUpload'];
 
     // if (featureFlag.descriptionTab) {
