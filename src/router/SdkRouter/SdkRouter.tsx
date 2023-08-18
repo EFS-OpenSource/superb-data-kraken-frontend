@@ -9,7 +9,14 @@ import {
 } from '@contexts/index';
 import RequireAuthentication from '@router/RequireAuthentication/RequireAuthentication';
 import { Layout } from '@router/index';
-import { HomePage, OpenSearchApp, ArgoWorkflow, LoginPage } from '@views/index';
+import {
+  HomePage,
+  OpenSearchApp,
+  ArgoWorkflow,
+  LoginPage,
+  // TODO: nur temporärer Eintrag, muss samt Datei wieder gelöscht werden nach fertiger implementierung
+  BasicTable,
+} from '@views/index';
 
 function SdkRouter() {
   const { isAuthenticated } = useOidc();
@@ -29,6 +36,7 @@ function SdkRouter() {
               <Route path="/apps/dashboard" element={<OpenSearchApp />} />
               <Route path="/apps/workflow" element={<ArgoWorkflow />} />
               <Route path="/apps/search" element={<SearchApp />} />
+              <Route path="/apps/basictable" element={<BasicTable />} />
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/login" replace />} />
