@@ -1,5 +1,10 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import {
+  useEffect,
+  useCallback,
+  InputHTMLAttributes,
+  useMemo,
+  useState,
+} from 'react';
 
 import {
   Column,
@@ -12,19 +17,12 @@ import {
   getFacetedUniqueValues,
   getFacetedMinMaxValues,
   getPaginationRowModel,
-  // sortingFns,
   getSortedRowModel,
   FilterFn,
-  // SortingFn,
   ColumnDef,
   flexRender,
-  // FilterFns,
 } from '@tanstack/react-table';
-import {
-  RankingInfo,
-  rankItem,
-  // compareItems,
-} from '@tanstack/match-sorter-utils';
+import { RankingInfo, rankItem } from '@tanstack/match-sorter-utils';
 import { CustomButton, Icon } from '@components/index';
 import { Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { MdTableRows } from 'react-icons/md';
@@ -77,14 +75,14 @@ function DebouncedInput({
   value: string | number;
   onChange: (value: string | number) => void;
   debounce?: number;
-} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
-  const [value, setValue] = React.useState(initialValue);
+} & Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
+  const [value, setValue] = useState(initialValue);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timeout = setTimeout(() => {
       onChange(value);
     }, debounce);
@@ -94,7 +92,6 @@ function DebouncedInput({
 
   return (
     <input
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       value={value}
       onChange={(e) => setValue(e.target.value)}
@@ -115,12 +112,12 @@ function Filter({
 
   const columnFilterValue = column.getFilterValue();
 
-  const sortedUniqueValues = React.useMemo(
+  const sortedUniqueValues = useMemo(
     () =>
       typeof firstValue === 'number'
         ? []
         : Array.from(column.getFacetedUniqueValues().keys()).sort(),
-    [column.getFacetedUniqueValues()],
+    [firstValue, column.getFacetedUniqueValues],
   );
 
   return typeof firstValue === 'number' ? (
@@ -134,11 +131,12 @@ function Filter({
           onChange={(value) =>
             column.setFilterValue((old: [number, number]) => [value, old?.[1]])
           }
-          placeholder={`Min ${
-            column.getFacetedMinMaxValues()?.[0]
-              ? `(${column.getFacetedMinMaxValues()?.[0]})`
-              : ''
-          }`}
+          placeholder="Min"
+          // placeholder={`Min ${
+          //   column.getFacetedMinMaxValues()?.[0]
+          //     ? `(${column.getFacetedMinMaxValues()?.[0]})`
+          //     : ''
+          // }`}
           className="w-24 border shadow rounded"
         />
         <DebouncedInput
@@ -149,11 +147,12 @@ function Filter({
           onChange={(value) =>
             column.setFilterValue((old: [number, number]) => [old?.[0], value])
           }
-          placeholder={`Max ${
-            column.getFacetedMinMaxValues()?.[1]
-              ? `(${column.getFacetedMinMaxValues()?.[1]})`
-              : ''
-          }`}
+          placeholder="Max"
+          // placeholder={`Max ${
+          //   column.getFacetedMinMaxValues()?.[1]
+          //     ? `(${column.getFacetedMinMaxValues()?.[1]})`
+          //     : ''
+          // }`}
           className="w-24 border shadow rounded"
         />
       </div>
@@ -170,6 +169,7 @@ function Filter({
         type="text"
         value={(columnFilterValue ?? '') as string}
         onChange={(value) => column.setFilterValue(value)}
+        // placeholder="Search..."
         placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
         className="w-36 border shadow rounded"
         list={`${column.id}list`}
@@ -179,6 +179,92 @@ function Filter({
   );
 }
 
+interface DropdownRowCountProps {
+  rowCountValues: number[];
+  table: Table<any>;
+}
+
+const DropdownRowCount = ({
+  rowCountValues,
+  table,
+}: DropdownRowCountProps): JSX.Element => (
+  <Dropdown>
+    <Dropdown.Toggle variant="secondary">
+      <CustomButton
+        size="sm"
+        placementTooltip="bottom"
+        icon={<Icon icon={MdTableRows} size={16} />}
+        tooltipMessage="CustomTable.row-count"
+        onClick={() => undefined}
+      />
+    </Dropdown.Toggle>
+    <Dropdown.Menu>
+      {rowCountValues.map((selectedPageSize) => (
+        <Dropdown.Item
+          key={selectedPageSize}
+          active={selectedPageSize === table.getState().pagination.pageSize}
+          onClick={() => {
+            table.setPageSize(Number(selectedPageSize));
+          }}
+        >
+          {selectedPageSize}
+        </Dropdown.Item>
+      ))}
+    </Dropdown.Menu>
+  </Dropdown>
+);
+
+const DropdownColumnSelect = ({
+  table,
+}: {
+  table: Table<any>;
+}): JSX.Element => (
+  <Dropdown>
+    <Dropdown.Toggle variant="secondary">
+      <CustomButton
+        size="sm"
+        placementTooltip="bottom"
+        icon={<Icon icon={BiColumns} size={16} />}
+        tooltipMessage="CustomTable.column-select"
+        onClick={() => undefined}
+      />
+    </Dropdown.Toggle>
+    <Dropdown.Menu
+      style={{
+        maxHeight: '60vh',
+        minWidth: '775px',
+        overflowX: 'hidden',
+        overflowY: 'scroll',
+      }}
+    >
+      <Dropdown.Item>
+        <input
+          {...{
+            type: 'checkbox',
+
+            checked: table.getIsAllColumnsVisible(),
+            onChange: table.getToggleAllColumnsVisibilityHandler(),
+          }}
+        />{' '}
+        Toggle All
+      </Dropdown.Item>
+      <Dropdown.Divider />
+      {table.getAllLeafColumns().map((column) => (
+        <Dropdown.Item key={column.id} id={column.id}>
+          <input
+            {...{
+              type: 'checkbox',
+              checked: column.getIsVisible(),
+              onChange: column.getToggleVisibilityHandler(),
+            }}
+          />{' '}
+          {column.id}
+        </Dropdown.Item>
+      ))}
+    </Dropdown.Menu>
+  </Dropdown>
+);
+
 const CustomTable = <T extends object>({
   columns,
   data,
@@ -187,11 +273,9 @@ const CustomTable = <T extends object>({
   withTotalFilter = true,
   withColumnFilter = true,
 }: CustomTableProps<T>) => {
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [globalFilter, setGlobalFilter] = React.useState('');
-  const [columnVisibility, setColumnVisibility] = React.useState({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [columnVisibility, setColumnVisibility] = useState({});
   const { formatMessage } = useIntl();
 
   const table = useReactTable({
@@ -222,103 +306,15 @@ const CustomTable = <T extends object>({
     debugColumns: false,
   });
 
-  React.useEffect(() => {
-    if (table.getState().columnFilters[0]?.id === 'fullName') {
-      if (table.getState().sorting[0]?.id !== 'fullName') {
-        table.setSorting([{ id: 'fullName', desc: false }]);
-      }
-    }
-  }, [table.getState().columnFilters[0]?.id]);
-
-  // eslint-disable-next-line react/no-unstable-nested-components
-  const DropdownRowCount = (): JSX.Element => (
-    <Dropdown>
-      <Dropdown.Toggle variant="secondary">
-        <CustomButton
-          size="sm"
-          placementTooltip="bottom"
-          icon={<Icon icon={MdTableRows} size={16} />}
-          tooltipMessage="CustomTable.row-count"
-          onClick={() => undefined}
-        />
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        {rowCountValues.map((selectedPageSize) => (
-          <Dropdown.Item
-            key={selectedPageSize}
-            active={selectedPageSize === table.getState().pagination.pageSize}
-            onClick={() => {
-              table.setPageSize(Number(selectedPageSize));
-            }}
-          >
-            {selectedPageSize}
-          </Dropdown.Item>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
-  );
-
-  DropdownRowCount.displayName = 'DropdownRowCount';
-
-  // eslint-disable-next-line react/no-unstable-nested-components
-  const DropdownColumnSelect = (): JSX.Element => (
-    <Dropdown>
-      <Dropdown.Toggle variant="secondary">
-        <CustomButton
-          size="sm"
-          placementTooltip="bottom"
-          icon={<Icon icon={BiColumns} size={16} />}
-          tooltipMessage="CustomTable.column-select"
-          onClick={() => undefined}
-        />
-      </Dropdown.Toggle>
-      <Dropdown.Menu
-        style={{
-          maxHeight: '60vh',
-          minWidth: '775px',
-          overflowX: 'hidden',
-          overflowY: 'scroll',
-        }}
-      >
-        <Dropdown.Item>
-          <input
-            {...{
-              type: 'checkbox',
-
-              checked: table.getIsAllColumnsVisible(),
-              onChange: table.getToggleAllColumnsVisibilityHandler(),
-            }}
-          />{' '}
-          Toggle All
-        </Dropdown.Item>
-        <Dropdown.Divider />
-        {table.getAllLeafColumns().map((column) => (
-          <Dropdown.Item key={column.id} id={column.id}>
-            <input
-              {...{
-                type: 'checkbox',
-                checked: column.getIsVisible(),
-                onChange: column.getToggleVisibilityHandler(),
-              }}
-            />{' '}
-            {column.id}
-          </Dropdown.Item>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
-  );
-
-  DropdownColumnSelect.displayName = 'DropdownColumnSelect';
-
   return (
     <div className="px-10">
       <Container fluid className="d-flex justify-content-end p-0">
         <Row className="d-flex mb-2 m-0 ">
           <Col className="p-0 m-0">
-            <DropdownColumnSelect />
+            <DropdownColumnSelect table={table} />
           </Col>
           <Col className="p-0 m-0">
-            <DropdownRowCount />
+            <DropdownRowCount rowCountValues={rowCountValues} table={table} />
           </Col>
         </Row>
       </Container>

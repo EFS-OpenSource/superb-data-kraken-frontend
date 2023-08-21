@@ -14,7 +14,6 @@ import {
   OpenSearchApp,
   ArgoWorkflow,
   LoginPage,
-  // TODO: nur temporärer Eintrag, muss samt Datei wieder gelöscht werden nach fertiger implementierung
   BasicTable,
 } from '@views/index';
 

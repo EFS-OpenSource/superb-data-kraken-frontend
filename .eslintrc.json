@@ -21,8 +21,9 @@
         "namedComponents": ["arrow-function", "function-declaration"]
       }
     ],
-    "import/newline-after-import": "off"
-    // "import/prefer-default-export": "off"
+    "import/newline-after-import": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "react/jsx-props-no-spreading": "off"
   },
   "root": true,
   // ignore test files

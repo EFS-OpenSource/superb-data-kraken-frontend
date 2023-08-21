@@ -10,6 +10,7 @@ import CustomButton from './stateless-components/CustomButton/CustomButton';
 import CustomCardTitle from './stateless-components/CustomCard/CustomCardTitle/CustomCardTitle';
 import CustomCardBody from './stateless-components/CustomCard/CustomCardBody/CustomCardBody';
 import CustomCard from './stateless-components/CustomCard/CustomCard/CustomCard';
+import CustomTable from './stateless-components/CustomTable/CustomTable';
 import InputText from './stateless-components/InputText/InputText';
 import ChipGroup from './stateless-components/ChipGroup/ChipGroup';
 
@@ -26,6 +27,7 @@ export {
   CustomCardTitle,
   CustomCardBody,
   CustomCard,
+  CustomTable,
   InputText,
   ChipGroup,
 };

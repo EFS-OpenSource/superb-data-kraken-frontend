@@ -1,11 +1,6 @@
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { createColumnHelper } from '@tanstack/react-table';
 import simpleData from '@assets/mockData/simpleData.json';
-import CustomTable from '@components/tables/CustomTable/CustomTable';
+import { CustomTable } from '@components/index';
 import { useMemo } from 'react';
 
 type SimpleData = {
