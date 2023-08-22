@@ -1,11 +1,5 @@
-import {
-  useEffect,
-  useCallback,
-  InputHTMLAttributes,
-  useMemo,
-  useState,
-} from 'react';
-
+import { useEffect, InputHTMLAttributes, useMemo, useState } from 'react';
+import useLocalStorage from 'use-local-storage';
 import {
   Column,
   Table,
@@ -120,6 +114,7 @@ function Filter({
     [firstValue, column.getFacetedUniqueValues],
   );
 
+  const { formatMessage } = useIntl();
   return typeof firstValue === 'number' ? (
     <div>
       <div className="flex space-x-2">
@@ -132,12 +127,14 @@ function Filter({
             column.setFilterValue((old: [number, number]) => [value, old?.[1]])
           }
           placeholder="Min"
-          // placeholder={`Min ${
-          //   column.getFacetedMinMaxValues()?.[0]
-          //     ? `(${column.getFacetedMinMaxValues()?.[0]})`
-          //     : ''
-          // }`}
-          className="w-24 border shadow rounded"
+          maxLength={3}
+          style={{
+            width: '3.7rem',
+            height: '.5rem',
+            fontSize: '14px',
+            display: 'inline-block',
+          }}
+          className="form-control form-control-sm rounded me-1"
         />
         <DebouncedInput
           type="number"
@@ -148,12 +145,13 @@ function Filter({
             column.setFilterValue((old: [number, number]) => [old?.[0], value])
           }
           placeholder="Max"
-          // placeholder={`Max ${
-          //   column.getFacetedMinMaxValues()?.[1]
-          //     ? `(${column.getFacetedMinMaxValues()?.[1]})`
-          //     : ''
-          // }`}
-          className="w-24 border shadow rounded"
+          style={{
+            width: '3.7rem',
+            height: '.5rem',
+            fontSize: '14px',
+            display: 'inline-block',
+          }}
+          className="form-control form-control-sm rounded"
         />
       </div>
       <div className="h-1" />
@@ -170,8 +168,10 @@ function Filter({
         value={(columnFilterValue ?? '') as string}
         onChange={(value) => column.setFilterValue(value)}
         // placeholder="Search..."
-        placeholder={`Search... (${column.getFacetedUniqueValues().size})`}
-        className="w-36 border shadow rounded"
+        placeholder={`${formatMessage({
+          id: 'Search.name-short',
+        })}... (${column.getFacetedUniqueValues().size})`}
+        className="form-control form-control-sm rounded w-auto"
         list={`${column.id}list`}
       />
       <div className="h-1" />
@@ -214,56 +214,60 @@ const DropdownRowCount = ({
   </Dropdown>
 );
 
-const DropdownColumnSelect = ({
-  table,
-}: {
-  table: Table<any>;
-}): JSX.Element => (
-  <Dropdown>
-    <Dropdown.Toggle variant="secondary">
-      <CustomButton
-        size="sm"
-        placementTooltip="bottom"
-        icon={<Icon icon={BiColumns} size={16} />}
-        tooltipMessage="CustomTable.column-select"
-        onClick={() => undefined}
-      />
-    </Dropdown.Toggle>
-    <Dropdown.Menu
-      style={{
-        maxHeight: '60vh',
-        minWidth: '775px',
-        overflowX: 'hidden',
-        overflowY: 'scroll',
-      }}
-    >
-      <Dropdown.Item>
-        <input
-          {...{
-            type: 'checkbox',
-
-            checked: table.getIsAllColumnsVisible(),
-            onChange: table.getToggleAllColumnsVisibilityHandler(),
-          }}
-        />{' '}
-        Toggle All
-      </Dropdown.Item>
-      <Dropdown.Divider />
-      {table.getAllLeafColumns().map((column) => (
-        <Dropdown.Item key={column.id} id={column.id}>
+const DropdownColumnSelect = ({ table }: { table: Table<any> }) => {
+  const { formatMessage } = useIntl();
+  return (
+    <Dropdown>
+      <Dropdown.Toggle variant="secondary">
+        <CustomButton
+          size="sm"
+          placementTooltip="bottom"
+          icon={<Icon icon={BiColumns} size={16} />}
+          tooltipMessage="CustomTable.column-select"
+          onClick={() => undefined}
+        />
+      </Dropdown.Toggle>
+      <Dropdown.Menu
+        style={{
+          maxHeight: '60vh',
+          minWidth: '20rem',
+          overflowX: 'hidden',
+          overflowY: 'scroll',
+        }}
+      >
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        <label>
           <input
+            className="ms-3"
             {...{
               type: 'checkbox',
-              checked: column.getIsVisible(),
-              onChange: column.getToggleVisibilityHandler(),
+
+              checked: table.getIsAllColumnsVisible(),
+              onChange: table.getToggleAllColumnsVisibilityHandler(),
             }}
           />{' '}
-          {column.id}
-        </Dropdown.Item>
-      ))}
-    </Dropdown.Menu>
-  </Dropdown>
-);
+          {formatMessage({
+            id: 'CustomTable.toggle-all',
+          })}
+        </label>
+        <Dropdown.Divider />
+        {table.getAllLeafColumns().map((column) => (
+          <div key={column.id} id={column.id}>
+            <input
+              className="ms-3"
+              {...{
+                type: 'checkbox',
+                checked: column.getIsVisible(),
+                onChange: column.getToggleVisibilityHandler(),
+              }}
+            />{' '}
+            {column.id}
+          </div>
+        ))}
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
 
 const CustomTable = <T extends object>({
   columns,
@@ -275,7 +279,11 @@ const CustomTable = <T extends object>({
 }: CustomTableProps<T>) => {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
-  const [columnVisibility, setColumnVisibility] = useState({});
+  const [columnVisibility, setColumnVisibility] = useLocalStorage(
+    'columnStorage',
+    {},
+  );
+
   const { formatMessage } = useIntl();
 
   const table = useReactTable({
@@ -323,8 +331,10 @@ const CustomTable = <T extends object>({
         <DebouncedInput
           value={globalFilter ?? ''}
           onChange={(value) => setGlobalFilter(String(value))}
-          className="p-2 font-lg shadow border border-block"
-          placeholder="Search all columns..."
+          className="form-control w-auto mb-2"
+          placeholder={formatMessage({
+            id: 'CustomTable.filter-all-columns',
+          })}
         />
       </div>
       <div className="h-2" />
