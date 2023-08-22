@@ -27,6 +27,11 @@ import {
   BsChevronLeft,
   BsChevronRight,
 } from 'react-icons/bs';
+import {
+  PiCaretUpDownFill,
+  PiCaretUpFill,
+  PiCaretDownFill,
+} from 'react-icons/pi';
 import { useIntl } from 'react-intl';
 
 declare module '@tanstack/table-core' {
@@ -339,7 +344,7 @@ const CustomTable = <T extends object>({
       </div>
       <div className="h-2" />
       <table>
-        <thead className="text-white bg-primary font-weight-medium">
+        <thead className="text-white bg-primary font-weight-medium align-text-top">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
@@ -368,9 +373,34 @@ const CustomTable = <T extends object>({
                           header.getContext(),
                         )}
                         {{
-                          asc: ' ▲',
-                          desc: ' ▼',
+                          asc: (
+                            <Icon
+                              icon={PiCaretDownFill}
+                              size={16}
+                              color="text-secondary"
+                              type="button"
+                            />
+                          ),
+                          desc: (
+                            <Icon
+                              icon={PiCaretDownFill}
+                              size={16}
+                              color="text-secondary"
+                              type="button"
+                            />
+                          ),
                         }[header.column.getIsSorted() as string] ?? null}
+                        {/* eslint-disable-next-line no-nested-ternary */}
+                        {header.column.getCanSort() ? (
+                          header.column.getIsSorted() ? null : (
+                            <Icon
+                              icon={PiCaretUpDownFill}
+                              size={16}
+                              color="text-secondary"
+                              type="button"
+                            />
+                          )
+                        ) : null}
                       </div>
                       {header.column.getCanFilter() ? (
                         <div className="small">
