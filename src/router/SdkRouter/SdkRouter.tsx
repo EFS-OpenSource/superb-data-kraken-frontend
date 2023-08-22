@@ -7,10 +7,14 @@ import {
   IntlWrapperContext,
   IsExpandedContextProvider,
 } from '@contexts/index';
-import RequireAuthentication from '@router/RequireAuthentication/RequireAuthentication';
-import { Layout } from '@router/index';
+import {
+  Layout,
+  RequireAuthentication,
+  RequireAuthorization,
+} from '@router/index';
 import {
   HomePage,
+  AppPage,
   OpenSearchApp,
   ArgoWorkflow,
   LoginPage,
@@ -20,6 +24,8 @@ import {
 function SdkRouter() {
   const { isAuthenticated } = useOidc();
   const { setLanguage } = useContext(IntlWrapperContext);
+  const location = useLocation();
+
   return (
     <ActivePathContextProvider>
       <IsExpandedContextProvider>
@@ -36,11 +42,43 @@ function SdkRouter() {
               <Route path="/apps/workflow" element={<ArgoWorkflow />} />
               <Route path="/apps/search" element={<SearchApp />} />
               <Route path="/apps/basictable" element={<BasicTable />} />
+              <Route element={<RequireAuthorization />}>
+                <Route
+                  path="/org/:orgID/space/:spaceID/*"
+                  element={<AppPage />}
+                />
+                <Route
+                  path="/org/:orgID/space/:spaceID"
+                  element={
+                    <Navigate
+                      to="Overview"
+                      state={{
+                        from: location.pathname,
+                      }}
+                      replace
+                    />
+                  }
+                />
+                <Route path="/org/:orgID/*" element={<AppPage />} />
+
+                <Route
+                  path="/org/:orgID"
+                  element={
+                    <Navigate
+                      to="Overview"
+                      state={{
+                        from: location.pathname,
+                      }}
+                      replace
+                    />
+                  }
+                />
+              </Route>
             </Route>
           </Route>
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
-      </IsExpandedContextProvider>{' '}
+      </IsExpandedContextProvider>
     </ActivePathContextProvider>
   );
 }

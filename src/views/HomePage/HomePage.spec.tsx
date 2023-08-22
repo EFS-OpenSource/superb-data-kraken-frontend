@@ -1,46 +1,11 @@
 import { render } from '@testing-library/react';
-import TestWrapper from 'src/utils/TestWrapper/TestWrapper.spec';
+import TestWrapper from '@utils/TestWrapper/TestWrapper';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import HomePage from './HomePage';
 import { MemoryRouter } from 'react-router-dom';
-import Tabs from 'src/components/stateless-components/tabs/Tabs/Tabs';
+import 'cross-fetch/polyfill';
 
-const disabledStyle = 'none';
 const client = new QueryClient();
-
-jest.mock('@axa-fr/react-oidc', () => ({
-  useOidc: () => ({
-    oidcUser: {
-      profile: { sub: '123' },
-      tokens: { id_token: 'abc123', access_token: 'xyz456' },
-    },
-    login: jest.fn(),
-    oidcLogout: jest.fn(),
-  }),
-  useOidcUser: () => ({
-    oidcUser: {
-      profile: { sub: '123' },
-      tokens: { id_token: 'abc123', access_token: 'xyz456' },
-    },
-  }),
-}));
-
-const tabs = [
-  {
-    name: 'HomePage.overview',
-    id: 'HomePage.overview',
-    level: 'primary',
-    content: <div>Hello</div>,
-    path: 'overview',
-  },
-  {
-    name: 'HomePage.news',
-    id: 'HomePage.news',
-    level: 'secondary',
-    content: <div>Bye</div>,
-    path: 'news',
-  },
-];
 
 describe('HomePage', () => {
   it('should render successfully', () => {

@@ -3,9 +3,9 @@ import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { OidcProvider } from '@axa-fr/react-oidc';
-import SdkRouter from 'src/router/SdkRouter/SdkRouter';
-import { IntlWrapper } from 'src/contexts/IntlProviderWrapper';
-import { oidcConfiguration, oidcProps } from './utils/authConf.js';
+import { SdkRouter } from '@router/index';
+import { IntlWrapper } from '@contexts/index';
+import { oidcConfiguration, oidcProps } from '@utils/authConf';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -37,7 +37,7 @@ if (navigator.serviceWorker.controller) {
             </QueryClientProvider>
           </IntlWrapper>
         </StrictMode>
-      </BrowserRouter>{' '}
+      </BrowserRouter>
     </OidcProvider>,
   );
 } else {

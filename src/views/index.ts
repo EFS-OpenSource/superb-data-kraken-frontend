@@ -4,6 +4,7 @@ import ArgoWorkflow from './IFrames/ArgoWorkflow/ArgoWorkflow';
 import OpenSearchApp from './IFrames/OpenSearchApp/OpenSearchApp';
 import LoginPage from './LoginPage/LoginPage';
 import BasicTable from './Table/BasicTable/BasicTable';
+import AppPage from './AppPage/AppPage/AppPage';
 
 export {
   HomePage,
@@ -11,5 +12,6 @@ export {
   ArgoWorkflow,
   OpenSearchApp,
   LoginPage,
+  AppPage,
   BasicTable,
 };

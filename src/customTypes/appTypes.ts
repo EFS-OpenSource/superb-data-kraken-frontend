@@ -20,6 +20,5 @@ export const AppNames = [
   'Search',
   'Dashboard',
   'FileUpload',
-  'CalculatorApp',
 ] as const;
 export type AppNameType = (typeof AppNames)[number];

@@ -3,11 +3,10 @@ import { useOidcUser } from '@axa-fr/react-oidc';
 import { Container } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { LoadingIndicator, Tabs } from '@components/index';
-import { Tab } from '@customTypes/tabs';
+import { Tab, Organization } from '@customTypes/index';
 import { getOrganizationsWithSpaces } from '@services/index';
 import { useQuery } from '@tanstack/react-query';
 import { OrgGrid } from '@views/index';
-import { Organization } from '@customTypes/index';
 
 const HomePage = () => {
   const { formatMessage } = useIntl();
