@@ -7,11 +7,19 @@ import {
   IntlWrapperContext,
   IsExpandedContextProvider,
 } from '@contexts/index';
-import RequireAuthentication from '@router/RequireAuthentication/RequireAuthentication';
-import { Layout } from '@router/index';
-import { HomePage, OpenSearchApp, ArgoWorkflow, LoginPage } from '@views/index';
-import RequireAuthorization from '@router/RequireAuthorization/RequireAuthorization';
-import AppPage from '@views/AppPage/AppPage/AppPage';
+import {
+  Layout,
+  RequireAuthentication,
+  RequireAuthorization,
+} from '@router/index';
+import {
+  HomePage,
+  AppPage,
+  OpenSearchApp,
+  ArgoWorkflow,
+  LoginPage,
+  BasicTable,
+} from '@views/index';
 
 function SdkRouter() {
   const { isAuthenticated } = useOidc();
@@ -33,6 +41,7 @@ function SdkRouter() {
               <Route path="/apps/dashboard" element={<OpenSearchApp />} />
               <Route path="/apps/workflow" element={<ArgoWorkflow />} />
               <Route path="/apps/search" element={<SearchApp />} />
+              <Route path="/apps/basictable" element={<BasicTable />} />
               <Route element={<RequireAuthorization />}>
                 <Route
                   path="/org/:orgID/space/:spaceID/*"
