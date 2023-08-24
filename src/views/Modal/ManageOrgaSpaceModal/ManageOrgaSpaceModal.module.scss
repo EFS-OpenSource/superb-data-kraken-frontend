@@ -1,0 +1,19 @@
+@media screen and (min-width: 1200px) {
+  .spaceModal {
+    min-width: 1365px;
+  }
+
+  .spaceModalHeight {
+    min-height: 1000px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .spaceModal {
+    min-width: 819px;
+  }
+
+  .spaceModalHeight {
+    min-height: 907px;
+  }
+}

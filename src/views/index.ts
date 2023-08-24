@@ -4,5 +4,16 @@ import ArgoWorkflow from './IFrames/ArgoWorkflow/ArgoWorkflow';
 import OpenSearchApp from './IFrames/OpenSearchApp/OpenSearchApp';
 import LoginPage from './LoginPage/LoginPage';
 import AppPage from './AppPage/AppPage/AppPage';
+import ManageOrgaSpaceModal from './Modal/ManageOrgaSpaceModal/ManageOrgaSpaceModal';
 
-export { HomePage, OrgGrid, ArgoWorkflow, OpenSearchApp, LoginPage, AppPage };
+export * from './Modal/tabComponents';
+
+export {
+  HomePage,
+  OrgGrid,
+  ArgoWorkflow,
+  OpenSearchApp,
+  LoginPage,
+  AppPage,
+  ManageOrgaSpaceModal,
+};

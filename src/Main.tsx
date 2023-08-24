@@ -27,7 +27,7 @@ if (navigator.serviceWorker.controller) {
       callbackSuccessComponent={oidcProps.callbackSuccessComponent}
       authenticatingComponent={oidcProps.authenticatingComponent}
     >
-      <BrowserRouter basename={import.meta.env.DEV ? '/' : '/bla'}>
+      <BrowserRouter basename={import.meta.env.DEV ? '/' : '/sdk-frontend'}>
         <StrictMode>
           <IntlWrapper>
             <QueryClientProvider client={queryClient}>
@@ -41,5 +41,24 @@ if (navigator.serviceWorker.controller) {
     </OidcProvider>,
   );
 } else {
-  window.location.reload();
+  root.render(
+    <OidcProvider
+      configuration={oidcConfiguration}
+      loadingComponent={oidcProps.loadingComponent}
+      callbackSuccessComponent={oidcProps.callbackSuccessComponent}
+      authenticatingComponent={oidcProps.authenticatingComponent}
+    >
+      <BrowserRouter basename={import.meta.env.DEV ? '/' : '/sdk-frontend'}>
+        <StrictMode>
+          <IntlWrapper>
+            <QueryClientProvider client={queryClient}>
+              <Routes>
+                <Route path="/login" element={<SdkRouter />} />
+              </Routes>
+            </QueryClientProvider>
+          </IntlWrapper>
+        </StrictMode>
+      </BrowserRouter>
+    </OidcProvider>,
+  );
 }
