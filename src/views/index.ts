@@ -9,4 +9,13 @@ import ManageOrgaSpaceModal from './Modal/ManageOrgaSpaceModal/ManageOrgaSpaceMo
 
 export * from './Modal/tabComponents';
 
-export { HomePage, OrgGrid, ArgoWorkflow, OpenSearchApp, LoginPage, AppPage };
+export {
+  HomePage,
+  OrgGrid,
+  ArgoWorkflow,
+  OpenSearchApp,
+  LoginPage,
+  AppPage,
+  ManageOrgaSpaceModal,
+  BasicTable,
+};
