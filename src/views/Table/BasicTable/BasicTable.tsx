@@ -53,7 +53,13 @@ const BasicTable = () => {
     [],
   );
 
-  return <CustomTable<SimpleData> columns={columns} data={simpleData} />;
+  return (
+    <CustomTable<SimpleData>
+      columns={columns}
+      data={simpleData}
+      tableName="basicTable"
+    />
+  );
 };
 
 // function BasicTable() {

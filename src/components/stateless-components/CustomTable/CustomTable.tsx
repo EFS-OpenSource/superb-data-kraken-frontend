@@ -33,6 +33,7 @@ import {
   PiCaretDownFill,
 } from 'react-icons/pi';
 import { useIntl } from 'react-intl';
+import { wrap } from 'module';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -60,6 +61,7 @@ interface CustomTableProps<T extends object> {
   columns: ColumnDef<T, any>[];
   data: T[];
   rowCountValues?: number[];
+  tableName: string;
   withPagination?: boolean;
   withTotalFilter?: boolean;
   withColumnFilter?: boolean;
@@ -278,6 +280,7 @@ const CustomTable = <T extends object>({
   columns,
   data,
   rowCountValues = [5, 10, 25, 50, 100],
+  tableName,
   withPagination = true,
   withTotalFilter = true,
   withColumnFilter = true,
@@ -285,7 +288,7 @@ const CustomTable = <T extends object>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
-    'columnStorage',
+    `${tableName}-columnStorage`,
     {},
   );
 
@@ -321,111 +324,122 @@ const CustomTable = <T extends object>({
 
   return (
     <div className="px-10">
-      <Container fluid className="d-flex justify-content-end p-0">
+      <div>
         <Row className="d-flex mb-2 m-0 ">
-          <Col className="p-0 m-0">
-            <DropdownColumnSelect table={table} />
+          <Col className="pt-2">
+            <DebouncedInput
+              value={globalFilter ?? ''}
+              onChange={(value) => setGlobalFilter(String(value))}
+              className="form-control w-auto mb-2"
+              placeholder={formatMessage({
+                id: 'CustomTable.filter-all-columns',
+              })}
+            />
           </Col>
-          <Col className="p-0 m-0">
-            <DropdownRowCount rowCountValues={rowCountValues} table={table} />
+
+          <Col>
+            <Container fluid className="d-flex justify-content-end p-0">
+              <Row>
+                <Col className="p-0 m-0">
+                  <DropdownColumnSelect table={table} />
+                </Col>
+                <Col className="p-0 m-0">
+                  <DropdownRowCount
+                    rowCountValues={rowCountValues}
+                    table={table}
+                  />
+                </Col>
+              </Row>
+            </Container>
           </Col>
         </Row>
-      </Container>
-
-      <div>
-        <DebouncedInput
-          value={globalFilter ?? ''}
-          onChange={(value) => setGlobalFilter(String(value))}
-          className="form-control w-auto mb-2"
-          placeholder={formatMessage({
-            id: 'CustomTable.filter-all-columns',
-          })}
-        />
       </div>
-      <div className="h-2" />
-      <table>
-        <thead className="text-white bg-primary font-weight-medium align-text-top">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} colSpan={header.colSpan}>
-                  {header.isPlaceholder ? null : (
-                    <>
-                      <div
-                        {...{
-                          className: header.column.getCanSort()
-                            ? 'cursor-pointer select-none'
-                            : '',
-                          onClick: header.column.getToggleSortingHandler(),
-                          onKeyDown: (e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              e.preventDefault();
-                              header.column.getToggleSortingHandler();
-                            }
-                          },
-                          onKeyUp: (e) => {},
-                          role: 'button',
-                          tabIndex: 0,
-                        }}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                        {{
-                          asc: (
-                            <Icon
-                              icon={PiCaretDownFill}
-                              size={16}
-                              color="text-secondary"
-                              type="button"
-                            />
-                          ),
-                          desc: (
-                            <Icon
-                              icon={PiCaretDownFill}
-                              size={16}
-                              color="text-secondary"
-                              type="button"
-                            />
-                          ),
-                        }[header.column.getIsSorted() as string] ?? null}
-                        {/* eslint-disable-next-line no-nested-ternary */}
-                        {header.column.getCanSort() ? (
-                          header.column.getIsSorted() ? null : (
-                            <Icon
-                              icon={PiCaretUpDownFill}
-                              size={16}
-                              color="text-secondary"
-                              type="button"
-                            />
-                          )
-                        ) : null}
-                      </div>
-                      {header.column.getCanFilter() ? (
-                        <div className="small">
-                          <Filter column={header.column} table={table} />
+      <div className="h-2 p-0" />
+      <Row className="table-wrapper">
+        <table>
+          <thead className="text-white bg-primary align-text-top">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id} colSpan={header.colSpan}>
+                    {header.isPlaceholder ? null : (
+                      <>
+                        <div
+                          {...{
+                            className: header.column.getCanSort()
+                              ? 'cursor-pointer select-none text-nowrap'
+                              : '',
+                            onClick: header.column.getToggleSortingHandler(),
+                            onKeyDown: (e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                header.column.getToggleSortingHandler();
+                              }
+                            },
+                            onKeyUp: (e) => {},
+                            role: 'button',
+                            tabIndex: 0,
+                          }}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                          {{
+                            asc: (
+                              <Icon
+                                icon={PiCaretUpFill}
+                                size={16}
+                                color="text-secondary"
+                                type="button"
+                              />
+                            ),
+                            desc: (
+                              <Icon
+                                icon={PiCaretDownFill}
+                                size={16}
+                                color="text-secondary"
+                                type="button"
+                              />
+                            ),
+                          }[header.column.getIsSorted() as string] ?? null}
+                          {/* eslint-disable-next-line no-nested-ternary */}
+                          {header.column.getCanSort() ? (
+                            header.column.getIsSorted() ? null : (
+                              <Icon
+                                icon={PiCaretUpDownFill}
+                                size={16}
+                                color="text-secondary"
+                                type="button"
+                              />
+                            )
+                          ) : null}
                         </div>
-                      ) : null}
-                    </>
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                        {header.column.getCanFilter() ? (
+                          <div className="small text-nowrap">
+                            <Filter column={header.column} table={table} />
+                          </div>
+                        ) : null}
+                      </>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Row>
       <br />
       <div className="h-2" />
       <div className="d-flex justify-content-center small">
