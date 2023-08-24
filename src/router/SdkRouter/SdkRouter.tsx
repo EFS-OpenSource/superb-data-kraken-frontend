@@ -19,6 +19,7 @@ import {
   ArgoWorkflow,
   LoginPage,
   BasicTable,
+  SearchTable,
 } from '@views/index';
 
 function SdkRouter() {
@@ -42,6 +43,7 @@ function SdkRouter() {
               <Route path="/apps/workflow" element={<ArgoWorkflow />} />
               <Route path="/apps/search" element={<SearchApp />} />
               <Route path="/apps/basictable" element={<BasicTable />} />
+              <Route path="/apps/searchtable" element={<SearchTable />} />
               <Route element={<RequireAuthorization />}>
                 <Route
                   path="/org/:orgID/space/:spaceID/*"

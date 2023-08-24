@@ -19,27 +19,27 @@ const queryClient = new QueryClient({
   },
 });
 
-if (navigator.serviceWorker.controller) {
-  root.render(
-    <OidcProvider
-      configuration={oidcConfiguration}
-      loadingComponent={oidcProps.loadingComponent}
-      callbackSuccessComponent={oidcProps.callbackSuccessComponent}
-      authenticatingComponent={oidcProps.authenticatingComponent}
-    >
-      <BrowserRouter basename={import.meta.env.DEV ? '/' : '/bla'}>
-        <StrictMode>
-          <IntlWrapper>
-            <QueryClientProvider client={queryClient}>
-              <Routes>
+root.render(
+  <OidcProvider
+    configuration={oidcConfiguration}
+    loadingComponent={oidcProps.loadingComponent}
+    callbackSuccessComponent={oidcProps.callbackSuccessComponent}
+    authenticatingComponent={oidcProps.authenticatingComponent}
+  >
+    <BrowserRouter basename={import.meta.env.DEV ? '/' : '/sdk-frontend'}>
+      <StrictMode>
+        <IntlWrapper>
+          <QueryClientProvider client={queryClient}>
+            <Routes>
+              {navigator.serviceWorker.controller ? (
                 <Route path="/*" element={<SdkRouter />} />
-              </Routes>
-            </QueryClientProvider>
-          </IntlWrapper>
-        </StrictMode>
-      </BrowserRouter>
-    </OidcProvider>,
-  );
-} else {
-  window.location.reload();
-}
+              ) : (
+                <Route path="/login" element={<SdkRouter />} />
+              )}
+            </Routes>
+          </QueryClientProvider>
+        </IntlWrapper>
+      </StrictMode>
+    </BrowserRouter>
+  </OidcProvider>,
+);
