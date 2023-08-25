@@ -1,5 +1,7 @@
 import { useEffect, InputHTMLAttributes, useMemo, useState } from 'react';
+import { useIntl } from 'react-intl';
 import useLocalStorage from 'use-local-storage';
+import { Col, Container, Dropdown, Row } from 'react-bootstrap';
 import {
   Column,
   Table,
@@ -18,7 +20,6 @@ import {
 } from '@tanstack/react-table';
 import { RankingInfo, rankItem } from '@tanstack/match-sorter-utils';
 import { CustomButton, Icon } from '@components/index';
-import { Col, Container, Dropdown, Row } from 'react-bootstrap';
 import { MdTableRows } from 'react-icons/md';
 import { BiColumns } from 'react-icons/bi';
 import {
@@ -32,8 +33,6 @@ import {
   PiCaretUpFill,
   PiCaretDownFill,
 } from 'react-icons/pi';
-import { useIntl } from 'react-intl';
-import { wrap } from 'module';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -65,6 +64,9 @@ interface CustomTableProps<T extends object> {
   withPagination?: boolean;
   withTotalFilter?: boolean;
   withColumnFilter?: boolean;
+  withDropdownColumnSelect?: boolean;
+  withDropdownRowCount?: boolean;
+  customRowCount?: number;
 }
 
 function DebouncedInput({
@@ -174,7 +176,6 @@ function Filter({
         type="text"
         value={(columnFilterValue ?? '') as string}
         onChange={(value) => column.setFilterValue(value)}
-        // placeholder="Search..."
         placeholder={`${formatMessage({
           id: 'Search.name-short',
         })}... (${column.getFacetedUniqueValues().size})`}
@@ -191,41 +192,43 @@ interface DropdownRowCountProps {
   table: Table<any>;
 }
 
-const DropdownRowCount = ({
+function DropdownRowCount({
   rowCountValues,
   table,
-}: DropdownRowCountProps): JSX.Element => (
-  <Dropdown>
-    <Dropdown.Toggle variant="secondary">
-      <CustomButton
-        size="sm"
-        placementTooltip="bottom"
-        icon={<Icon icon={MdTableRows} size={16} />}
-        tooltipMessage="CustomTable.row-count"
-        onClick={() => undefined}
-      />
-    </Dropdown.Toggle>
-    <Dropdown.Menu>
-      {rowCountValues.map((selectedPageSize) => (
-        <Dropdown.Item
-          key={selectedPageSize}
-          active={selectedPageSize === table.getState().pagination.pageSize}
-          onClick={() => {
-            table.setPageSize(Number(selectedPageSize));
-          }}
-        >
-          {selectedPageSize}
-        </Dropdown.Item>
-      ))}
-    </Dropdown.Menu>
-  </Dropdown>
-);
+}: DropdownRowCountProps): JSX.Element {
+  return (
+    <Dropdown>
+      <Dropdown.Toggle variant="secondary" className="px-0 ps-2">
+        <CustomButton
+          size="sm"
+          placementTooltip="bottom"
+          icon={<Icon icon={MdTableRows} size={16} />}
+          tooltipMessage="CustomTable.row-count"
+          onClick={() => undefined}
+        />
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+        {rowCountValues.map((selectedPageSize) => (
+          <Dropdown.Item
+            key={selectedPageSize}
+            active={selectedPageSize === table.getState().pagination.pageSize}
+            onClick={() => {
+              table.setPageSize(Number(selectedPageSize));
+            }}
+          >
+            {selectedPageSize}
+          </Dropdown.Item>
+        ))}
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+}
 
-const DropdownColumnSelect = ({ table }: { table: Table<any> }) => {
+function DropdownColumnSelect({ table }: { table: Table<any> }) {
   const { formatMessage } = useIntl();
   return (
     <Dropdown>
-      <Dropdown.Toggle variant="secondary">
+      <Dropdown.Toggle variant="secondary" className="px-0">
         <CustomButton
           size="sm"
           placementTooltip="bottom"
@@ -274,9 +277,9 @@ const DropdownColumnSelect = ({ table }: { table: Table<any> }) => {
       </Dropdown.Menu>
     </Dropdown>
   );
-};
+}
 
-const CustomTable = <T extends object>({
+function CustomTable<T extends object>({
   columns,
   data,
   rowCountValues = [5, 10, 25, 50, 100],
@@ -284,7 +287,10 @@ const CustomTable = <T extends object>({
   withPagination = true,
   withTotalFilter = true,
   withColumnFilter = true,
-}: CustomTableProps<T>) => {
+  withDropdownColumnSelect = true,
+  withDropdownRowCount = true,
+  customRowCount = 10,
+}: CustomTableProps<T>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
@@ -322,35 +328,50 @@ const CustomTable = <T extends object>({
     debugColumns: false,
   });
 
+  useEffect(() => {
+    if (customRowCount !== 10) {
+      table.setPageSize(customRowCount);
+    }
+  }, [customRowCount]);
+
   return (
-    <div className="px-10">
+    <div>
       <div>
         <Row className="d-flex mb-2 m-0 ">
-          <Col className="pt-2">
-            <DebouncedInput
-              value={globalFilter ?? ''}
-              onChange={(value) => setGlobalFilter(String(value))}
-              className="form-control w-auto mb-2"
-              placeholder={formatMessage({
-                id: 'CustomTable.filter-all-columns',
-              })}
-            />
-          </Col>
-
+          {/* GLOBAL FILTER */}
+          {withTotalFilter && (
+            <Col className="mt-2 p-0">
+              <DebouncedInput
+                value={globalFilter ?? ''}
+                onChange={(value) => setGlobalFilter(String(value))}
+                className="form-control w-auto mb-2"
+                placeholder={formatMessage({
+                  id: 'CustomTable.filter-all-columns',
+                })}
+              />
+            </Col>
+          )}
+          {/* GLOBAL FILTER END */}
           <Col>
+            {/* DROPDOWNS */}
             <Container fluid className="d-flex justify-content-end p-0">
               <Row>
-                <Col className="p-0 m-0">
-                  <DropdownColumnSelect table={table} />
-                </Col>
-                <Col className="p-0 m-0">
-                  <DropdownRowCount
-                    rowCountValues={rowCountValues}
-                    table={table}
-                  />
-                </Col>
+                {withDropdownColumnSelect && (
+                  <Col className="p-0 m-0">
+                    <DropdownColumnSelect table={table} />
+                  </Col>
+                )}
+                {withDropdownRowCount && (
+                  <Col className="p-0 m-0">
+                    <DropdownRowCount
+                      rowCountValues={rowCountValues}
+                      table={table}
+                    />
+                  </Col>
+                )}
               </Row>
             </Container>
+            {/* DROPDOWNS END */}
           </Col>
         </Row>
       </div>
@@ -392,6 +413,7 @@ const CustomTable = <T extends object>({
                                 size={16}
                                 color="text-secondary"
                                 type="button"
+                                className="mb-1 ms-1"
                               />
                             ),
                             desc: (
@@ -400,6 +422,7 @@ const CustomTable = <T extends object>({
                                 size={16}
                                 color="text-secondary"
                                 type="button"
+                                className="mb-1 ms-1"
                               />
                             ),
                           }[header.column.getIsSorted() as string] ?? null}
@@ -411,15 +434,18 @@ const CustomTable = <T extends object>({
                                 size={16}
                                 color="text-secondary"
                                 type="button"
+                                className="mb-1 ms-1"
                               />
                             )
                           ) : null}
                         </div>
-                        {header.column.getCanFilter() ? (
-                          <div className="small text-nowrap">
+                        {/* COLUMNS FILTER */}
+                        {withColumnFilter && header.column.getCanFilter() ? (
+                          <div className="small text-nowrap mt-2">
                             <Filter column={header.column} table={table} />
                           </div>
                         ) : null}
+                        {/* COLUMNS FILTER END */}
                       </>
                     )}
                   </th>
@@ -441,80 +467,91 @@ const CustomTable = <T extends object>({
         </table>
       </Row>
       <br />
-      <div className="h-2" />
-      <div className="d-flex justify-content-center small">
-        <div className="d-flex items-center gap-2">
-          {table.getCanPreviousPage() && (
-            <>
-              <Icon
-                icon={BsChevronDoubleLeft}
-                size={16}
-                color="text-primary"
-                type="button"
-                onClick={() => table.setPageIndex(0)}
-              />
-              <Icon
-                icon={BsChevronLeft}
-                size={16}
-                color="text-primary"
-                type="button"
-                onClick={() => table.previousPage()}
-              />
-            </>
-          )}
-          <div className="d-flex justify-content-center ">
+      {/* PAGINATION */}
+      {withPagination && (
+        <>
+          <div className="h-2" />
+          <div className="d-flex justify-content-center small">
             <div className="d-flex items-center gap-2">
-              <span className="flex items-center gap-1">
-                {table.getPageCount() === 0
-                  ? '0'
-                  : table.getState().pagination.pageIndex + 1}{' '}
-                {formatMessage({
-                  id: 'CustomTable.paginator-text',
-                })}{' '}
-                {table.getPageCount()}
-              </span>
+              {table.getCanPreviousPage() && (
+                <>
+                  <Icon
+                    icon={BsChevronDoubleLeft}
+                    size={16}
+                    color="text-primary"
+                    type="button"
+                    onClick={() => table.setPageIndex(0)}
+                  />
+                  <Icon
+                    icon={BsChevronLeft}
+                    size={16}
+                    color="text-primary"
+                    type="button"
+                    onClick={() => table.previousPage()}
+                  />
+                </>
+              )}
+              <div className="d-flex justify-content-center ">
+                <div className="d-flex items-center gap-2">
+                  <span className="flex items-center gap-1">
+                    {table.getPageCount() === 0
+                      ? '0'
+                      : table.getState().pagination.pageIndex + 1}{' '}
+                    {formatMessage({
+                      id: 'CustomTable.paginator-text',
+                    })}{' '}
+                    {table.getPageCount()}
+                  </span>
+                </div>
+              </div>
+
+              {table.getCanNextPage() && (
+                <>
+                  <Icon
+                    icon={BsChevronRight}
+                    size={16}
+                    color="text-primary"
+                    type="button"
+                    onClick={() => table.nextPage()}
+                  />
+                  <Icon
+                    icon={BsChevronDoubleRight}
+                    size={16}
+                    color="text-primary"
+                    type="button"
+                    onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+                  />
+                </>
+              )}
             </div>
           </div>
-
-          {table.getCanNextPage() && (
-            <>
-              <Icon
-                icon={BsChevronRight}
-                size={16}
-                color="text-primary"
-                type="button"
-                onClick={() => table.nextPage()}
-              />
-              <Icon
-                icon={BsChevronDoubleRight}
-                size={16}
-                color="text-primary"
-                type="button"
-                onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              />
-            </>
+          {/* ONLY SHOW "GO TO PAGE" IF THERE ARE MORE THAN 2 PAGES */}
+          {table.getPageCount() > 2 && (
+            <div className="d-flex justify-content-center mt-2 small">
+              <span className="align-middle">
+                {formatMessage({
+                  id: 'CustomTable.go-to-page',
+                })}{' '}
+                <input
+                  type="number"
+                  style={{ width: '4rem' }}
+                  defaultValue={table.getState().pagination.pageIndex + 1}
+                  onChange={(e) => {
+                    const page = e.target.value
+                      ? Number(e.target.value) - 1
+                      : 0;
+                    table.setPageIndex(page);
+                  }}
+                  className="border p-1 rounded w-16"
+                />
+              </span>
+            </div>
           )}
-        </div>
-      </div>
-      <div className="d-flex justify-content-center mt-2 small">
-        <span className="align-middle">
-          {formatMessage({
-            id: 'CustomTable.go-to-page',
-          })}{' '}
-          <input
-            type="number"
-            style={{ width: '4rem' }}
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
-            }}
-            className="border p-1 rounded w-16"
-          />
-        </span>
-      </div>
+        </>
+      )}
+      {/* PAGINATION END */}
     </div>
   );
-};
+}
 
 export default CustomTable;

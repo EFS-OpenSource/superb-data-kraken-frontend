@@ -4,6 +4,15 @@ import { useIntl } from 'react-intl';
 import { Link, useParams } from 'react-router-dom';
 import { useOidcIdToken, useOidc } from '@axa-fr/react-oidc';
 import {
+  Col,
+  Container,
+  OverlayTrigger,
+  Row,
+  Spinner,
+  Tooltip,
+} from 'react-bootstrap';
+import { IoAdd } from 'react-icons/io5';
+import {
   CustomCard,
   InputText,
   CustomCardTitle,
@@ -18,22 +27,11 @@ import {
   userSpaceRoleTypes,
   Owner,
   UserDataState,
+  SpaceModalTabNames,
 } from '@customTypes/index';
 import { getSpaces } from '@services/index';
 import { useGetOwners, useGetRoles } from '@customHooks/index';
-import {
-  Col,
-  Container,
-  OverlayTrigger,
-  Row,
-  Spinner,
-  Tooltip,
-} from 'react-bootstrap';
-import { IoAdd } from 'react-icons/io5';
-
-// import { SpaceModalTabNames } from '@e-fs-frontend-applications/apps/sdk-frontend/src/types/ManageOrgaSpaceModal';
-// import { SpaceTabs } from '@e-fs-frontend-applications/apps/sdk-frontend/src/components/manage-orgas-spaces/tabComponents';
-// import { ManageOrgaSpaceModal } from '@e-fs-frontend-applications/apps/sdk-frontend/src/components/manage-orgas-spaces/ManageOrgaSpaceModal';
+import { SpaceTabs, ManageOrgaSpaceModal } from '@views/index';
 
 interface SpaceType {
   orgData: Organization;
@@ -146,23 +144,23 @@ function Spaces({ orgData, userDataState }: SpaceType) {
                   )}
                 </div>
               </OverlayTrigger>
-              {/* {show &&
-              orgData &&
-              (isOwner() ||
-                (userOrgaRoles !== undefined &&
-                  userOrgaRoles.includes('admin'))) && (
-                <ManageOrgaSpaceModal
-                  show={show}
-                  setShow={setShow}
-                  orgData={orgData}
-                  owners={[userInfo] as Owner[]}
-                  tabComponents={SpaceTabs(true) as any}
-                  tabNames={SpaceModalTabNames}
-                  modalType="createSpace"
-                  roles={userSpaceRoleTypes}
-                  onMutation={setFetchActive}
-                />
-              )} */}
+              {show &&
+                orgData &&
+                (isOwner() ||
+                  (userOrgaRoles !== undefined &&
+                    userOrgaRoles.includes('admin'))) && (
+                  <ManageOrgaSpaceModal
+                    show={show}
+                    setShow={setShow}
+                    orgData={orgData}
+                    owners={[userInfo] as Owner[]}
+                    tabComponents={SpaceTabs(true) as any}
+                    tabNames={SpaceModalTabNames}
+                    modalType="createSpace"
+                    roles={userSpaceRoleTypes}
+                    onMutation={setFetchActive}
+                  />
+                )}
             </>
           )}
         </Col>

@@ -16,6 +16,7 @@ import {
 } from '@customTypes/index';
 import { useAddRemoveElements } from '@customHooks/index';
 import { IoAdd, IoClose } from 'react-icons/io5';
+import { MembersTable } from '@views/index';
 
 type MembersTabProps = {
   roles: string[];
@@ -237,7 +238,7 @@ function MembersTab({
           }
           dropdownOptions={roles}
         />
-        {/* <div className="ms-4">
+        <div className="ms-4">
           {users && (
             <MembersTable
               initialMembers={initialUsers}
@@ -249,7 +250,7 @@ function MembersTab({
               roles={roles}
             />
           )}
-        </div> */}
+        </div>
         {/* <div className="w-75 m-auto text-center border">
           {users && JSON.stringify(users)}
         </div> */}

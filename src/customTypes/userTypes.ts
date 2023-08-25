@@ -61,3 +61,10 @@ export interface Owner {
   firstName: string;
   lastName: string;
 }
+
+export interface MembersToRenderType {
+  memberName?: string;
+  memberEmail: string;
+  memberRoles: JSX.Element;
+  memberAction: JSX.Element | undefined;
+}

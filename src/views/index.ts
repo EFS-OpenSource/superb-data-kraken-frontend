@@ -3,9 +3,9 @@ import OrgGrid from './OrgGrid/OrgGrid';
 import ArgoWorkflow from './IFrames/ArgoWorkflow/ArgoWorkflow';
 import OpenSearchApp from './IFrames/OpenSearchApp/OpenSearchApp';
 import LoginPage from './LoginPage/LoginPage';
-import BasicTable from './Table/BasicTable/BasicTable';
 import AppPage from './AppPage/AppPage/AppPage';
 import ManageOrgaSpaceModal from './Modal/ManageOrgaSpaceModal/ManageOrgaSpaceModal';
+import MembersTable from './Modal/MembersTab/MembersTable/MembersTable';
 
 export * from './Modal/tabComponents';
 
@@ -17,5 +17,5 @@ export {
   LoginPage,
   AppPage,
   ManageOrgaSpaceModal,
-  BasicTable,
+  MembersTable,
 };
