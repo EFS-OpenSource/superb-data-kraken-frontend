@@ -20,6 +20,7 @@ import {
   CustomHeader,
   Icon,
   ManageOrgaSpaceModal,
+  ConfirmationModal,
 } from '@components/index';
 import { useGetRoles, useGetOwners } from '@customHooks/index';
 import {
@@ -45,7 +46,6 @@ import {
 } from '@services/index';
 import { SuccessToast, ErrorToast } from '@notifications/index';
 import { OrganizationTabs, SpaceTabs } from '@views/index';
-// import { ConfirmationModal } from '@e-fs-frontend-applications/apps/sdk-frontend/src/parts/popovers/generic-popovers/ConfirmationModal';
 
 const lockBsClasses = 'mx-3 mt-1';
 const lockInlineStyles = { transform: 'translate(0%, -25%)' };
@@ -356,21 +356,21 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
                     toolptipPlacement="bottom"
                   />
 
-                  {/* <ConfirmationModal
-                show={show}
-                onSetShow={setShow}
-                onHandleSubmit={handleDeletionStateSpace}
-                confirmButtonText={
-                  spaceData.state === 'DELETION'
-                    ? 'Button.delete-revoke'
-                    : 'Button.delete'
-                }
-                message={
-                  spaceData.state === 'DELETION'
-                    ? 'AppPageHeader.confirmation-modal-revoke-deletion-message'
-                    : 'AppPageHeader.confirmation-modal-delete-message'
-                }
-              /> */}
+                  <ConfirmationModal
+                    show={show}
+                    onSetShow={setShow}
+                    onHandleSubmit={handleDeletionStateSpace}
+                    confirmButtonText={
+                      spaceData.state === 'DELETION'
+                        ? 'Button.delete-revoke'
+                        : 'Button.delete'
+                    }
+                    message={
+                      spaceData.state === 'DELETION'
+                        ? 'AppPageHeader.confirmation-modal-revoke-deletion-message'
+                        : 'AppPageHeader.confirmation-modal-delete-message'
+                    }
+                  />
                 </>
               )}
             </Col>
