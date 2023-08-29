@@ -4,8 +4,8 @@ import ArgoWorkflow from './IFrames/ArgoWorkflow/ArgoWorkflow';
 import OpenSearchApp from './IFrames/OpenSearchApp/OpenSearchApp';
 import LoginPage from './LoginPage/LoginPage';
 import AppPage from './AppPage/AppPage/AppPage';
-import ManageOrgaSpaceModal from './Modal/ManageOrgaSpaceModal/ManageOrgaSpaceModal';
 import MembersTable from './Modal/MembersTab/MembersTable/MembersTable';
+import OrgSpaceModalParent from './Modal/OrgSpaceModalParent/OrgSpaceModalParent';
 
 export * from './Modal/tabComponents';
 
@@ -16,6 +16,6 @@ export {
   OpenSearchApp,
   LoginPage,
   AppPage,
-  ManageOrgaSpaceModal,
   MembersTable,
+  OrgSpaceModalParent,
 };

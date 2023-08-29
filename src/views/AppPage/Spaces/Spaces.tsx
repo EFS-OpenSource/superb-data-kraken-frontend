@@ -19,6 +19,7 @@ import {
   CustomCardBody,
   Icon,
   LoadingIndicator,
+  ManageOrgaSpaceModal,
 } from '@components/index';
 import {
   OrgaRoleType,
@@ -31,7 +32,7 @@ import {
 } from '@customTypes/index';
 import { getSpaces } from '@services/index';
 import { useGetOwners, useGetRoles } from '@customHooks/index';
-import { SpaceTabs, ManageOrgaSpaceModal } from '@views/index';
+import { SpaceTabs } from '@views/index';
 
 interface SpaceType {
   orgData: Organization;

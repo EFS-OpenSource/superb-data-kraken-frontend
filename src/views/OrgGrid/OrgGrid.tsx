@@ -10,8 +10,9 @@ import {
   InputText,
   CustomCardTitle,
   CustomCardBody,
+  ManageOrgaSpaceModal,
 } from '@components/index';
-import { ManageOrgaSpaceModal, OrganizationTabs } from '@views/index';
+import { OrganizationTabs } from '@views/index';
 import {
   Organization,
   userOrgaRoleTypes,

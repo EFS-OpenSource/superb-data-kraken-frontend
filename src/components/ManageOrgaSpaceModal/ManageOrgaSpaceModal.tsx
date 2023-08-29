@@ -10,8 +10,10 @@ import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useIntl } from 'react-intl';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { Icon, LoadingIndicator, TabsWithoutPath } from '@components/index';
+import { LoadingIndicator } from '@components/index';
 import { ErrorToast, SuccessToast } from '@notifications/index';
+import { Button } from 'react-bootstrap';
+
 import {
   createOrganization,
   createSpace,
@@ -29,8 +31,6 @@ import {
   UserSpaceRoleType,
   OrganizationModalTabNameType,
   SpaceModalTabNameType,
-  OrganizationModalTabNames,
-  SpaceModalTabNames,
   ModalTypes,
   MapType,
   TabData,
@@ -39,14 +39,9 @@ import {
   Organization,
   UserOrgaRoleType,
   Owner,
+  ModalTabNameType,
 } from '@customTypes/index';
-import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
-import { GrClose } from 'react-icons/gr';
-import styles from './ManageOrgaSpaceModal.module.scss';
-
-type ModalTabNameType =
-  | typeof OrganizationModalTabNames
-  | typeof SpaceModalTabNames;
+import { OrgSpaceModalParent } from '@views/index';
 
 type ManageOrgaSpaceModalProps = {
   show: boolean;
@@ -145,6 +140,8 @@ function ManageOrgaSpaceModal({
         }))
       : undefined,
   );
+
+  // HANDLE MODAL ENDPOINTS FUNCTIONALITY AND TOAST FEEDBACKS
 
   const haveOwnersChanged = (initial: string[], updated: string[]): boolean =>
     JSON.stringify(initial.sort()) !== JSON.stringify(updated.sort());
@@ -460,6 +457,8 @@ function ManageOrgaSpaceModal({
     },
   );
 
+  // SETUP MODAL CONTENT
+
   const handleModalTabs = useCallback(
     (modals: (OrganizationModalTabNameType | SpaceModalTabNameType)[]) => {
       const components = tabComponents;
@@ -515,7 +514,7 @@ function ManageOrgaSpaceModal({
     [tabComponents, formatMessage, modalData, users, owners, roles],
   );
 
-  let nextButton;
+  let nextButton: JSX.Element;
 
   switch (activeKey) {
     case tabNames[tabNames.length - 1]:
@@ -593,91 +592,18 @@ function ManageOrgaSpaceModal({
     );
   }, [handleModalTabs, tabNames]);
 
-  const ModalTitle = () => {
-    let title = 'title';
-    if (modalType === 'createOrganization') {
-      title = 'AddEditOrgSpacesModal.add-organization';
-    } else if (modalType === 'editOrganization') {
-      title = 'AddEditOrgSpacesModal.edit-organization';
-    } else if (modalType === 'createSpace') {
-      title = 'AddEditOrgSpacesModal.add-space';
-    } else if (modalType === 'editSpace') {
-      title = 'AddEditOrgSpacesModal.edit-space';
-    }
-    return title;
-  };
-
   return (
-    <Modal
-      backdrop="static"
+    <OrgSpaceModalParent
+      modalType={modalType}
+      modalTabs={modalTabs}
       show={show}
-      onHide={handleClose}
-      animation={false}
-      centered
-      dialogClassName={styles.spaceModal}
-      contentClassName={styles.spaceModalHeight}
-    >
-      <Modal.Header className="d-flex mt-4 mb-2 border border-0">
-        <h3 className="font-weight-medium flex-grow-1 text-center m-0 p-0">
-          {formatMessage({
-            id: ModalTitle(),
-          })}
-        </h3>
-
-        <Icon
-          ariaLabel="closeManageOrgaSpaceModal"
-          icon={GrClose}
-          type="button"
-          size={24}
-          onClick={handleClose}
-          className="me-4"
-        />
-      </Modal.Header>
-
-      <Modal.Body className="p-0 m-0 d-flex">
-        <Form
-          className="w-100 d-flex align-items-start flex-column flex-grow-1"
-          noValidate
-          validated={validated}
-          onSubmit={handleSubmit}
-        >
-          <TabsWithoutPath
-            tabs={modalTabs}
-            activeStyle="text-primary font-weight-medium border-0 border-bottom border-primary border-1"
-            inactiveStyle="text-primary border-0 text-decoration-none"
-            activeKey={activeKey}
-            onSetActiveKey={setActiveKey}
-          />
-
-          <Row className="mt-auto mb-6 mx-0 w-100 d-flex justify-content-center">
-            <Col
-              xs={{ span: 4, offset: 4 }}
-              xl={{ span: 2, offset: 5 }}
-              className="m-0 p-0 d-flex justify-content-between"
-            >
-              <Button
-                aria-label="cancelButton"
-                variant="outline-primary"
-                onClick={handleClose}
-              >
-                {formatMessage({
-                  id: 'AddEditOrgSpacesModal.cancel-button',
-                })}
-              </Button>
-              {modalType === 'editOrganization' || modalType === 'editSpace' ? (
-                <Button aria-label="submitButton" type="submit">
-                  {formatMessage({
-                    id: 'AddEditOrgSpacesModal.save-button',
-                  })}
-                </Button>
-              ) : (
-                nextButton
-              )}
-            </Col>
-          </Row>
-        </Form>
-      </Modal.Body>
-    </Modal>
+      validated={validated}
+      handleClose={handleClose}
+      handleSubmit={handleSubmit}
+      activeKey={activeKey}
+      setActiveKey={setActiveKey}
+      nextButton={nextButton}
+    />
   );
 }
 

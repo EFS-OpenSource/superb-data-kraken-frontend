@@ -2,10 +2,25 @@ import { useState, useContext, Key, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
-
 import { useIntl } from 'react-intl';
+import { Col, Row, Spinner } from 'react-bootstrap';
+import {
+  BsChevronRight,
+  BsChevronUp,
+  BsChevronDown,
+  BsLock,
+  BsUnlock,
+  BsDoorClosed,
+} from 'react-icons/bs';
+import { MdEdit } from 'react-icons/md';
+import { RiDeleteBin6Line, RiDeleteBin2Line } from 'react-icons/ri';
 import { ActivePathContext } from '@contexts/index';
-import { Chip, CustomHeader, Icon } from '@components/index';
+import {
+  Chip,
+  CustomHeader,
+  Icon,
+  ManageOrgaSpaceModal,
+} from '@components/index';
 import { useGetRoles, useGetOwners } from '@customHooks/index';
 import {
   OrgaRoleType,
@@ -29,23 +44,7 @@ import {
   setDeletionStateSpace,
 } from '@services/index';
 import { SuccessToast, ErrorToast } from '@notifications/index';
-import { Col, Row, Spinner } from 'react-bootstrap';
-import {
-  BsChevronRight,
-  BsChevronUp,
-  BsChevronDown,
-  BsLock,
-  BsUnlock,
-  BsDoorClosed,
-} from 'react-icons/bs';
-import { MdEdit } from 'react-icons/md';
-import { RiDeleteBin6Line, RiDeleteBin2Line } from 'react-icons/ri';
-
-import {
-  OrganizationTabs,
-  SpaceTabs,
-  ManageOrgaSpaceModal,
-} from '@views/index';
+import { OrganizationTabs, SpaceTabs } from '@views/index';
 // import { ConfirmationModal } from '@e-fs-frontend-applications/apps/sdk-frontend/src/parts/popovers/generic-popovers/ConfirmationModal';
 
 const lockBsClasses = 'mx-3 mt-1';

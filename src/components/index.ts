@@ -22,6 +22,7 @@ import AddMemberPopover from './stateless-components/popovers/AddMemberPopover/A
 import OrganizationAddTagPopover from './stateless-components/popovers/OrganizationAddTagPopover/OrganizationAddTagPopover';
 import AddTagPopover from './stateless-components/popovers/AddTagPopover/AddTagPopover';
 import ConfirmationModal from './stateless-components/ConfirmationModal/ConfirmationModal';
+import ManageOrgaSpaceModal from './ManageOrgaSpaceModal/ManageOrgaSpaceModal';
 
 export * from './stateless-components/FormFields/FormFields';
 
@@ -50,4 +51,5 @@ export {
   OrganizationAddTagPopover,
   AddTagPopover,
   ConfirmationModal,
+  ManageOrgaSpaceModal,
 };
