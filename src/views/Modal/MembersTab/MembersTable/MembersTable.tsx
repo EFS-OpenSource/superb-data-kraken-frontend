@@ -297,17 +297,34 @@ function MembersTable({
   ]);
 
   return (
-    <div className="mt-4">
-      <CustomTable
-        columns={DefaultColumnsMembersTable()}
-        data={membersToRender}
-        tableName="ModalMembersTable"
-        withTotalFilter={false}
-        withDropdownColumnSelect={false}
-        withDropdownRowCount={false}
-        customRowCount={5}
-      />
-    </div>
+    <>
+      <div className="mt-4">
+        <CustomTable
+          columns={DefaultColumnsMembersTable()}
+          data={membersToRender}
+          tableName="ModalMembersTable"
+          withTotalFilter={false}
+          withDropdownColumnSelect={false}
+          withDropdownRowCount={false}
+          customRowCount={5}
+        />
+      </div>
+      <p className="text-center mt-3">
+        <span style={{ fontSize: '0.75rem' }}>
+          {!spaceID &&
+            formatMessage({
+              id: 'MembersTable.note-admin-owner',
+            })}
+        </span>
+        <br />
+        <span style={{ fontSize: '0.75rem' }}>
+          {!spaceID &&
+            formatMessage({
+              id: 'MembersTable.note-admin-owner2',
+            })}
+        </span>
+      </p>
+    </>
   );
 }
 
