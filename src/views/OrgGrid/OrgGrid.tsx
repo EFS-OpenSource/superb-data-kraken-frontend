@@ -1,4 +1,8 @@
 import { useCallback, useEffect, useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { useIntl } from 'react-intl';
+import { Col, Row, Spinner } from 'react-bootstrap';
+import { IoAdd } from 'react-icons/io5';
 import {
   Chip,
   ChipGroup,
@@ -6,19 +10,15 @@ import {
   InputText,
   CustomCardTitle,
   CustomCardBody,
+  ManageOrgaSpaceModal,
 } from '@components/index';
-import { Link } from 'react-router-dom';
-import { useIntl } from 'react-intl';
-import { Col, Row, Spinner } from 'react-bootstrap';
-import { IoAdd } from 'react-icons/io5';
-// import { ManageOrgaSpaceModal } from '@e-fs-frontend-applications/apps/sdk-frontend/src/components/manage-orgas-spaces/ManageOrgaSpaceModal';
-// import { OrganizationModalTabNames } from '@e-fs-frontend-applications/apps/sdk-frontend/src/types/ManageOrgaSpaceModal';
-// import { OrganizationTabs } from '@e-fs-frontend-applications/apps/sdk-frontend/src/components/manage-orgas-spaces/tabComponents';
+import { OrganizationTabs } from '@views/index';
 import {
   Organization,
   userOrgaRoleTypes,
   Space,
   Owner,
+  OrganizationModalTabNames,
 } from '@customTypes/index';
 import { ActivePathContext } from '@contexts/index';
 
@@ -33,7 +33,7 @@ const customCardStyle = {
   height: '340px',
 };
 
-const OrgGrid = ({ username, orgasWithSpaces, userInfo }: OrgGridProps) => {
+function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
   const { formatMessage } = useIntl();
 
   const { activePath, onChangeActivePath } = useContext(ActivePathContext);
@@ -238,7 +238,7 @@ const OrgGrid = ({ username, orgasWithSpaces, userInfo }: OrgGridProps) => {
 
   return (
     <section className="mb-4 ms-0 ps-0 pt-3">
-      {/* {sdkAdmin() !== undefined && (
+      {sdkAdmin() !== undefined && (
         <ManageOrgaSpaceModal
           show={showModal}
           setShow={setShowModal}
@@ -249,7 +249,7 @@ const OrgGrid = ({ username, orgasWithSpaces, userInfo }: OrgGridProps) => {
           roles={userOrgaRoleTypes}
           onMutation={setFetchActive}
         />
-      )} */}
+      )}
       <Col className="ms-3 ps-0 d-flex">
         <InputText
           className="mb-2 me-11"
@@ -364,6 +364,6 @@ const OrgGrid = ({ username, orgasWithSpaces, userInfo }: OrgGridProps) => {
       </Row>
     </section>
   );
-};
+}
 
 export default OrgGrid;

@@ -1,14 +1,18 @@
+import { lazy } from 'react';
 import { render } from '@testing-library/react';
-import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
-import { MemoryRouter } from 'react-router-dom';
-import RequireAuthorization from './RequireAuthorization';
+import TestWrapper from '@utils/TestWrapper/TestWrapper';
+import ManageOrgaSpaceModal from './ManageOrgaSpaceModal';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SpaceTabs } from '@views/Modal/tabComponents';
+import { MapType } from '@customTypes/ManageOrgaSpaceModalTypes';
+
+import 'cross-fetch/polyfill';
 
 const client = new QueryClient();
-describe('RequireAuthorization', () => {
+
+describe('ManageOrgaSpaceModal', () => {
   jest.mock('@axa-fr/react-oidc', () => ({
     useOidc: () => ({
-      isAuthenticated: true,
       oidcUser: {
         profile: { sub: '123' },
         tokens: {
@@ -42,12 +46,19 @@ describe('RequireAuthorization', () => {
     }),
   }));
   it('should render successfully', () => {
+    const setShow = jest.fn();
     const { baseElement } = render(
       <TestWrapper>
         <QueryClientProvider client={client}>
-          <MemoryRouter initialEntries={['/home/overview']}>
-            <RequireAuthorization />
-          </MemoryRouter>
+          <ManageOrgaSpaceModal
+            show={false}
+            setShow={setShow}
+            owners={[]}
+            tabNames={['General', 'Members']}
+            modalType={'createOrganization'}
+            tabComponents={SpaceTabs(true) as unknown as MapType}
+            roles={[]}
+          />
         </QueryClientProvider>
       </TestWrapper>,
     );

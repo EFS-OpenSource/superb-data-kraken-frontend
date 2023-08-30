@@ -8,7 +8,7 @@ import { getOrganizationsWithSpaces } from '@services/index';
 import { useQuery } from '@tanstack/react-query';
 import { OrgGrid } from '@views/index';
 
-const HomePage = () => {
+function HomePage() {
   const { formatMessage } = useIntl();
 
   const { oidcUser } = useOidcUser();
@@ -65,7 +65,6 @@ const HomePage = () => {
       // }
       setTabs([...theTabs]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, orgs]);
 
   return (
@@ -79,7 +78,7 @@ const HomePage = () => {
       {tabs && (
         <Tabs
           tabs={tabs}
-          activeStyle="border-bottom border-primary border-3 ms-3 me-4"
+          activeStyle="border-bottom border-primary border-1 ms-3 me-4"
           inactiveStyle="none ms-3 me-4"
           className="h2"
         />
@@ -90,6 +89,6 @@ const HomePage = () => {
       )}
     </Container>
   );
-};
+}
 
 export default HomePage;
