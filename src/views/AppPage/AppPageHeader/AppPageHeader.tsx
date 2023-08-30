@@ -72,6 +72,13 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
     }
   }, [idTokenPayload, isOwner, owners]);
 
+  const userOrgaRoles = useGetRoles<OrgaRoleType>(
+    orgData?.name,
+    'organization',
+  );
+
+  const isAdmin = userOrgaRoles ? userOrgaRoles.includes('admin') : false;
+
   const { data } = useQuery({
     queryKey: spaceData
       ? ['spaceUsers', spaceID, `o_${orgID}`]
@@ -92,7 +99,7 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
 
       return response;
     },
-    enabled: isOwner,
+    enabled: isOwner || isAdmin,
   });
 
   let iconState;
@@ -146,10 +153,7 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
       ? `${spaceData.name.substring(0, 40)}...`
       : spaceData?.name;
 
-  const userOrgaRoles = useGetRoles<OrgaRoleType>(
-    orgData?.name,
-    'organization',
-  );
+  const membersTabVisible = isOwner || isAdmin;
 
   const onHeaderCollapseHandler = () => {
     setHeaderIsCollapsed((prev) => !prev);
@@ -240,11 +244,12 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
             users={data && data.ok ? data.data : undefined}
             spaceData={spaceData}
             owners={owners}
-            tabComponents={SpaceTabs(isOwner) as unknown as MapType}
+            tabComponents={SpaceTabs(membersTabVisible) as any}
             tabNames={SpaceModalTabNames}
             modalType="editSpace"
             roles={userSpaceRoleTypes}
             onMutation={setFetchActive}
+            isOwner={isOwner}
           />
         )}
 
@@ -255,11 +260,12 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
             orgData={orgData}
             users={data && data.ok ? data.data : undefined}
             owners={owners}
-            tabComponents={OrganizationTabs(isOwner) as unknown as MapType}
+            tabComponents={OrganizationTabs(membersTabVisible) as any}
             tabNames={OrganizationModalTabNames}
             modalType="editOrganization"
             roles={userOrgaRoleTypes}
             onMutation={setFetchActive}
+            isOwner={isOwner}
           />
         )}
       </>

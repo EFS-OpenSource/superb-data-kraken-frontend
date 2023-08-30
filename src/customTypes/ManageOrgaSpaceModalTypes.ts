@@ -31,6 +31,7 @@ export interface TabData {
   initialOwners?: Owner[];
   onUpdateOwners?: (updatedOwners: string[]) => void;
   onUpdateUsers?: (updatedUsers: Record<string, unknown>[]) => void;
+  isOwner?: boolean;
 }
 
 export type MapType = {

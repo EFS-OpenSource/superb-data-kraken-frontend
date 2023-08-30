@@ -1,7 +1,9 @@
 import { useCallback, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 // import { MembersTable } from '@e-fs-frontend-applications/apps/sdk-frontend/src/components/manage-orgas-spaces/MembersTable';
 import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { IoAdd, IoClose } from 'react-icons/io5';
 import {
   Chip,
   Icon,
@@ -15,7 +17,6 @@ import {
   UserOrgaRoleType,
 } from '@customTypes/index';
 import { useAddRemoveElements } from '@customHooks/index';
-import { IoAdd, IoClose } from 'react-icons/io5';
 import { MembersTable } from '@views/index';
 
 type MembersTabProps = {
@@ -27,6 +28,7 @@ type MembersTabProps = {
   )[];
   onUpdateOwners?: (updatedOwners: string[]) => void;
   onUpdateUsers?: (updatedUsers: Record<string, unknown>[]) => void;
+  isOwner: boolean;
 };
 
 function MembersTab({
@@ -35,11 +37,14 @@ function MembersTab({
   initialUsers,
   initialOwners,
   roles,
+  isOwner,
 }: MembersTabProps) {
   const { formatMessage } = useIntl();
   const {
     reducer: [owners, dispatchOwners],
   } = useAddRemoveElements<Owner>(initialOwners || [], 'id');
+
+  const { spaceID } = useParams();
 
   const handleAddOwner = useCallback(
     (_email: string, email: string) => {
@@ -172,28 +177,43 @@ function MembersTab({
             {formatMessage({
               id: 'Card.Owner',
             })}
-            <InputSelectPopover
-              id="addOwnerPopover"
-              placement="top"
-              headline={formatMessage({
-                id: 'Card.Owner',
-              })}
-              style={{
-                minWidth: '515px',
-                maxWidth: '515px',
-              }}
-              buttonLabel={formatMessage({
-                id: 'AddMemberPopover.addMember-button',
-              })}
-              handleShow={handleShow}
-              popoverOpenButton={openPopoverButton}
-              onSend={(_inputText: string, email: string) =>
-                handleAddOwner(email, email)
-              }
-              dropdownOptions={initialUsers.map(
-                (initialUser) => initialUser.email,
-              )}
-            />
+            {isOwner && (
+              <InputSelectPopover
+                id="addOwnerPopover"
+                placement="top"
+                headline={formatMessage({
+                  id: 'Card.Owner',
+                })}
+                style={{
+                  minWidth: '515px',
+                  maxWidth: '515px',
+                }}
+                buttonLabel={formatMessage({
+                  id: 'AddMemberPopover.addMember-button',
+                })}
+                handleShow={handleShow}
+                popoverOpenButton={openPopoverButton}
+                onSend={(_inputText: string, email: string) =>
+                  handleAddOwner(email, email)
+                }
+                dropdownOptions={
+                  spaceID
+                    ? initialUsers.map((initialUser) => initialUser.email)
+                    : initialUsers
+                        .filter(
+                          (
+                            initialUser: OrgaSpaceUser<
+                              UserOrgaRoleType | UserSpaceRoleType
+                            >,
+                          ) =>
+                            initialUser.permissions
+                              .map((permission) => permission.toUpperCase())
+                              .includes('ADMIN'),
+                        )
+                        .map((initialUser) => initialUser.email)
+                }
+              />
+            )}
           </div>
         ) : (
           <div className="m-0 p-0 d-flex align-items-center h3 font-weight-medium">
@@ -215,7 +235,7 @@ function MembersTab({
                 }
               }}
               icon={
-                initialUsers && (
+                initialUsers && isOwner ? (
                   <Icon
                     ariaLabel="deleteAddEditModalTag"
                     icon={IoClose}
@@ -223,11 +243,13 @@ function MembersTab({
                     color="text-light"
                     size={16}
                   />
+                ) : (
+                  <div />
                 )
               }
               activeColor="accent"
               size="sm"
-              disabled={!initialUsers}
+              disabled={!initialUsers || !isOwner}
             />
           ))}
       </Form.Group>
