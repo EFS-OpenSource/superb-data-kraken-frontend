@@ -1,13 +1,13 @@
 import { lazy } from 'react';
 
-export const SpaceTabs = (isOwner: boolean) => ({
+export const SpaceTabs = (membersTabVisible: boolean) => ({
   General: {
     component: lazy(() => import('./SpaceGeneralTab/SpaceGeneralTab')),
     visiblity: true,
   },
   Members: {
     component: lazy(() => import('./MembersTab/MembersTab')),
-    visiblity: isOwner,
+    visiblity: membersTabVisible,
   },
   Data: {
     component: lazy(() => import('./SpaceDataTab/SpaceDataTab')),
@@ -15,7 +15,7 @@ export const SpaceTabs = (isOwner: boolean) => ({
   },
 });
 
-export const OrganizationTabs = (isOwner: boolean) => ({
+export const OrganizationTabs = (membersTabVisible: boolean) => ({
   General: {
     component: lazy(
       () => import('./OrganizationGeneralTab/OrganizationGeneralTab'),
@@ -24,6 +24,6 @@ export const OrganizationTabs = (isOwner: boolean) => ({
   },
   Members: {
     component: lazy(() => import('./MembersTab/MembersTab')),
-    visiblity: isOwner,
+    visiblity: membersTabVisible,
   },
 });

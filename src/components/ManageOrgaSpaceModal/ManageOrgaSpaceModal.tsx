@@ -9,7 +9,6 @@ import {
 import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useIntl } from 'react-intl';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { LoadingIndicator } from '@components/index';
 import { ErrorToast, SuccessToast } from '@notifications/index';
 import { Button } from 'react-bootstrap';
@@ -55,6 +54,7 @@ type ManageOrgaSpaceModalProps = {
   spaceData?: Space;
   users?: OrgaSpaceUser<UserSpaceRoleType | UserOrgaRoleType>[];
   onMutation?: (mutationState: boolean) => void;
+  isOwner?: boolean;
 };
 
 function ManageOrgaSpaceModal({
@@ -69,6 +69,7 @@ function ManageOrgaSpaceModal({
   tabNames,
   modalType,
   onMutation,
+  isOwner,
 }: ManageOrgaSpaceModalProps) {
   const intialModalData = () => {
     if (modalType === 'editSpace' && spaceData) {
@@ -102,7 +103,6 @@ function ManageOrgaSpaceModal({
   const { formatMessage } = useIntl();
   const queryClient = useQueryClient();
   const { orgID, spaceID } = useParams();
-  const { idTokenPayload } = useOidcIdToken();
   const [validated, setValidated] = useState<boolean>(false);
   const [modalTabs, setModalTabs] = useState<(TabData & TabWithoutPath)[]>([]);
   const [modalData, setModalData] = useState<Space | Organization>(
@@ -170,11 +170,6 @@ function ManageOrgaSpaceModal({
   ): boolean => stringifyUsers(initial) !== stringifyUsers(updated);
 
   const [activeKey, setActiveKey] = useState(tabNames[0]);
-
-  const isOwner =
-    idTokenPayload && idTokenPayload.sub
-      ? owners.map((owner: Owner) => owner.id).includes(idTokenPayload.sub)
-      : false;
 
   const updateOrganizationUsersMutation = useMutation(() =>
     updatedUsers
@@ -479,6 +474,7 @@ function ManageOrgaSpaceModal({
               onUpdateOwners: { setUpdatedOwners },
               onUpdateUsers: { setUpdatedUsers },
               roles: { roles },
+              isOwner: { isOwner },
               content: (
                 <div
                   style={{
@@ -498,6 +494,7 @@ function ManageOrgaSpaceModal({
                         initialOwners={owners}
                         onUpdateOwners={setUpdatedOwners}
                         onUpdateUsers={setUpdatedUsers}
+                        isOwner={isOwner}
                       />
                     )}
                   </Suspense>
@@ -511,7 +508,7 @@ function ManageOrgaSpaceModal({
 
       setModalTabs(visibleModals as unknown as (TabData & TabWithoutPath)[]);
     },
-    [tabComponents, formatMessage, modalData, users, owners, roles],
+    [tabComponents, formatMessage, modalData, users, owners, roles, isOwner],
   );
 
   let nextButton: JSX.Element;
