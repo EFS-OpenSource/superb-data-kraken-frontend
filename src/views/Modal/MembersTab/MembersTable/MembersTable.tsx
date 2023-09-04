@@ -79,8 +79,6 @@ function MembersTable({
   onHandleChange,
 }: MembersTableProps) {
   const { formatMessage } = useIntl();
-  const rowCountValues = [5, 10];
-  const [rowCount, setRowCount] = useState(rowCountValues[0]);
 
   const [membersToRender, setMembersToRender] = useState<MembersToRenderType[]>(
     [],
@@ -303,21 +301,22 @@ function MembersTable({
           columns={DefaultColumnsMembersTable()}
           data={membersToRender}
           tableName="ModalMembersTable"
-          withTotalFilter={false}
           withDropdownColumnSelect={false}
           withDropdownRowCount={false}
           customRowCount={5}
+          // showColumnsFiltering
         />
       </div>
-      <p className="text-center mt-3">
-        <span style={{ fontSize: '0.75rem' }}>
+      <p className="text-center mt-4" style={{ fontSize: '0.75rem' }}>
+        <span>
           {!spaceID &&
             formatMessage({
               id: 'MembersTable.note-admin-owner',
             })}
         </span>
         <br />
-        <span style={{ fontSize: '0.75rem' }}>
+        <br />
+        <span>
           {!spaceID &&
             formatMessage({
               id: 'MembersTable.note-admin-owner2',
