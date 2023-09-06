@@ -339,7 +339,6 @@ function CustomTable<T extends object>({
 
   const [showGlobalFiltering, setShowGlobalFiltering] = useState(false);
   const [columnFiltering, setColumnFiltering] = useState(false);
-  const [showColumnsFilteringIcon, setShowColumnsFilteringIcon] = useState();
 
   return (
     <div>
