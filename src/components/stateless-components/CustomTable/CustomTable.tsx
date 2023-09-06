@@ -27,12 +27,15 @@ import {
   BsChevronDoubleRight,
   BsChevronLeft,
   BsChevronRight,
+  BsSearch,
+  BsFilterLeft,
 } from 'react-icons/bs';
 import {
   PiCaretUpDownFill,
   PiCaretUpFill,
   PiCaretDownFill,
 } from 'react-icons/pi';
+import { GrClose } from 'react-icons/gr';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -63,10 +66,10 @@ interface CustomTableProps<T extends object> {
   tableName: string;
   withPagination?: boolean;
   withTotalFilter?: boolean;
-  withColumnFilter?: boolean;
   withDropdownColumnSelect?: boolean;
   withDropdownRowCount?: boolean;
   customRowCount?: number;
+  showColumnsFiltering?: boolean;
 }
 
 function DebouncedInput({
@@ -286,10 +289,10 @@ function CustomTable<T extends object>({
   tableName,
   withPagination = true,
   withTotalFilter = true,
-  withColumnFilter = true,
   withDropdownColumnSelect = true,
   withDropdownRowCount = true,
   customRowCount = 10,
+  showColumnsFiltering = false,
 }: CustomTableProps<T>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -334,21 +337,76 @@ function CustomTable<T extends object>({
     }
   }, [customRowCount]);
 
+  const [showGlobalFiltering, setShowGlobalFiltering] = useState(false);
+  const [columnFiltering, setColumnFiltering] = useState(false);
+
   return (
     <div>
       <div>
         <Row className="d-flex mb-2 m-0 ">
           {/* GLOBAL FILTER */}
           {withTotalFilter && (
-            <Col className="mt-2 p-0">
-              <DebouncedInput
-                value={globalFilter ?? ''}
-                onChange={(value) => setGlobalFilter(String(value))}
-                className="form-control w-auto mb-2"
-                placeholder={formatMessage({
-                  id: 'CustomTable.filter-all-columns',
-                })}
-              />
+            <Col className="d-flex mt-2 p-0">
+              {!showGlobalFiltering && (
+                <Row className="">
+                  <div className=" pt-1 pe-2 mb-2">
+                    <div>
+                      {' '}
+                      <BsSearch
+                        type="button"
+                        size={20}
+                        onClick={() =>
+                          setShowGlobalFiltering(!showGlobalFiltering)
+                        }
+                      />{' '}
+                      <span style={{ fontSize: '1rem' }}>
+                        {formatMessage({
+                          id: 'CustomTable.global-filtering',
+                        })}
+                      </span>
+                    </div>
+                  </div>{' '}
+                </Row>
+              )}
+              {showGlobalFiltering && (
+                <div className="d-flex">
+                  <DebouncedInput
+                    value={globalFilter ?? ''}
+                    onChange={(value) => setGlobalFilter(String(value))}
+                    className="form-control w-auto"
+                    placeholder={formatMessage({
+                      id: 'CustomTable.filter-all-columns',
+                    })}
+                  />
+                  <GrClose
+                    type="button"
+                    className="ms-1 mt-2"
+                    size={20}
+                    onClick={() => {
+                      setShowGlobalFiltering(!showGlobalFiltering);
+                      setGlobalFilter(String(''));
+                    }}
+                  />
+                </div>
+              )}
+              {showColumnsFiltering && (
+                <Row className="ms-2">
+                  <div className="pt-1 pe-2 mb-2">
+                    <div>
+                      <BsFilterLeft
+                        type="button"
+                        size={24}
+                        onClick={() => setColumnFiltering(!columnFiltering)}
+                      />{' '}
+                      <span style={{ fontSize: '1rem' }}>
+                        {formatMessage({
+                          id: 'CustomTable.column-filtering',
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                </Row>
+              )}
             </Col>
           )}
           {/* GLOBAL FILTER END */}
@@ -397,7 +455,7 @@ function CustomTable<T extends object>({
                                 header.column.getToggleSortingHandler();
                               }
                             },
-                            onKeyUp: (e) => {},
+                            // onKeyUp: (e) => {},
                             role: 'button',
                             tabIndex: 0,
                           }}
@@ -440,7 +498,7 @@ function CustomTable<T extends object>({
                           ) : null}
                         </div>
                         {/* COLUMNS FILTER */}
-                        {withColumnFilter && header.column.getCanFilter() ? (
+                        {columnFiltering && header.column.getCanFilter() ? (
                           <div className="small text-nowrap mt-2">
                             <Filter column={header.column} table={table} />
                           </div>
