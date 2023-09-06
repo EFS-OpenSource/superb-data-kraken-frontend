@@ -54,11 +54,7 @@ const BasicTable = () => {
   );
 
   return (
-    <CustomTable<SimpleData>
-      columns={columns}
-      data={simpleData}
-      tableName="basicTable"
-    />
+    <CustomTable columns={columns} data={simpleData} tableName="basicTable" />
   );
 };
 

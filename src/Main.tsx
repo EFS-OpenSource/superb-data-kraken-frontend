@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { OidcProvider } from '@axa-fr/react-oidc';
 import { SdkRouter } from '@router/index';
 import { IntlWrapper } from '@contexts/index';
-import { oidcConfiguration, oidcProps } from '@utils/authConf';
+import oidcConfiguration from '@utils/authConf';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
@@ -22,9 +22,9 @@ const queryClient = new QueryClient({
 root.render(
   <OidcProvider
     configuration={oidcConfiguration}
-    loadingComponent={oidcProps.loadingComponent}
-    callbackSuccessComponent={oidcProps.callbackSuccessComponent}
-    authenticatingComponent={oidcProps.authenticatingComponent}
+    // loadingComponent={oidcProps.loadingComponent}
+    // callbackSuccessComponent={oidcProps.callbackSuccessComponent}
+    // authenticatingComponent={oidcProps.authenticatingComponent}
   >
     <BrowserRouter basename={import.meta.env.DEV ? '/' : '/sdk-frontend'}>
       <StrictMode>
