@@ -1,5 +1,4 @@
 import { TokenRenewMode } from '@axa-fr/react-oidc';
-import { LoadingIndicator } from '@components/index';
 
 const oidcConfiguration = {
   client_id: 'sdk-client',
