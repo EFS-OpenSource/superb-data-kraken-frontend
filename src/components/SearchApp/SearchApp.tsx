@@ -27,7 +27,7 @@ interface SearchAppProps {
 
 const columnHelper = createColumnHelper<MeasurementIndex>();
 
-const SearchApp: React.FC<SearchAppProps> = ({ orgData, spaceData }) => {
+function SearchApp({ orgData, spaceData }: SearchAppProps) {
   const isMounted = useRef(false);
 
   // Initial setup for index name based on orgData & spaceData.
@@ -268,6 +268,6 @@ const SearchApp: React.FC<SearchAppProps> = ({ orgData, spaceData }) => {
       )}
     </div>
   );
-};
+}
 
 export default SearchApp;

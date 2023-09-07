@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import Select from 'react-select';
 import { DropdownOptions } from '@customTypes/index';
 
@@ -62,7 +61,7 @@ const defaultStyles = {
   }),
 };
 
-const SelectWithAutocomplete: FC<SelectWithAutocompleteProps> = ({
+function SelectWithAutocomplete({
   options,
   onChange,
   placeholder,
@@ -71,18 +70,20 @@ const SelectWithAutocomplete: FC<SelectWithAutocompleteProps> = ({
   isLoading,
   isSearchable,
   styles,
-}) => (
-  <Select
-    options={options}
-    onChange={onChange}
-    placeholder={placeholder}
-    value={value}
-    isDisabled={isDisabled ?? false}
-    isLoading={isLoading ?? false}
-    isSearchable={isSearchable ?? true}
-    styles={styles ?? defaultStyles}
-    hideSelectedOptions
-  />
-);
+}: SelectWithAutocompleteProps) {
+  return (
+    <Select
+      options={options}
+      onChange={onChange}
+      placeholder={placeholder}
+      value={value}
+      isDisabled={isDisabled ?? false}
+      isLoading={isLoading ?? false}
+      isSearchable={isSearchable ?? true}
+      styles={styles ?? defaultStyles}
+      hideSelectedOptions
+    />
+  );
+}
 
 export default SelectWithAutocomplete;

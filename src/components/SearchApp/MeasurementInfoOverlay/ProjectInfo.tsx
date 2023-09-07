@@ -7,7 +7,7 @@ interface ProjectInfoProps {
   data: MeasurementIndex;
 }
 
-const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }): JSX.Element => {
+function ProjectInfo({ data }: ProjectInfoProps): JSX.Element {
   const { formatMessage } = useIntl();
   return (
     data &&
@@ -126,6 +126,6 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }): JSX.Element => {
       </div>
     )
   );
-};
+}
 
 export default ProjectInfo;

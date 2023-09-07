@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { Col, Form } from 'react-bootstrap';
 import { BsSearch } from 'react-icons/bs';
 import { Filter } from '@customTypes/index';
@@ -10,11 +9,11 @@ export interface SearchInputBasicProps {
   onSetSearchValue: (searchValue: string | undefined) => void;
 }
 
-export const SearchInputBasic: FC<SearchInputBasicProps> = ({
+export function SearchInputBasic({
   searchValue,
   onSetSelectFilters,
   onSetSearchValue,
-}) => {
+}: SearchInputBasicProps) {
   const filterAllFieds = [
     {
       operator: 'LIKE',
@@ -56,4 +55,4 @@ export const SearchInputBasic: FC<SearchInputBasicProps> = ({
       />
     </Col>
   );
-};
+}

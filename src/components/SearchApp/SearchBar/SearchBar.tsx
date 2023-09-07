@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { IoOptionsSharp } from 'react-icons/io5';
@@ -16,7 +16,7 @@ export interface SeachBarProps {
   onSetSearchValue: (searchValue: string | undefined) => void;
 }
 
-export const SearchBar: FC<SeachBarProps> = ({
+export function SearchBar({
   searchInputBasic,
   searchInputAdvanced,
   onSetSelectFilters,
@@ -25,7 +25,7 @@ export const SearchBar: FC<SeachBarProps> = ({
   onSetHitCount,
   onSetTableData,
   onSetSearchValue,
-}) => {
+}: SeachBarProps) {
   const { formatMessage } = useIntl();
   const [advancedMode, setAdvancedMode] = useState<boolean>(false);
 
@@ -85,4 +85,4 @@ export const SearchBar: FC<SeachBarProps> = ({
       )}
     </Col>
   );
-};
+}

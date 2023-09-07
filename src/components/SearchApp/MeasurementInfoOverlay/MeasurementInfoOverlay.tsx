@@ -2,7 +2,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { Icon, CustomTable } from '@components/index';
 import { format } from 'date-fns';
 import download from 'downloadjs';
-import { FC, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { BsDownload } from 'react-icons/bs';
 import { useIntl } from 'react-intl';
@@ -33,10 +33,10 @@ export interface MeasurementInfoOverlayProps {
 
 const columnHelper = createColumnHelper<MeasurementInfoOverlayColumns>();
 
-const MeasurementInfoOverlay: FC<MeasurementInfoOverlayProps> = ({
+function MeasurementInfoOverlay({
   data,
   onOverlayToggler,
-}): JSX.Element => {
+}: MeasurementInfoOverlayProps): JSX.Element {
   const { formatMessage } = useIntl();
 
   const columnData = useMemo(
@@ -222,6 +222,6 @@ const MeasurementInfoOverlay: FC<MeasurementInfoOverlayProps> = ({
       </Button>
     </Container>
   );
-};
+}
 
 export default MeasurementInfoOverlay;

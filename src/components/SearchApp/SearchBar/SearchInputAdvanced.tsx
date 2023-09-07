@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { useState } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { produce } from 'immer';
@@ -22,14 +22,14 @@ export interface SearchInputAdvancedProps {
   onReducedIndexAttributes: (remainingOptions: string[]) => void;
 }
 
-export const SearchInputAdvanced: FC<SearchInputAdvancedProps> = ({
+export function SearchInputAdvanced({
   criteria,
   data,
   searchValue,
   onSetSelectFilters,
   onReducedIndexAttributes,
   onSetSearchValue,
-}) => {
+}: SearchInputAdvancedProps) {
   const { formatMessage } = useIntl();
 
   const [selectedIndexProperties, setSelectedIndexProperties] = useState<
@@ -170,4 +170,4 @@ export const SearchInputAdvanced: FC<SearchInputAdvancedProps> = ({
       </Row>
     </Col>
   );
-};
+}

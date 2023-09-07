@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import PropTypes from 'prop-types';
 import { Badge } from 'react-bootstrap';
 import { BsFillXCircleFill } from 'react-icons/bs';
@@ -12,13 +11,7 @@ export interface InputChipProps {
   color?: (typeof colors)[number];
 }
 
-const InputChip: FC<InputChipProps> = ({
-  text,
-  onClose,
-  size,
-  rounded,
-  color,
-}) => {
+function InputChip({ text, onClose, size, rounded, color }: InputChipProps) {
   const Chip = (
     <Badge pill={rounded} bg={color}>
       {`${text || 'ChipText'}`}
@@ -45,7 +38,7 @@ const InputChip: FC<InputChipProps> = ({
     default:
       return <h6>{Chip}</h6>;
   }
-};
+}
 
 InputChip.propTypes = {
   size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg']),

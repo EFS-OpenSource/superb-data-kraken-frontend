@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { bool, oneOf, shape, string } from 'prop-types';
 import { useIntl } from 'react-intl';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
@@ -22,7 +21,7 @@ export interface ChipProps {
   className?: string;
 }
 
-const Chip: FC<ChipProps> = ({
+function Chip({
   ariaLabel,
   text,
   icon,
@@ -38,7 +37,7 @@ const Chip: FC<ChipProps> = ({
   disabled,
   tooltip,
   className,
-}) => {
+}: ChipProps) {
   const { formatMessage } = useIntl();
   let fontSize;
   let textColor;
@@ -123,7 +122,7 @@ const Chip: FC<ChipProps> = ({
   ) : (
     button
   );
-};
+}
 
 Chip.propTypes = {
   size: oneOf(['xs', 'sm', 'md', 'lg']),
