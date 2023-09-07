@@ -4,8 +4,10 @@ import ArgoWorkflow from './IFrames/ArgoWorkflow/ArgoWorkflow';
 import OpenSearchApp from './IFrames/OpenSearchApp/OpenSearchApp';
 import LoginPage from './LoginPage/LoginPage';
 import AppPage from './AppPage/AppPage/AppPage';
-import BasicTable from './Table/BasicTable/BasicTable';
-import SearchTable from './Table/SearchTable/SearchTable';
+import MembersTable from './Modal/MembersTab/MembersTable/MembersTable';
+import OrgSpaceModalParent from './Modal/OrgSpaceModalParent/OrgSpaceModalParent';
+
+export * from './Modal/tabComponents';
 
 export {
   HomePage,
@@ -14,6 +16,6 @@ export {
   OpenSearchApp,
   LoginPage,
   AppPage,
-  BasicTable,
-  SearchTable,
+  MembersTable,
+  OrgSpaceModalParent,
 };

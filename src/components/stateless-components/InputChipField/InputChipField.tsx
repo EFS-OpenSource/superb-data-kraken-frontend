@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { BsX } from 'react-icons/bs';
 import { nanoid } from 'nanoid';
@@ -18,7 +17,7 @@ export interface InputChipFieldProps {
   onSetHitCount: (hitCount: number | undefined) => void;
 }
 
-const InputChipField: FC<InputChipFieldProps> = ({
+function InputChipField({
   selectedFilters,
   indexAttributes,
   reducedIndexAttributes,
@@ -26,7 +25,7 @@ const InputChipField: FC<InputChipFieldProps> = ({
   onReducedIndexAttributes,
   onSetTableData,
   onSetHitCount,
-}) => {
+}: InputChipFieldProps) {
   const removeAllInputChips = (): void => {
     onSelectedFilters([]);
     onReducedIndexAttributes(indexAttributes);
@@ -105,6 +104,6 @@ const InputChipField: FC<InputChipFieldProps> = ({
       </Col>
     </Row>
   );
-};
+}
 
 export default InputChipField;

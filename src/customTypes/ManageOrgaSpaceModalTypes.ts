@@ -19,6 +19,10 @@ export type OrganizationModalTabNameType =
 export const SpaceModalTabNames = ['General', 'Members', 'Data'] as const;
 export type SpaceModalTabNameType = (typeof SpaceModalTabNames)[number];
 
+export type ModalTabNameType =
+  | typeof OrganizationModalTabNames
+  | typeof SpaceModalTabNames;
+
 export interface TabData {
   modalData: Space | Organization;
   handleChange: Dispatch<SetStateAction<Space | Organization>>;
@@ -27,6 +31,7 @@ export interface TabData {
   initialOwners?: Owner[];
   onUpdateOwners?: (updatedOwners: string[]) => void;
   onUpdateUsers?: (updatedUsers: Record<string, unknown>[]) => void;
+  isOwner?: boolean;
 }
 
 export type MapType = {

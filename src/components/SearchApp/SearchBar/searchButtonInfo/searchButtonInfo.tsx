@@ -11,7 +11,7 @@ import {
   FaGripLinesVertical,
 } from 'react-icons/fa';
 
-const SearchButtonInfo = [
+const searchButtonInfo = [
   {
     icon: <Icon icon={FaEquals} size={12} />,
     tooltip: 'Search.equal-button',
@@ -54,4 +54,4 @@ const SearchButtonInfo = [
   },
 ];
 
-export default SearchButtonInfo;
+export default searchButtonInfo;
