@@ -16,9 +16,9 @@ export interface CustomTableProps<T extends object> {
   tableName: string;
   withPagination?: boolean;
   withTotalFilter?: boolean;
-  withColumnFilter?: boolean;
   withDropdownColumnSelect?: boolean;
   withDropdownRowCount?: boolean;
+  showColumnsFiltering?: boolean;
   customRowCount?: number;
   defaultColumnsVisibility?: any;
   overlayComponent?: boolean;

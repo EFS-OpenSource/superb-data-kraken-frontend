@@ -270,6 +270,8 @@
   "CustomTable.go-to-page": "Zu Seite:",
   "CustomTable.filter-all-columns": "In allen Spalten filtern",
   "CustomTable.toggle-all": "Alle/keine anzeigen",
+  "CustomTable.global-filtering": "Globaler Filter",
+  "CustomTable.column-filtering": "Spaltenfilter",
   "CustomdropdownMenu.select-all": "Alle anzeigen",
   "CustomdropdownMenu.select-none": "Keine anzeigen",
   "CustomdropdownMenu.clear": "Löschen",

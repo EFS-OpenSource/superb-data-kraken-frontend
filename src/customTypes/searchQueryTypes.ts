@@ -26,8 +26,6 @@ export interface Aggregations {
 export interface QueryInput {
   // eslint-disable-next-line camelcase
   index_name: string;
-  page: number;
-  size: number;
   resultProperties: string[];
   filter: Filter[];
   aggregations?: Aggregations[];

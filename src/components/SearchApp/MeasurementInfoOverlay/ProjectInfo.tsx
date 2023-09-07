@@ -14,17 +14,17 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }): JSX.Element => {
     data.metadata && (
       <div
         style={{ fontSize: 'smaller' }}
-        className="mt-5 mb-6 p-4 bg-light rounded-lg"
+        className="mt-5 mb-6 p-4 bg-light rounded"
       >
         <Row className="mx-2">
           {data.metadata.project && data.metadata.project.name && (
-            <Col xs={6} lg={3} className="px-4">
-              <Row>
-                <h5 className="text-dark">
+            <Col xs={6} lg={3} className="px-4 mb-2">
+              <Row className="px-0">
+                <span className="text-dark">
                   {formatMessage({
                     id: 'MeasuremenentInfoOverlay.project-name',
                   })}
-                </h5>
+                </span>
               </Row>
               <Row>
                 <div>{data.metadata.project.name}</div>
@@ -33,13 +33,14 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }): JSX.Element => {
           )}
           {data.metadata.project && data.metadata.project.purpose && (
             <Col xs={6} lg={3} className="px-4">
-              <h5 className="text-dark">
-                <Row>
+              <Row className="px-0">
+                <span className="text-dark">
                   {formatMessage({
                     id: 'MeasuremenentInfoOverlay.project-purpose',
                   })}
-                </Row>
-              </h5>
+                </span>
+              </Row>
+
               <Row>
                 <div>{data.metadata.project.purpose}</div>
               </Row>
@@ -47,13 +48,13 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }): JSX.Element => {
           )}
           {data.metadata.project && data.metadata.project.confidentiality && (
             <Col xs={6} lg={3} className="px-4">
-              <h5 className="text-dark">
-                <Row>
+              <Row>
+                <span className="text-dark">
                   {formatMessage({
                     id: 'MeasuremenentInfoOverlay.project-confidentiality',
                   })}
-                </Row>
-              </h5>
+                </span>
+              </Row>
               <Row>
                 <div>{data.metadata.project.confidentiality}</div>
               </Row>
@@ -61,13 +62,13 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }): JSX.Element => {
           )}
           {data.metadata.name && (
             <Col xs={6} lg={3} className="px-4">
-              <h5 className="text-dark">
-                <Row>
+              <Row>
+                <span className="text-dark">
                   {formatMessage({
                     id: 'MeasuremenentInfoOverlay.measurement-name',
                   })}
-                </Row>
-              </h5>
+                </span>
+              </Row>
               <Row>
                 <div>{data.metadata.name}</div>
               </Row>
@@ -75,13 +76,13 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }): JSX.Element => {
           )}
           {data.metadata.scope && data.metadata.scope.name && (
             <Col xs={6} lg={3} className="px-4">
-              <h5 className="text-dark">
-                <Row>
+              <Row>
+                <span className="text-dark">
                   {formatMessage({
                     id: 'MeasuremenentInfoOverlay.measurement-scope',
                   })}
-                </Row>
-              </h5>
+                </span>
+              </Row>
               <Row>
                 <div>{data.metadata.scope.name}</div>
               </Row>
@@ -89,13 +90,13 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }): JSX.Element => {
           )}
           {data.metadata.dateTime && data.metadata.dateTime.createdAt && (
             <Col xs={6} lg={3} className="px-4">
-              <h5 className="text-dark">
-                <Row>
+              <Row>
+                <span className="text-dark">
                   {formatMessage({
                     id: 'MeasuremenentInfoOverlay.measurement-createdAt',
                   })}
-                </Row>
-              </h5>
+                </span>
+              </Row>
               <Row>
                 <div>
                   {format(
@@ -108,13 +109,13 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ data }): JSX.Element => {
           )}
           {data.metadata.environment && data.metadata.environment.name && (
             <Col xs={6} lg={3} className="px-4">
-              <h5 className="text-dark">
-                <Row>
+              <Row>
+                <span className="text-dark">
                   {formatMessage({
                     id: 'MeasuremenentInfoOverlay.measurement-environment',
                   })}
-                </Row>
-              </h5>
+                </span>
+              </Row>
 
               <Row>
                 <div>{data.metadata.environment.name}</div>

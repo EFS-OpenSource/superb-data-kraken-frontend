@@ -8,14 +8,12 @@ export interface SearchInputBasicProps {
   searchValue: string | undefined;
   onSetSelectFilters: (filterAllFieds: Filter[]) => void;
   onSetSearchValue: (searchValue: string | undefined) => void;
-  onSetCurrentPage: (currentPage: number) => void;
 }
 
 export const SearchInputBasic: FC<SearchInputBasicProps> = ({
   searchValue,
   onSetSelectFilters,
   onSetSearchValue,
-  onSetCurrentPage,
 }) => {
   const filterAllFieds = [
     {
@@ -28,13 +26,11 @@ export const SearchInputBasic: FC<SearchInputBasicProps> = ({
   const handleKeyPress = (target: { charCode: number }): void => {
     if (target.charCode === 13 && searchValue) {
       onSetSelectFilters(filterAllFieds);
-      onSetCurrentPage(0);
     }
   };
 
   const handleSearchButton = () => {
     onSetSelectFilters(filterAllFieds);
-    onSetCurrentPage(0);
   };
 
   return (

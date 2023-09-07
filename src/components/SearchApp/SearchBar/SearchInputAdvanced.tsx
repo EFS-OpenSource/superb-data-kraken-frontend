@@ -20,7 +20,6 @@ export interface SearchInputAdvancedProps {
   onSetSearchValue: (searchValue: string | undefined) => void;
   onSetSelectFilters: (selectedFilters: (state: Filter[]) => Filter[]) => void;
   onReducedIndexAttributes: (remainingOptions: string[]) => void;
-  onSetCurrentPage: (currentPage: number) => void;
 }
 
 export const SearchInputAdvanced: FC<SearchInputAdvancedProps> = ({
@@ -30,7 +29,6 @@ export const SearchInputAdvanced: FC<SearchInputAdvancedProps> = ({
   onSetSelectFilters,
   onReducedIndexAttributes,
   onSetSearchValue,
-  onSetCurrentPage,
 }) => {
   const { formatMessage } = useIntl();
 
@@ -105,7 +103,6 @@ export const SearchInputAdvanced: FC<SearchInputAdvancedProps> = ({
   };
 
   const addFilter = (): void => {
-    onSetCurrentPage(0);
     if (operatorValue && searchValue && selectedIndexProperties) {
       handleAddChip(
         operatorValue,

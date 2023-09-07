@@ -16,7 +16,6 @@ export interface InputChipFieldProps {
   onReducedIndexAttributes: (updatedPropOptions: string[]) => void;
   onSetTableData: (tableData: MeasurementIndex[]) => void;
   onSetHitCount: (hitCount: number | undefined) => void;
-  onSetCurrentPage: (currentPage: number) => void;
 }
 
 const InputChipField: FC<InputChipFieldProps> = ({
@@ -27,7 +26,6 @@ const InputChipField: FC<InputChipFieldProps> = ({
   onReducedIndexAttributes,
   onSetTableData,
   onSetHitCount,
-  onSetCurrentPage,
 }) => {
   const removeAllInputChips = (): void => {
     onSelectedFilters([]);
@@ -60,7 +58,6 @@ const InputChipField: FC<InputChipFieldProps> = ({
     if (reducedSelectedFilterOptions.length === 0) {
       removeAllInputChips();
     }
-    onSetCurrentPage(0);
   };
 
   return (
