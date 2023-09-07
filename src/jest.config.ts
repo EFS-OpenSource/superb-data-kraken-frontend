@@ -16,6 +16,7 @@ const config: JestConfigWithTsJest = {
   transformIgnorePatterns: ['../node_modules/', '^.+\\.(css|scss|sass)$'],
   moduleNameMapper: {
     '\\.(css|scss|sass)$': 'identity-obj-proxy',
+    '^nanoid$': 'ts-jest',
   },
 };
 
