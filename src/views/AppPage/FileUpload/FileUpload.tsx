@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 import { format } from 'date-fns';
+import { createColumnHelper } from '@tanstack/react-table';
 import { Button, Container, ProgressBar } from 'react-bootstrap';
-import {
-  // CustomTable,
-  FileFolderInput,
-  Icon,
-} from '@components/index';
+import { FaTrash } from 'react-icons/fa';
+import { BsFolder2 } from 'react-icons/bs';
+import { ImFilesEmpty } from 'react-icons/im';
+import { CustomTable, FileFolderInput, Icon } from '@components/index';
 import { ErrorToast, SuccessToast } from '@notifications/index';
 import {
   postFactory,
@@ -28,15 +28,13 @@ import {
   FilesTypeForTable,
   S3AccessKeyResult,
 } from '@customTypes/index';
-import { FaTrash } from 'react-icons/fa';
-import { BsFolder2 } from 'react-icons/bs';
-import { ImFilesEmpty } from 'react-icons/im';
-// import { DefaultColumnsUploadTable } from '../../assets/configs/upload/configInitialColums';
 
 interface CustomTagProps {
   orgData: Organization;
   spaceData: Space;
 }
+
+const columnHelper = createColumnHelper<FilesTypeForTable>();
 
 function FileUpload({ orgData, spaceData }: CustomTagProps) {
   const { formatMessage } = useIntl();
@@ -44,10 +42,43 @@ function FileUpload({ orgData, spaceData }: CustomTagProps) {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [uploading, setUploading] = useState<boolean>(false);
 
-  const handleDragFile = (e: React.DragEvent<HTMLDivElement>): void => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor('count', {
+        header: formatMessage({
+          id: 'FileUpload.count',
+        }),
+        cell: (info) => info.getValue(),
+        enableSorting: false,
+      }),
+      columnHelper.accessor('name', {
+        header: formatMessage({
+          id: 'FileUpload.file-name',
+        }),
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor('type', {
+        header: formatMessage({
+          id: 'FileUpload.file-type',
+        }),
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor('size', {
+        header: formatMessage({
+          id: 'FileUpload.file-size',
+        }),
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor('action', {
+        header: formatMessage({
+          id: 'FileUpload.file-action',
+        }),
+        cell: (info) => info.getValue(),
+        enableSorting: false,
+      }),
+    ],
+    [],
+  );
 
   const filterDuplicates = (newFiles: any[]) => {
     const validFiles = newFiles.filter(
@@ -55,11 +86,6 @@ function FileUpload({ orgData, spaceData }: CustomTagProps) {
         !uploadFiles.find((existing) => existing.name === newFile.name),
     );
     return validFiles;
-  };
-
-  const handleDropFile = (e: React.DragEvent<HTMLDivElement>): void => {
-    e.preventDefault();
-    e.stopPropagation();
   };
 
   const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -131,7 +157,7 @@ function FileUpload({ orgData, spaceData }: CustomTagProps) {
         version: '/v1.0',
       };
       const validateJsonPost = postFactory<string, any>(urlOptions, baseURL);
-      console.log(jsonContent);
+
       const validateJson = await validateJsonPost('validateJson', payload);
 
       if (validateJson.status !== 200) {
@@ -325,8 +351,6 @@ function FileUpload({ orgData, spaceData }: CustomTagProps) {
               webkitDirectory=""
               icon={BsFolder2}
               textId="FileUpload.instruction-folder"
-              onDrop={handleDropFile}
-              onDragOver={handleDragFile}
               onChange={handleSelectFile}
             />
             <FileFolderInput
@@ -337,8 +361,6 @@ function FileUpload({ orgData, spaceData }: CustomTagProps) {
               inputId="file-upload"
               icon={ImFilesEmpty}
               textId="FileUpload.instruction-files"
-              onDrop={handleDropFile}
-              onDragOver={handleDragFile}
               onChange={handleSelectFile}
             />
           </div>
@@ -372,20 +394,20 @@ function FileUpload({ orgData, spaceData }: CustomTagProps) {
               })}
             </Button>
           </div>
-          {/* Placeholder until CustomTable is available */}
-          <div className="w-75 d-flex m-auto my-4">
-            {JSON.stringify(filesForTable)}
-          </div>
-          {/* <section className="w-100 mt-4">
-            <div className="w-80 m-auto">
+
+          <section className="w-100 mt-4 mb-4">
+            <div className="w-75 m-auto">
               {uploadFiles.length > 0 && (
                 <CustomTable
-                  columns={DefaultColumnsUploadTable()}
+                  columns={columns}
                   data={filesForTable}
+                  tableName="FileUploadTable"
+                  withDropdownColumnSelect={false}
+                  withTotalFilter={false}
                 />
               )}
             </div>
-          </section> */}
+          </section>
         </>
       )}
     </section>

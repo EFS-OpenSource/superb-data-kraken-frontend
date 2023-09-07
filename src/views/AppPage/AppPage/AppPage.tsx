@@ -57,7 +57,7 @@ interface TabWithData extends Tab {
   tooltipMessage?: string;
 }
 
-const AppPage = () => {
+function AppPage() {
   const { orgID, spaceID } = useParams();
   // const { featureFlag } = useContext(FeatureFlags)
   const { isAuthenticated } = useOidc();
@@ -268,6 +268,6 @@ const AppPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default AppPage;

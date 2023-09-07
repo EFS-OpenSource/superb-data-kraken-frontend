@@ -14,11 +14,11 @@ type LanguageContextType = {
 
 export const IntlWrapperContext = createContext({} as LanguageContextType);
 
-export const IntlWrapper = ({
+export function IntlWrapper({
   children,
 }: {
   children: React.ReactNode;
-}): JSX.Element => {
+}): JSX.Element {
   const [language, setLanguage] = useState('de');
 
   const LanguageContext = useMemo(
@@ -40,4 +40,4 @@ export const IntlWrapper = ({
       </IntlProvider>
     </IntlWrapperContext.Provider>
   );
-};
+}
