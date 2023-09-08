@@ -77,7 +77,7 @@ function FileUpload({ orgData, spaceData }: CustomTagProps) {
         enableSorting: false,
       }),
     ],
-    [],
+    [formatMessage],
   );
 
   const filterDuplicates = (newFiles: any[]) => {
