@@ -57,7 +57,10 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
     return process.env.VITE_INDEX_NAME ?? 'measurements';
   };
 
-  const [indexName] = useState<string>(assembleIndexName());
+  const [indexName, setIndexName] = useState<string>('');
+  useEffect(() => {
+    setIndexName(assembleIndexName());
+  }, [orgData, spaceData]);
   const [indexAttributes, setIndexAttributes] = useState<string[]>([]);
   const [reducedIndexAttributes, setReducedIndexAttributes] = useState<
     string[]
