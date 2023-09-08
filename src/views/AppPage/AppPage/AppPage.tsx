@@ -57,7 +57,7 @@ interface TabWithData extends Tab {
   tooltipMessage?: string;
 }
 
-const AppPage = () => {
+function AppPage() {
   const { orgID, spaceID } = useParams();
   // const { featureFlag } = useContext(FeatureFlags)
   const { isAuthenticated } = useOidc();
@@ -214,7 +214,7 @@ const AppPage = () => {
             tooltipMessage: tooltip() !== undefined ? tooltip() : undefined,
             content: (
               <div
-                style={{ width: '100%', height: '100%' }}
+                style={{ width: '100%', height: '100%', minHeight: '440px' }}
                 className="d-flex flex-column overflow-scroll"
               >
                 <Suspense fallback={<LoadingIndicator />}>
@@ -268,6 +268,6 @@ const AppPage = () => {
       </div>
     </div>
   );
-};
+}
 
 export default AppPage;

@@ -25,13 +25,13 @@ import {
 } from './factories';
 
 // TODO: Enviroment Variables
-// const baseURL = process.env.NX_SDK_BACKEND_URL;
+// const baseURL = process.env.VITE_SDK_BACKEND_URL;
 
 // const urlOptionsV1: AxiosOptions = {
 //   url:
 //     process.env['NODE_process.env'] === 'production'
-//       ? (process.env.NX_SDK_BACKEND_URL as string)
-//       : (process.env.NX_SDK_BACKEND_LOCAL_URL as string),
+//       ? (process.env.VITE_SDK_BACKEND_URL as string)
+//       : (process.env.VITE_SDK_BACKEND_LOCAL_URL as string),
 //   path: '/organizationmanager/api',
 //   version: '/v1.0',
 // };

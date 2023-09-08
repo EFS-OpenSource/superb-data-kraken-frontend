@@ -1,4 +1,3 @@
-import { FC } from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 import { Placement } from '@popperjs/core/lib/enums';
@@ -16,7 +15,7 @@ export interface CustomButtonProps {
   variantDisabled?: (typeof colors)[number];
 }
 
-const CustomButton: FC<CustomButtonProps> = ({
+function CustomButton({
   size,
   icon,
   buttonDisabled,
@@ -25,7 +24,7 @@ const CustomButton: FC<CustomButtonProps> = ({
   placementTooltip,
   variant,
   variantDisabled,
-}) => {
+}: CustomButtonProps) {
   const { formatMessage } = useIntl();
 
   return (
@@ -50,7 +49,7 @@ const CustomButton: FC<CustomButtonProps> = ({
       </Button>
     </OverlayTrigger>
   );
-};
+}
 
 CustomButton.propTypes = {
   buttonDisabled: bool,
