@@ -17,8 +17,37 @@ import { IoAdd, IoClose } from 'react-icons/io5';
 
 const columnHelper = createColumnHelper<MembersToRenderType>();
 
-const DefaultColumnsMembersTable = () => {
+type UsersUnionType =
+  | OrgaSpaceUser<UserOrgaRoleType>
+  | OrgaSpaceUser<UserSpaceRoleType>;
+
+type RolesUnionType = UserOrgaRoleType | UserSpaceRoleType;
+
+type MembersTableProps = {
+  initialMembers: any;
+  members: any;
+  roles: string[];
+  onRemoveMember: (member: UsersUnionType) => void;
+  onHandleChange: (passedData: UsersUnionType) => void;
+};
+
+function MembersTable({
+  initialMembers,
+  members,
+  roles,
+  onRemoveMember,
+  onHandleChange,
+}: MembersTableProps) {
   const { formatMessage } = useIntl();
+
+  const [membersToRender, setMembersToRender] = useState<MembersToRenderType[]>(
+    [],
+  );
+
+  const { spaceID } = useParams();
+  const roleCount = spaceID
+    ? userSpaceRoleTypes.length
+    : userOrgaRoleTypes.length;
 
   const columns = useMemo(
     () => [
@@ -53,41 +82,6 @@ const DefaultColumnsMembersTable = () => {
     ],
     [],
   );
-
-  return columns;
-};
-
-type UsersUnionType =
-  | OrgaSpaceUser<UserOrgaRoleType>
-  | OrgaSpaceUser<UserSpaceRoleType>;
-
-type RolesUnionType = UserOrgaRoleType | UserSpaceRoleType;
-
-type MembersTableProps = {
-  initialMembers: any;
-  members: any;
-  roles: string[];
-  onRemoveMember: (member: UsersUnionType) => void;
-  onHandleChange: (passedData: UsersUnionType) => void;
-};
-
-function MembersTable({
-  initialMembers,
-  members,
-  roles,
-  onRemoveMember,
-  onHandleChange,
-}: MembersTableProps) {
-  const { formatMessage } = useIntl();
-
-  const [membersToRender, setMembersToRender] = useState<MembersToRenderType[]>(
-    [],
-  );
-
-  const { spaceID } = useParams();
-  const roleCount = spaceID
-    ? userSpaceRoleTypes.length
-    : userOrgaRoleTypes.length;
 
   const handleAddPermission = useCallback(
     (
@@ -298,13 +292,12 @@ function MembersTable({
     <>
       <div className="mt-4">
         <CustomTable
-          columns={DefaultColumnsMembersTable()}
+          columns={columns}
           data={membersToRender}
           tableName="ModalMembersTable"
           withDropdownColumnSelect={false}
           withDropdownRowCount={false}
           customRowCount={5}
-          // showColumnsFiltering
         />
       </div>
       <p className="text-center mt-4" style={{ fontSize: '0.75rem' }}>
