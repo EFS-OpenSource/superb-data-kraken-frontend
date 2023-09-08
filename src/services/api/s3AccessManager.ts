@@ -11,8 +11,8 @@ import {
 /* Get S3 Tokens */
 
 // Coming from window/html env now? How to solve?
-const s3BaseUrl = process.env.NX_S3_BACKEND_URL;
-const s3StorageUrl = process.env.NX_S3_STORAGE;
+const s3BaseUrl = process.env.VITE_S3_BACKEND_URL;
+const s3StorageUrl = process.env.VITE_S3_STORAGE;
 
 const s3JwtOptions: AxiosOptions = {
   url: s3BaseUrl ?? '',

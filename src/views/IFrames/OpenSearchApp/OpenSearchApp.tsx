@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import Iframe from 'react-iframe';
 import { Organization, Space } from '@customTypes/index';
 
@@ -7,10 +7,7 @@ interface DashboardAppProps {
   spaceData?: Space;
 }
 
-const DashboardApp: React.FC<DashboardAppProps> = ({
-  orgData,
-  spaceData,
-}): ReactElement => {
+function DashboardApp({ orgData, spaceData }: DashboardAppProps): ReactElement {
   // const dashboardInfo = orgData?.appConfigs.find(
   //     (appConfig) => appConfig.appType === 'DASHBOARD'
   // )
@@ -37,6 +34,6 @@ const DashboardApp: React.FC<DashboardAppProps> = ({
       />
     </div>
   );
-};
+}
 
 export default DashboardApp;

@@ -1,4 +1,4 @@
-import { FC, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import {
   Container,
   Row,
@@ -25,7 +25,7 @@ interface LayoutProps {
   onLanguageChange: (language: string) => void;
 }
 
-const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
+function Layout({ onLanguageChange }: LayoutProps) {
   // const { featureFlag } = useContext(FeatureFlags)
   const { formatMessage } = useIntl();
   // const spaceRoles = useGetAllRoles<SpaceRoleType>('space')
@@ -236,6 +236,6 @@ const Layout: FC<LayoutProps> = ({ onLanguageChange }) => {
       </Row>
     </Container>
   );
-};
+}
 
 export default Layout;

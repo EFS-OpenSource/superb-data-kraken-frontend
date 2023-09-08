@@ -6,3 +6,5 @@ export * from './api/blobService';
 export * from './api/s3Service';
 export * from './api/accessManager';
 export * from './api/s3AccessManager';
+export * from './api/search';
+export * from './api/metaDataGeneratorBackend';

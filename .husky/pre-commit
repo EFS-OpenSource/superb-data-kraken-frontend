@@ -7,5 +7,3 @@ echo "Running linters on staged files ..."
 npx lint-staged --concurrent false --relative
 echo "Running tests on affected files"
 npx nx test
-
-

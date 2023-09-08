@@ -10,7 +10,7 @@ interface OverviewAppType {
   spaceData: Space;
 }
 
-const OverviewApp: React.FC<OverviewAppType> = ({ orgData, spaceData }) => {
+function OverviewApp({ orgData, spaceData }: OverviewAppType) {
   const { formatMessage } = useIntl();
   const { spaceID } = useParams();
 
@@ -88,6 +88,6 @@ const OverviewApp: React.FC<OverviewAppType> = ({ orgData, spaceData }) => {
       </Col>
     </Container>
   );
-};
+}
 
 export default OverviewApp;

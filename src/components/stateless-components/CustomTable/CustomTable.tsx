@@ -15,7 +15,6 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   FilterFn,
-  ColumnDef,
   flexRender,
 } from '@tanstack/react-table';
 import { RankingInfo, rankItem } from '@tanstack/match-sorter-utils';
@@ -36,6 +35,7 @@ import {
   PiCaretDownFill,
 } from 'react-icons/pi';
 import { GrClose } from 'react-icons/gr';
+import { CustomTableProps } from '@customTypes/index';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -58,19 +58,6 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Return if the item should be filtered in/out
   return itemRank.passed;
 };
-
-interface CustomTableProps<T extends object> {
-  columns: ColumnDef<T, any>[];
-  data: T[];
-  rowCountValues?: number[];
-  tableName: string;
-  withPagination?: boolean;
-  withTotalFilter?: boolean;
-  withDropdownColumnSelect?: boolean;
-  withDropdownRowCount?: boolean;
-  customRowCount?: number;
-  showColumnsFiltering?: boolean;
-}
 
 function DebouncedInput({
   value: initialValue,
@@ -293,12 +280,15 @@ function CustomTable<T extends object>({
   withDropdownRowCount = true,
   customRowCount = 10,
   showColumnsFiltering = false,
+  defaultColumnsVisibility = {},
+  overlayComponent = false,
+  onDataOverlayComponent,
 }: CustomTableProps<T>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
     `${tableName}-columnStorage`,
-    {},
+    defaultColumnsVisibility,
   );
 
   const { formatMessage } = useIntl();
@@ -513,7 +503,15 @@ function CustomTable<T extends object>({
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
+              <tr
+                key={row.id}
+                role={overlayComponent === true ? 'button' : ''}
+                onClick={
+                  overlayComponent && onDataOverlayComponent
+                    ? () => onDataOverlayComponent(row.original)
+                    : undefined
+                }
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
