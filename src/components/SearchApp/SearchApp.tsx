@@ -103,7 +103,7 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
     });
   };
 
-  // Fetch filter criteria on component mount.
+  // Fetch filter criteria / columnnames on component mount.
   useEffect(() => {
     getFilterCriteria(indexName).then((response) => {
       if (response.ok) {

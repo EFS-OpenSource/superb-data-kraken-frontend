@@ -1,5 +1,4 @@
 import { Icon } from '@components/index';
-import * as React from 'react';
 import {
   FaEquals,
   FaGreaterThan,
