@@ -33,9 +33,6 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
   // Initial setup for index name based on orgData & spaceData.
   // TODO Async await - orgdata not available on reload
   const assembleIndexName = (): string => {
-    if (!orgData && !spaceData) {
-      return process.env.VITE_INDEX_NAME ?? 'measurements';
-    }
     if (orgData && !spaceData) {
       return (
         `${orgData.name}_.*_${process.env.VITE_INDEX_NAME}` ?? 'measurements'
