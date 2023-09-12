@@ -17,7 +17,7 @@ limitations under the License.
 import type { JestConfigWithTsJest } from 'ts-jest';
 
 const config: JestConfigWithTsJest = {
-  displayName: 'nx-test2',
+  displayName: 'superb-data-kraken-frontend',
   preset: '../jest.preset.js',
 
   transform: {

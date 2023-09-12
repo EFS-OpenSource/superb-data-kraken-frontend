@@ -1,7 +1,7 @@
 {
-  "name": "sdk-frontend-open-source",
+  "name": "superb-data-kraken-frontend",
   "version": "0.0.1",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
     "start": "nx serve",
     "build": "nx build",

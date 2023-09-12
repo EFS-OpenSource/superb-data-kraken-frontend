@@ -1,5 +1,5 @@
 {
-  "name": "SDK_Open_Source_Frontend",
+  "name": "superb-data-kraken-frontend",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "./src",
   "projectType": "application",
@@ -9,7 +9,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "development",
       "options": {
-        "outputPath": "dist/SDK_Open_Source_Frontend"
+        "outputPath": "dist/superb-data-kraken-frontend"
       },
       "configurations": {
         "development": {
@@ -32,16 +32,16 @@
       "executor": "@nx/vite:dev-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "SDK_Open_Source_Frontend:build",
+        "buildTarget": "superb-data-kraken-frontend:build",
         "hmr": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "SDK_Open_Source_Frontend:build:development",
+          "buildTarget": "superb-data-kraken-frontend:build:development",
           "hmr": true
         },
         "production": {
-          "buildTarget": "SDK_Open_Source_Frontend:build:production",
+          "buildTarget": "superb-data-kraken-frontend:build:production",
           "hmr": false
         }
       }
@@ -50,22 +50,22 @@
       "executor": "@nx/vite:preview-server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "SDK_Open_Source_Frontend:build"
+        "buildTarget": "superb-data-kraken-frontend:build"
       },
       "configurations": {
         "development": {
-          "buildTarget": "SDK_Open_Source_Frontend:build:development"
+          "buildTarget": "superb-data-kraken-frontend:build:development"
         },
         "production": {
-          "buildTarget": "SDK_Open_Source_Frontend:build:production"
+          "buildTarget": "superb-data-kraken-frontend:build:production"
         }
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["coverage/SDK_Open_Source_Frontend"],
+      "outputs": ["coverage/superb-data-kraken-frontend"],
       "options": {
-        "reportsDirectory": "coverage/SDK_Open_Source_Frontend",
+        "reportsDirectory": "coverage/superb-data-kraken-frontend",
         "jestConfig": "jest.config.ts",
         "passWithNoTests": true,
         "codeCoverage": true,
@@ -83,7 +83,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "SDK_Open_Source_Frontend:build"
+        "buildTarget": "superb-data-kraken-frontend:build"
       }
     },
 

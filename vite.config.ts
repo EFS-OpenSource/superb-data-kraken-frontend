@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  cacheDir: './node_modules/.vite/sdk-frontend-open-source',
+  cacheDir: './node_modules/.vite/superb-data-kraken-frontend',
   //TODO: Following fixes use of process.env rather than import.meta.env, which fails in test with jest,
   // but seems to work only in development and not after build (process.env is undefined)
 
