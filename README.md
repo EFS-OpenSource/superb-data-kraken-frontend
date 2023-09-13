@@ -1,4 +1,9 @@
-![SDK LOGO](vscode-local:/c%3A/Users/UB480/Downloads/Logo_SuperbDataKraken/PNG/SuperbDataKraken_white.png)
+<div style="text-align: center">
+
+![Alt text](public/superbdatakraken_white.png)
+
+</div>
+
 # Prerequisites
 
 This is a starter repo for a standalone Nx React application. Good luck!
