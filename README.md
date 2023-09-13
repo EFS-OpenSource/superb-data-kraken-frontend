@@ -1,8 +1,8 @@
-<div style="text-align: center">
+<p align="center">
+  <img src="public/superbdatakraken_white.png" alt="SDK LOGO"/>
+</p>
 
-![Alt text](public/superbdatakraken_white.png)
 
-</div>
 
 # Prerequisites
 
