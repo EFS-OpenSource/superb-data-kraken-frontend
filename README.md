@@ -19,7 +19,7 @@ SDK is more than just a business intelligence platform as a data platform. Reacq
 <br/>
 <br/>
 <br/>
-<img src="public/img/sdk_readme_img_1.png" alt="SDK at work" style="width: 700px"/>
+<img src="public/img/sdk_readme_img_1.png" alt="SDK at work" style="width: 800px"/>
 <br/>
 <br/>
 
@@ -38,7 +38,7 @@ derived from it. Of course, access permissions can be managed and personalized b
 <br/>
 
 <div>
-<img src="public/img/sdk_readme_img_2.png" alt="SDK at work 2" style="width: 700px"/>
+<img src="public/img/sdk_readme_img_2.png" alt="SDK at work 2" style="width: 800px"/>
 </div>
 <br/>
 <br/>
