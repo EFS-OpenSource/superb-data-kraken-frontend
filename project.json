@@ -1,0 +1,92 @@
+{
+  "name": "superb-data-kraken-frontend",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "./src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "development",
+      "options": {
+        "outputPath": "dist/superb-data-kraken-frontend"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        },
+        "typecheck": {
+          "executor": "nx:run-commands",
+          "options": {
+            "commands": ["tsc -p tsconfig.app.json --noEmit"],
+            "cwd": "src/**/*.{ts, tsx}",
+            "forwardAllArgs": false
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "superb-data-kraken-frontend:build",
+        "hmr": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "superb-data-kraken-frontend:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "superb-data-kraken-frontend:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "superb-data-kraken-frontend:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "superb-data-kraken-frontend:build:development"
+        },
+        "production": {
+          "buildTarget": "superb-data-kraken-frontend:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["coverage/superb-data-kraken-frontend"],
+      "options": {
+        "reportsDirectory": "coverage/superb-data-kraken-frontend",
+        "jestConfig": "jest.config.ts",
+        "passWithNoTests": true,
+        "codeCoverage": true,
+        "coverage": true,
+        "coverageReporters": ["lcov", "text-summary"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["./src/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "superb-data-kraken-frontend:build"
+      }
+    },
+
+    "tags": {}
+  }
+}

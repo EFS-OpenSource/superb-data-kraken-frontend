@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running Type-Check with tsc ..."
+npx tsc -p tsconfig.app.json --skipLibCheck --noEmit
+echo "Running linters on staged files ..."
+npx lint-staged --concurrent false --relative
+echo "Running tests on affected files"
+npx nx test

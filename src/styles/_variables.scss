@@ -1,0 +1,42 @@
+/* Colors */
+
+$primary: #1d2539;
+$secondary: #ffffff;
+$accent: #98b9f2;
+$success: #22af8a;
+$info: #64c3d2;
+$warning: #f5e74a;
+$danger: #c41c3c;
+$dark: #aaafb2;
+$darker: #666666;
+$middle: #dde2e8;
+$light: #f5f5f5;
+$testaccent: #8e0f58;
+
+/* Font Types */
+$font-family-base-local: 'Roboto-Regular', 'Calibri', -apple-system, sans-serif;
+$font-family-medium-local: 'Roboto-Medium', 'Calibri', -apple-system, sans-serif;
+
+/* Font Sizes */
+$font-size-base-local: 1.0625rem; /* According to design specs Text 2 17px regular, assumes browser default as 16px */
+$font-size-lg-local: 1.25rem; /* According to design specs 20px regular, assumes browser default as 16px */
+$font-size-sm-local: 0.625rem; /* According to design specs smallest text 10px regular, assumes browser default as 16px */
+
+$h1-font-size-local: 1.875rem; /* According to sdk design specs 30px */
+$h2-font-size-local: 1.4375rem; /* According to sdk design specs 23px */
+$h3-font-size-local: 1.25rem; /* According to sdk design specs 20px */
+$h4-font-size-local: 0.875rem; /* According to sdk design specs 14px */
+$h5-font-size-local: 0.75rem; /* According to sdk design specs 12px */
+$h6-font-size-local: 0.625rem; /* According to sdk design specs 10px */
+
+$font-weight-local: 400;
+$line-height-local: 1.3;
+
+/* Container Breakpoints */
+
+$grid-breakpoint-xs: 0;
+$grid-breakpoint-sm: 576px;
+$grid-breakpoint-md: 768px;
+$grid-breakpoint-lg: 992px;
+$grid-breakpoint-xl: 1200px;
+$grid-breakpoint-xxl: 1400px;

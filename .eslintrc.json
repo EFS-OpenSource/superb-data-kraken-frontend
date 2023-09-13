@@ -1,0 +1,51 @@
+{
+  "extends": ["plugin:@nx/react", "airbnb", "airbnb-typescript"],
+  "parserOptions": {
+    "project": "./tsconfig.app.json"
+  },
+  "rules": {
+    "@typescript-eslint/dot-notation": 0,
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": [
+      1,
+      { "extensions": [".js", ".jsx", "ts", ".tsx"] }
+    ],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/prop-types": "off",
+    "react/require-default-props": "off",
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": ["function-declaration"]
+      }
+    ],
+    "import/newline-after-import": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-underscore-dangle": "off"
+  },
+  "root": true,
+  // ignore test files
+  "ignorePatterns": [
+    "src/**/*.spec.tsx",
+    "*.config.ts",
+    "*.preset.js",
+    "tsconfig.json",
+    "node_modules"
+  ],
+  "plugins": ["@nx"],
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nx/typescript"],
+      "rules": {}
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nx/javascript"],
+      "rules": {}
+    }
+  ]
+}
