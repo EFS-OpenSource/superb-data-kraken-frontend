@@ -1,9 +1,9 @@
+![SDK LOGO](vscode-local:/c%3A/Users/UB480/Downloads/Logo_SuperbDataKraken/PNG/SuperbDataKraken_white.png)
 # Prerequisites
 
 This is a starter repo for a standalone Nx React application. Good luck!
 
 First of all, run
-
 ```
 npm install
 ```
