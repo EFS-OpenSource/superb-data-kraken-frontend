@@ -31,11 +31,11 @@ company's data and learn how to leverage it further!
 SDK is divided into different components that can be combined according to your preferences. It all starts  
 with data upload. In this process, data is processed through a secure area and transferred to the desired  
 storage location.
-<br/>
+
 During the upload, metadata is captured and processed in a search engine. If needed, this data can be made  
 fully searchable based on content. Automated analysis takes place through workflows, which can be generated  
 and customized as per requirements and preferences.
-<br/>
+
 The results are then stored in appropriate databases and visualized through interactive dashboards. Users  
 can access the data and the insights derived from it. Of course, access permissions can be managed and  
 personalized by the admin at any time.
