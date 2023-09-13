@@ -36,7 +36,11 @@ derived from it. Of course, access permissions can be managed and personalized b
 <br/>
 <br/>
 <br/>
-<img src="public/img/ServicesMesh_2.svg" alt="SDK at work 2" style="width: 600px; background-color:white"/>
+
+<div style="width: 600px; background-color: white">
+<img src="public/img/ServicesMesh_2.svg" alt="SDK at work 2" style="width: 600px"/>
+</div>
+
 <br/>
 <br/>
 
