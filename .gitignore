@@ -39,5 +39,8 @@ testem.log
 .DS_Store
 Thumbs.db
 
-#public
+# public
 /public/OidcTrustedDomains.js
+
+# pre commit hooks
+.husky
