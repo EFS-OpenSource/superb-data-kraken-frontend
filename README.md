@@ -27,6 +27,7 @@ company's data and learn how to leverage it further!
 
 # How does it work?
 
+
 SDK is divided into different components that can be combined according to your preferences. It all starts  
 with data upload. In this process, data is processed through a secure area and transferred to the desired  
 storage location.
