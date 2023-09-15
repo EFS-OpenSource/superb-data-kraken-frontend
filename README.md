@@ -8,25 +8,25 @@
 
 <br/>
 <br/>
-<br/>
 
 # SUPERB DATA KRAKEN
 
 **An automated data platform to capture, process, analyze and present your data**
 
 From your data to your insights in interactive dashboards within minutes. Automation of knowledge extraction  
-through customizable workflows.  
-<br/>
+through customizable workflows.
+
 SDK is more than just a business intelligence platform as a data platform. Reacquaint yourself with your  
 company's data and learn how to leverage it further!
 <br/>
 <br/>
 <br/>
-<img src="public/img/sdk_readme_img_1.png" alt="SDK at work" style="width: 800px"/>
+    <img src="public/img/sdk_readme_img_1.png" alt="SDK at work" style="width: 800px"/>
 <br/>
 <br/>
 
 # How does it work?
+
 
 SDK is divided into different components that can be combined according to your preferences. It all starts  
 with data upload. In this process, data is processed through a secure area and transferred to the desired  
@@ -44,7 +44,7 @@ personalized by the admin at any time.
 <br/>
 
 <div>
-<img src="public/img/sdk_readme_img_2.png" alt="SDK at work 2" style="width: 800px"/>
+    <img src="public/img/sdk_readme_img_2.png" alt="SDK at work 2" style="width: 800px"/>
 </div>
 <br/>
 <br/>
