@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
   OrgaSpaceUser,
@@ -40,28 +39,19 @@ import {
   deleteFactory,
 } from './factories';
 
-// TODO: Enviroment Variables
-// const baseURL = process.env.VITE_SDK_BACKEND_URL;
-
-// const urlOptionsV1: AxiosOptions = {
-//   url:
-//     process.env['NODE_process.env'] === 'production'
-//       ? (process.env.VITE_SDK_BACKEND_URL as string)
-//       : (process.env.VITE_SDK_BACKEND_LOCAL_URL as string),
-//   path: '/organizationmanager/api',
-//   version: '/v1.0',
-// };
-
-const baseURL = 'https://sdk-dev.efs.ai:443';
+const baseURL =
+  process.env['NODE_process.env'] === 'production'
+    ? (process.env.VITE_SDK_BACKEND_URL as string)
+    : (process.env.VITE_SDK_BACKEND_LOCAL_URL as string);
 
 const urlOptionsV1: AxiosOptions = {
-  url: 'http://localhost:8090',
+  url: baseURL,
   path: '/organizationmanager/api',
   version: '/v1.0',
 };
 
 const urlOptionsV2: AxiosOptions = {
-  url: 'http://localhost:8090',
+  url: baseURL,
   path: '/organizationmanager/api',
   version: '/v2.0',
 };
