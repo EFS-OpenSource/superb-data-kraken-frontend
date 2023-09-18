@@ -70,6 +70,7 @@ It uses the React library and is written in Typescript.
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Usage](#usage)
+- [Further Requirements](#further-requirements)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -127,6 +128,7 @@ To get started with Superb Data Kraken Frontend, follow these steps:
    - Return to your project root folder.
 
    ```bash
+   cd ..
    npm start
    ```
 
@@ -145,6 +147,23 @@ Here are some basic instructions for using Superb Data Kraken Frontend:
 3. **Visualize Data**: Explore your data with the built-in data visualization tools.
 
 4. **Manage Data**: Perform various data management tasks such as download, delete, and update.
+
+
+## Further Requirements
+
+In order to be able to use the Superb Data Kraken, you will need further components:
+
+- OIDC-conformant Authentication such as Auth0, Keycloak
+
+- Orgamanager (Link)
+
+- Accessmanager (Link)
+
+- Storagemanager (Link)
+
+- Metadata-Backend (Link)
+
+- Search (Link)
 
 ## Contributing
 
