@@ -21,12 +21,11 @@ company's data and learn how to leverage it further!
 <br/>
 <br/>
 <br/>
-    <img src="public/img/sdk_readme_img_1.png" alt="SDK at work" style="width: 800px"/>
+<img src="public/img/sdk_readme_img_1.png" alt="SDK at work" style="width: 800px"/>
 <br/>
 <br/>
 
 # How does it work?
-
 
 SDK is divided into different components that can be combined according to your preferences. It all starts  
 with data upload. In this process, data is processed through a secure area and transferred to the desired  
@@ -64,7 +63,7 @@ based on facts and lead your business into a successful and sustainable future w
 
 **Superb Data Kraken Frontend** is the frontend component of the Superb Data Kraken project. It provides a  
 user-friendly interface for interacting with and managing data using the Superb Data Kraken backend.  
-It uses React and Typescript in
+It uses the React library and is written in Typescript.
 
 ## Table of Contents
 
@@ -77,7 +76,7 @@ It uses React and Typescript in
 ## Features
 
 - **User-friendly Interface:** Superb Data Kraken Frontend offers an intuitive and user-friendly interface  
-    for managing your data effortlessly.
+   for managing your data effortlessly.
 
 - **Data Visualization:** Visualize your data with stunning charts and graphs to gain insights quickly.
 
@@ -99,44 +98,67 @@ To get started with Superb Data Kraken Frontend, follow these steps:
 
 2. **Install dependencies:**
 
-    ```bash
-    cd superb-data-kraken-frontend
-    npm install
-    ```
+   ```bash
+   cd superb-data-kraken-frontend
+   npm install
+   ```
 
 3. **Configuration:**
 
-    - Copy the .env.template configuration file and adjust it as needed:  
+   - Copy the .env.template configuration file and adjust it as needed:
 
-    ```bash
-    cp .env.template .env
-    ```
+   ```bash
+   cp .env.template .env
+   ```
 
-    - Update the environment variables in the .env file with your configuration details.
+   - Update the environment variables in the .env file with your configuration details.
 
-    - Copy the OidcTrustedDomainsTemplate.js configuration file and adjust it as needed:  
-  
-    ```bash
-    cd public
-    cp OidcTrustedDomainsTemplate.js OidcTrustedDomains.js
-    ```
+   - Copy the OidcTrustedDomainsTemplate.js configuration file and adjust it as needed:
 
-    - Update the trustedDomains array in the OidcTrustedDomains.js file with your configuration details.
+   ```bash
+   cd public
+   cp OidcTrustedDomainsTemplate.js OidcTrustedDomains.js
+   ```
+
+   - Update the trustedDomains array in the OidcTrustedDomains.js file with your configuration details.
 
 4. **Run the Development Server:**
 
-    - Return to your project root folder.  
+   - Return to your project root folder.
 
-    ```bash
-    npm start
-    ```
+   ```bash
+   npm start
+   ```
 
 5. **Access the Frontend:**
 
-    - Open your web browser and navigate to http://localhost:4200 to access the Superb Data Kraken Frontend.
+   - Open your web browser and navigate to http://localhost:4200 to access the Superb Data Kraken Frontend.
 
+## Usage
 
+Here are some basic instructions for using Superb Data Kraken Frontend:
 
+1. **Login**: Use your credentials to log in to the platform.
+
+2. **Upload Data**: Upload your data files using the provided interface.
+
+3. **Visualize Data**: Explore your data with the built-in data visualization tools.
+
+4. **Manage Data**: Perform various data management tasks such as download, delete, and update.
+
+## Contributing
+
+We welcome contributions to Superb Data Kraken Frontend. If you'd like to contribute, please follow these guidelines:
+
+- Fork the repository and create a new branch for your feature or bug fix.
+
+- Ensure your code follows the project's coding standards. (CONTRIBUTRION.md -> tbd)
+
+- Create clear and concise commit messages.
+
+- Submit a pull request, describing the changes you've made and their purpose.
+
+- Participate in code reviews and address any feedback.
 
 ## License
 
