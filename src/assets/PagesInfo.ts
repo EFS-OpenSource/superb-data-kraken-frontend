@@ -20,13 +20,9 @@ import {
   BsHouseFill,
   BsArrowRepeat,
 } from 'react-icons/bs';
-// import { SiJupyter } from 'react-icons/si';
 import { HomePage, OpenSearchApp, ArgoWorkflow } from 'src/views';
 import { SearchApp } from 'src/components';
 import { PageInfo } from '../customTypes/pageInfoTypes';
-
-// import { ArgoWorkflow } from '../../pages/ArgoWorkflow';
-// import SearchApp from '../../parts/search-app/SearchApp';
 
 export const appPageInfo = [
   {
@@ -60,7 +56,12 @@ export const appPageInfo = [
     buttonText: 'SdkDashboard.open-button',
     page: OpenSearchApp,
   },
-  {
+] as unknown as PageInfo[];
+
+console.log(process.env.VITE_WORKFLOW_URL);
+
+if (process.env.VITE_WORKFLOW_URL) {
+  appPageInfo.push({
     nameShort: 'WorkflowManagement.name-short',
     name: 'WorkflowManagement.name',
     description: 'WorkflowManagement.description',
@@ -69,19 +70,8 @@ export const appPageInfo = [
     icon: BsArrowRepeat,
     buttonText: 'SdkDashboard.open-button',
     page: ArgoWorkflow,
-  },
-  // {
-  //     nameShort: 'JupyterHub.name-short',
-  //     name: 'JupyterHub.name',
-  //     description: 'JupyterHub.description',
-  //     descriptionDisabled: 'App.disabled',
-  //     path: '/apps/jupyterhub',
-  //     icon: SiJupyter,
-  //     buttonText: 'SdkDashboard.open-button',
-  //     page: <JupyterHub />,
-
-  // },
-] as unknown as PageInfo[];
+  });
+}
 
 export const overViewInfo = [
   {
