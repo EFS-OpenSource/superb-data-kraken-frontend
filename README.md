@@ -153,7 +153,7 @@ Here are some basic instructions for using Superb Data Kraken Frontend:
 
 In order to be able to use the Superb Data Kraken, you will need further components:
 
-- OIDC-conformant Authentication such as Auth0, Keycloak
+- OIDC-conformant Authentication such as Auth0, Keycloak, Zitadel etc.
 
 - Orgamanager (Link)
 
