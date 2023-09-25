@@ -232,6 +232,7 @@ function DropdownRowCount({
 
 function DropdownColumnSelect({ table }: { table: Table<any> }) {
   const { formatMessage } = useIntl();
+  console.log('hello world');
   return (
     <Dropdown>
       <Dropdown.Toggle variant="secondary" className="px-0">
