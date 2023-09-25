@@ -136,6 +136,7 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
                       .join('\n')
                   : '';
               },
+              filterFn: 'massdata',
             });
           }
 
