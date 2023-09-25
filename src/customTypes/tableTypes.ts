@@ -41,6 +41,11 @@ export interface CustomTableProps<T extends object> {
   onDataOverlayComponent?: (selectedRowData: T) => void;
 }
 
+export interface ColumnCreationResult {
+  columns: any[];
+  columnsVisibility: Record<string, boolean>;
+}
+
 export interface SearchColumns {
   massdata: {
     dateCreated: string[];

@@ -29,6 +29,7 @@ import {
   Organization,
   Space,
   MassData,
+  ColumnCreationResult,
 } from '@customTypes/index';
 import { getMetaData, getFilterCriteria } from '@services/index';
 import { ErrorToast } from '@notifications/index';
@@ -76,6 +77,7 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
   useEffect(() => {
     setIndexName(assembleIndexName());
   }, [orgData, spaceData]);
+
   const [indexAttributes, setIndexAttributes] = useState<string[]>([]);
   const [reducedIndexAttributes, setReducedIndexAttributes] = useState<
     string[]
@@ -93,10 +95,77 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
     undefined,
   );
   const [defaultColumnsVisibility, setDefaultColumnsVisibility] = useState({});
+  const [isAdvancedSearchActive, setIsAdvancedSearchActive] = useState(false);
+
+  // Get the nested keys from the search result object and create a string array splitted with dots.
+  const getNestedKeys = (obj: any, parent = ''): string[] => {
+    let keys: string[] = [];
+
+    Object.keys(obj).forEach((key) => {
+      // create a new key with a dot if there is a parent key
+      const newKey = parent ? `${parent}.${key}` : key;
+      if (Array.isArray(obj[key]) && obj[key].length > 0) {
+        // if the value of the current key is an array, call the function recursevely w/ first element and new key name
+        keys = keys.concat(getNestedKeys(obj[key][0], newKey));
+      } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+        // else if it's an object:
+        keys = keys.concat(getNestedKeys(obj[key], newKey));
+      } else {
+        keys.push(newKey);
+      }
+    });
+
+    return keys.sort();
+  };
+
+  // Building the columns from the search results
+  const createColumns = (hit: MeasurementIndex[]): ColumnCreationResult => {
+    if (!hit) {
+      return { columns: [], columnsVisibility: {} };
+    }
+
+    const columnNames = getNestedKeys(hit);
+
+    // Define default columns based on env variable or a default set.
+    const defaultColumns = process.env.VITE_CONFIG_SEARCH_COLUMNS
+      ? process.env.VITE_CONFIG_SEARCH_COLUMNS.split(',')
+      : ['name', 'project.name', 'scope.name', 'caseSpecification.description'];
+
+    const columnsVisibility: Record<string, boolean> = {};
+
+    columnNames.forEach((columnName) => {
+      columnsVisibility[columnName] = defaultColumns.includes(columnName);
+    });
+
+    const columns = columnNames.map((columnName) => {
+      if (columnName.startsWith('massdata')) {
+        return columnHelper.accessor('massdata', {
+          id: columnName,
+          header: (props) => props.column.id,
+          cell: (info) => {
+            const massdataArray = info.row.original.massdata || [];
+            const key = columnName.split('.').pop();
+            return key
+              ? massdataArray
+                  .map((item) => item[key as keyof MassData])
+                  .slice(0, 3)
+                  .join('\n')
+              : '';
+          },
+        });
+      }
+      return columnHelper.accessor(columnName as any, {
+        id: columnName,
+        header: (props) => props.column.id,
+        cell: (info) => info.getValue(),
+      });
+    });
+
+    return { columns, columnsVisibility };
+  };
 
   const onSubmit = (event?: React.SyntheticEvent): void => {
     event?.preventDefault();
-
     const queryInput = {
       index_name: indexName.replace(
         '.',
@@ -108,6 +177,11 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
 
     getMetaData(queryInput).then((response) => {
       if (response.ok) {
+        const { columns, columnsVisibility } = createColumns(
+          response.data.hits[0],
+        );
+        setColumnData(columns);
+        setDefaultColumnsVisibility(columnsVisibility);
         setTableData(response.data.hits);
         setHitCount(response.data.max);
         setSearchDuration(response.data.duration);
@@ -123,66 +197,27 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
 
   // Fetch filter criteria / columnnames on component mount.
   useEffect(() => {
-    getFilterCriteria(indexName).then((response) => {
-      if (response.ok) {
-        const options: string[] = [];
-        response.data.map((result: Criteria) => options.push(result.property));
-        const sortedOptions = options.sort();
-        setIndexAttributes(sortedOptions);
-        setReducedIndexAttributes(sortedOptions);
-        setCriteria(response.data);
-
-        // Define default columns based on env variable or a default set.
-        const defaultColumns = process.env.VITE_CONFIG_SEARCH_COLUMNS
-          ? process.env.VITE_CONFIG_SEARCH_COLUMNS.split(',')
-          : [
-              'name',
-              'project.name',
-              'scope.name',
-              'caseSpecification.description',
-            ];
-
-        const newColumnsVisibility: Record<string, boolean> = {};
-
-        sortedOptions.forEach((columnName) => {
-          newColumnsVisibility[columnName] =
-            defaultColumns.includes(columnName);
-        });
-
-        setDefaultColumnsVisibility(newColumnsVisibility);
-
-        const columns = sortedOptions.map((option) => {
-          if (option.startsWith('massdata')) {
-            return columnHelper.accessor('massdata', {
-              id: option,
-              header: (props) => props.column.id,
-              cell: (info) => {
-                const massdataArray = info.row.original.massdata;
-                const key = option.split('.').pop();
-                return key
-                  ? massdataArray
-                      .map((item) => item[key as keyof MassData])
-                      .join('\n')
-                  : '';
-              },
-            });
-          }
-          return columnHelper.accessor(option as any, {
-            id: option,
-            header: (props) => props.column.id,
-            cell: (info) => info.getValue(),
-          });
-        });
-        setColumnData(columns);
-      } else
-        ErrorToast(
-          'ErrorToast.title',
-          response.status,
-          response.statusText,
-          response.data.errorCode,
-        );
-    });
-  }, [indexName]);
+    if (isAdvancedSearchActive && !criteria) {
+      getFilterCriteria(indexName).then((response) => {
+        if (response.ok) {
+          const options: string[] = [];
+          response.data.map((result: Criteria) =>
+            options.push(result.property),
+          );
+          const sortedOptions = options.sort();
+          setIndexAttributes(sortedOptions);
+          setReducedIndexAttributes(sortedOptions);
+          setCriteria(response.data);
+        } else
+          ErrorToast(
+            'ErrorToast.title',
+            response.status,
+            response.statusText,
+            response.data.errorCode,
+          );
+      });
+    }
+  }, [criteria, indexName, isAdvancedSearchActive]);
 
   // Fetch metadata when selected filters or other dependencies change.
   useEffect(() => {
@@ -240,6 +275,9 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
               searchDuration={searchDuration}
               onSetTableData={setTableData}
               onSetHitCount={setHitCount}
+              onAdvancedModeChange={(isActive) =>
+                setIsAdvancedSearchActive(isActive)
+              }
             />
           </Row>
 
