@@ -51,11 +51,12 @@ import {
   PiCaretDownFill,
 } from 'react-icons/pi';
 import { GrClose } from 'react-icons/gr';
-import { CustomTableProps } from '@customTypes/index';
+import { CustomTableProps, MassData } from '@customTypes/index';
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
     fuzzy: FilterFn<unknown>;
+    massdata: FilterFn<unknown>;
   }
   interface FilterMeta {
     itemRank: RankingInfo;
@@ -73,6 +74,21 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 
   // Return if the item should be filtered in/out
   return itemRank.passed;
+};
+
+const massdataFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+  const massdataArray = row.getValue(columnId) as MassData[] | undefined;
+  const key = columnId.split('.').pop();
+
+  if (!massdataArray || !key) {
+    return false;
+  }
+
+  const filteredArray = massdataArray
+    .map((item: MassData) => item[key as keyof MassData])
+    .filter((itemValue: any) => String(itemValue).includes(value));
+
+  return filteredArray.length > 0;
 };
 
 function DebouncedInput({
@@ -121,13 +137,35 @@ function Filter({
 
   const columnFilterValue = column.getFilterValue();
 
-  const sortedUniqueValues = useMemo(
-    () =>
-      typeof firstValue === 'number'
-        ? []
-        : Array.from(column.getFacetedUniqueValues().keys()).sort(),
-    [firstValue, column.getFacetedUniqueValues],
-  );
+  const sortedUniqueValues = useMemo(() => {
+    if (typeof firstValue === 'number') {
+      return [];
+    }
+
+    const allValues = Array.from(column.getFacetedUniqueValues().keys());
+    let uniqueValues = new Set();
+
+    if (column.id.startsWith('massdata')) {
+      const key = column.id.split('.').pop();
+      allValues.forEach((value) => {
+        if (Array.isArray(value)) {
+          value.forEach((item) => {
+            if (
+              item &&
+              typeof item === 'object' &&
+              Object.prototype.hasOwnProperty.call(item, key as string)
+            ) {
+              uniqueValues.add(item[key as keyof typeof item]);
+            }
+          });
+        }
+      });
+    } else {
+      uniqueValues = new Set(allValues);
+    }
+
+    return Array.from(uniqueValues).sort();
+  }, [firstValue, column.getFacetedUniqueValues, column.id]);
 
   const { formatMessage } = useIntl();
   return typeof firstValue === 'number' ? (
@@ -232,7 +270,6 @@ function DropdownRowCount({
 
 function DropdownColumnSelect({ table }: { table: Table<any> }) {
   const { formatMessage } = useIntl();
-  console.log('hello world');
   return (
     <Dropdown>
       <Dropdown.Toggle variant="secondary" className="px-0">
@@ -315,6 +352,7 @@ function CustomTable<T extends object>({
     columns,
     filterFns: {
       fuzzy: fuzzyFilter,
+      massdata: massdataFilter,
     },
     state: {
       columnFilters,
@@ -333,9 +371,6 @@ function CustomTable<T extends object>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: false,
   });
 
   useEffect(() => {
