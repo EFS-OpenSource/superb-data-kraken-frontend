@@ -343,7 +343,7 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
                   />
                 ) : (
                   <Spinner
-                    className="mt-3 me-4"
+                    className="me-4"
                     as="span"
                     animation="border"
                     size="sm"
@@ -489,7 +489,7 @@ function AppPageHeader({ orgData, spaceData }: OrgSpaceDataType) {
                   />
                 ) : (
                   <Spinner
-                    className="mt-3 me-4"
+                    className="me-4"
                     as="span"
                     animation="border"
                     size="sm"

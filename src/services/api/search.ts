@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-/* eslint-disable @typescript-eslint/naming-convention */
 import {
   Response,
   AxiosOptions,
@@ -23,7 +22,10 @@ import {
 } from '@customTypes/index.js';
 import { getFactory } from '@services/api/factories';
 
-const baseURL = 'http://localhost:8092';
+const baseURL =
+  process.env['NODE_process.env'] === 'production'
+    ? (process.env.VITE_SDK_BACKEND_URL as string)
+    : (process.env.VITE_SDK_SEARCH_LOCAL_URL as string);
 
 export const searchOptions: AxiosOptions = {
   url: baseURL ?? '',
@@ -31,6 +33,7 @@ export const searchOptions: AxiosOptions = {
   version: '/v1.0',
 };
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
 const getFilterCriteria_ = getFactory<Criteria[]>(searchOptions, baseURL);
 export const getFilterCriteria = (
   index: string,

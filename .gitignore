@@ -38,3 +38,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# public
+/public/OidcTrustedDomains.js
+
+# pre commit hooks
+.husky

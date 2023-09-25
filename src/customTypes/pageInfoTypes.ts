@@ -17,7 +17,7 @@ limitations under the License.
 import { IconType } from 'react-icons/lib';
 
 export interface PageInfo {
-  app: boolean;
+  app?: boolean;
   nameShort: string;
   name?: string;
   description?: string;
