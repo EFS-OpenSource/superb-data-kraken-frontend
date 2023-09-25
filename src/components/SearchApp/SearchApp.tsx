@@ -157,14 +157,16 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
               id: option,
               header: (props) => props.column.id,
               cell: (info) => {
-                const massdataArray = info.row.original.massdata;
+                const massdataArray = info.row.original.massdata || [];
                 const key = option.split('.').pop();
                 return key
                   ? massdataArray
                       .map((item) => item[key as keyof MassData])
+                      .slice(0, 3)
                       .join('\n')
                   : '';
               },
+              filterFn: 'massdata',
             });
           }
           return columnHelper.accessor(option as any, {
