@@ -58,8 +58,6 @@ export const appPageInfo = [
   },
 ] as unknown as PageInfo[];
 
-console.log(process.env.VITE_WORKFLOW_URL);
-
 if (process.env.VITE_WORKFLOW_URL) {
   appPageInfo.push({
     nameShort: 'WorkflowManagement.name-short',
