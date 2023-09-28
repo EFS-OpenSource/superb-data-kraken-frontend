@@ -147,6 +147,7 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
                 if (remainingItems > 0) {
                   cellContent.push(
                     <div key="more-items" className="fst-italic small">
+                      <br />
                       {formatMessage(
                         {
                           id: 'Search.more-items',
