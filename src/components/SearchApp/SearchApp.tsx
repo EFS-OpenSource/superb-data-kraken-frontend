@@ -15,6 +15,7 @@ limitations under the License.
  */
 
 import { useEffect, useState, useRef } from 'react';
+import { useIntl } from 'react-intl';
 import { createColumnHelper } from '@tanstack/react-table';
 import { Row, Col, Container } from 'react-bootstrap';
 import {
@@ -49,6 +50,7 @@ const columnHelper = createColumnHelper<MeasurementIndex>();
 
 function SearchApp({ orgData, spaceData }: SearchAppProps) {
   const isMounted = useRef(false);
+  const { formatMessage } = useIntl();
 
   // Initial setup for index name based on orgData & spaceData.
   // TODO Async await - orgdata not available on reload
@@ -116,6 +118,7 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
 
         const columnsVisibility: Record<string, boolean> = {};
 
+        const displayedItems = 3;
         columnNames.forEach((columnName: string) => {
           columnsVisibility[columnName] = defaultColumns.includes(columnName);
         });
@@ -126,16 +129,38 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
             return columnHelper.accessor('massdata', {
               id: columnName,
               header: (props) => props.column.id,
+
+              // eslint-disable-next-line react/no-unstable-nested-components
               cell: (info) => {
                 const massdataArray = info.row.original.massdata || [];
                 const key = columnName.split('.').pop();
-                return key
-                  ? massdataArray
-                      .map((item) => item[key as keyof MassData])
-                      .slice(0, 3)
-                      .join('\n')
-                  : '';
+                let cellContent: JSX.Element[] = [];
+
+                if (key) {
+                  cellContent = massdataArray
+                    .slice(0, displayedItems)
+                    .map((item) => <div>{item[key as keyof MassData]}</div>);
+                }
+
+                const remainingItems = massdataArray.length - displayedItems;
+
+                if (remainingItems > 0) {
+                  cellContent.push(
+                    <div key="more-items" className="fst-italic small">
+                      <br />
+                      {formatMessage(
+                        {
+                          id: 'Search.more-items',
+                        },
+                        { remainingItems },
+                      )}
+                    </div>,
+                  );
+                }
+
+                return <div>{cellContent}</div>;
               },
+
               filterFn: 'massdata',
             });
           }

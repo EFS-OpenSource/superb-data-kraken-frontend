@@ -149,6 +149,7 @@
   "Search.between-button": "Between",
   "Search.search-bar-filter-button": "Search options",
   "Search.select-columns": "Select columns",
+  "Search.more-items": "{remainingItems} more item(s)...",
   "ElasticDashboard.name": "Dashboard",
   "ElasticDashboard.name-short": "Dashboard",
   "ElasticDashboard.description": "OpenSearch Dashboard",
