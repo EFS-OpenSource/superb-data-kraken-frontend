@@ -156,6 +156,7 @@
   "Search.between-button": "Between",
   "Search.search-bar-filter-button": "Search options",
   "Search.select-columns": "Select columns",
+  "Search.more-items": "{remainingItems} more items",
   "VMServices.name": "VM Services",
   "VMServices.name-short": "VMs",
   "VMServices.description": "Creating and Administration of virtual machines",

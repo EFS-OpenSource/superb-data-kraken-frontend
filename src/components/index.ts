@@ -28,7 +28,7 @@ import CustomButtonGroup from './stateless-components/CustomButtonGroup/CustomBu
 import CustomCardTitle from './stateless-components/CustomCard/CustomCardTitle/CustomCardTitle';
 import CustomCardBody from './stateless-components/CustomCard/CustomCardBody/CustomCardBody';
 import CustomCard from './stateless-components/CustomCard/CustomCard/CustomCard';
-import CustomTable from './stateless-components/CustomTable/CustomTable';
+import CustomTable from './CustomTable/CustomTable';
 import InputText from './stateless-components/InputText/InputText';
 import InputChip from './stateless-components/InputChip/InputChip';
 import InputChipField from './stateless-components/InputChipField/InputChipField';
