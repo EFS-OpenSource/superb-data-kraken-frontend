@@ -156,7 +156,7 @@
   "Search.between-button": "Zwischen",
   "Search.select-columns": "Spaltenauswahl",
   "Search.search-bar-filter-button": "Suchoptionen",
-  "Search.more-items": "{remainingItems} weitere Elemente vorhanden...",
+  "Search.more-items": "{remainingItems} weitere(s) Element(e) vorhanden...",
   "VMServices.name": "VM Services",
   "VMServices.name-short": "VMs",
   "VMServices.description": "Erstellen und Admininstration von virtuellen Maschinen",
