@@ -132,7 +132,7 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
 
               // eslint-disable-next-line react/no-unstable-nested-components
               cell: (info) => {
-                const massdataArray = info.row.original.massdata;
+                const massdataArray = info.row.original.massdata || [];
                 const key = columnName.split('.').pop();
                 let cellContent: JSX.Element[] = [];
 
