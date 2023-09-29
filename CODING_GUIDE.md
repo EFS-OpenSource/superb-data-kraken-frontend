@@ -1,4 +1,4 @@
-# Project Name Coding Style Guidelines
+# Superb Data Kraken Coding Style Guidelines
 
 ## Table of Contents
 

@@ -97,7 +97,7 @@ When contributing code, please follow these guidelines:
 
 - Create a descriptive branch name (e.g., `feature/add-new-feature`).
 - Write clear and concise commit messages.
-- Keep your code style consistent with the project's coding standards (link to your style guide if available).
+- Keep your code style consistent with the project's coding standards [CODING_GUIDE](CODING_GUIDE.md).
 - Ensure all tests pass before submitting a PR.
 - Submit your changes as a PR to the `develop` branch of this repository.
 
