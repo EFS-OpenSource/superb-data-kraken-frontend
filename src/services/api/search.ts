@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
+/* eslint-disable @typescript-eslint/naming-convention */
 
 import {
   Response,
@@ -33,9 +34,14 @@ export const searchOptions: AxiosOptions = {
   version: '/v1.0',
 };
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 const getFilterCriteria_ = getFactory<Criteria[]>(searchOptions, baseURL);
 export const getFilterCriteria = (
   index: string,
 ): Promise<Response<Criteria[]> | ResponseError> =>
   getFilterCriteria_('criteria', { queryParams: { index } });
+
+const getResultProperties_ = getFactory<string[]>(searchOptions, baseURL);
+export const getResultProperties = (
+  index: string,
+): Promise<Response<string[]> | ResponseError> =>
+  getResultProperties_('resultproperties', { queryParams: { index } });

@@ -15,6 +15,7 @@ limitations under the License.
  */
 
 import { useEffect, useState, useRef } from 'react';
+import { useIntl } from 'react-intl';
 import { createColumnHelper } from '@tanstack/react-table';
 import { Row, Col, Container } from 'react-bootstrap';
 import {
@@ -30,7 +31,11 @@ import {
   Space,
   MassData,
 } from '@customTypes/index';
-import { getMetaData, getFilterCriteria } from '@services/index';
+import {
+  getMetaData,
+  getFilterCriteria,
+  getResultProperties,
+} from '@services/index';
 import { ErrorToast } from '@notifications/index';
 import { SearchInputBasic } from './SearchBar/SearchInputBasic';
 import { SearchBar } from './SearchBar/SearchBar';
@@ -45,6 +50,7 @@ const columnHelper = createColumnHelper<MeasurementIndex>();
 
 function SearchApp({ orgData, spaceData }: SearchAppProps) {
   const isMounted = useRef(false);
+  const { formatMessage } = useIntl();
 
   // Initial setup for index name based on orgData & spaceData.
   // TODO Async await - orgdata not available on reload
@@ -76,6 +82,7 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
   useEffect(() => {
     setIndexName(assembleIndexName());
   }, [orgData, spaceData]);
+
   const [indexAttributes, setIndexAttributes] = useState<string[]>([]);
   const [reducedIndexAttributes, setReducedIndexAttributes] = useState<
     string[]
@@ -93,10 +100,90 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
     undefined,
   );
   const [defaultColumnsVisibility, setDefaultColumnsVisibility] = useState({});
+  const [isAdvancedSearchActive, setIsAdvancedSearchActive] = useState(false);
+
+  // Building the columns from the resultProperties endpoint
+  const createColumns = () => {
+    getResultProperties(indexName).then((response) => {
+      if (response.ok) {
+        const columnNames = response.data.sort();
+        const defaultColumns = process.env.VITE_CONFIG_SEARCH_COLUMNS
+          ? process.env.VITE_CONFIG_SEARCH_COLUMNS.split(',')
+          : [
+              'name',
+              'project.name',
+              'scope.name',
+              'caseSpecification.description',
+            ];
+
+        const columnsVisibility: Record<string, boolean> = {};
+
+        const displayedItems = 3;
+        columnNames.forEach((columnName: string) => {
+          columnsVisibility[columnName] = defaultColumns.includes(columnName);
+        });
+        setDefaultColumnsVisibility(columnsVisibility);
+
+        const columns = columnNames.map((columnName: string) => {
+          if (columnName.startsWith('massdata')) {
+            return columnHelper.accessor('massdata', {
+              id: columnName,
+              header: (props) => props.column.id,
+
+              // eslint-disable-next-line react/no-unstable-nested-components
+              cell: (info) => {
+                const massdataArray = info.row.original.massdata || [];
+                const key = columnName.split('.').pop();
+                let cellContent: JSX.Element[] = [];
+
+                if (key) {
+                  cellContent = massdataArray
+                    .slice(0, displayedItems)
+                    .map((item) => <div>{item[key as keyof MassData]}</div>);
+                }
+
+                const remainingItems = massdataArray.length - displayedItems;
+
+                if (remainingItems > 0) {
+                  cellContent.push(
+                    <div key="more-items" className="fst-italic small">
+                      <br />
+                      {formatMessage(
+                        {
+                          id: 'Search.more-items',
+                        },
+                        { remainingItems },
+                      )}
+                    </div>,
+                  );
+                }
+
+                return <div>{cellContent}</div>;
+              },
+
+              filterFn: 'massdata',
+            });
+          }
+
+          return columnHelper.accessor(columnName as any, {
+            id: columnName,
+            header: (props) => props.column.id,
+            cell: (info) => info.getValue(),
+          });
+        });
+        setColumnData(columns);
+      } else
+        ErrorToast(
+          'ErrorToast.title',
+          response.status,
+          response.statusText,
+          response.data.errorCode,
+        );
+    });
+  };
 
   const onSubmit = (event?: React.SyntheticEvent): void => {
     event?.preventDefault();
-
     const queryInput = {
       index_name: indexName.replace(
         '.',
@@ -108,6 +195,7 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
 
     getMetaData(queryInput).then((response) => {
       if (response.ok) {
+        createColumns();
         setTableData(response.data.hits);
         setHitCount(response.data.max);
         setSearchDuration(response.data.duration);
@@ -123,66 +211,27 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
 
   // Fetch filter criteria / columnnames on component mount.
   useEffect(() => {
-    getFilterCriteria(indexName).then((response) => {
-      if (response.ok) {
-        const options: string[] = [];
-        response.data.map((result: Criteria) => options.push(result.property));
-        const sortedOptions = options.sort();
-        setIndexAttributes(sortedOptions);
-        setReducedIndexAttributes(sortedOptions);
-        setCriteria(response.data);
-
-        // Define default columns based on env variable or a default set.
-        const defaultColumns = process.env.VITE_CONFIG_SEARCH_COLUMNS
-          ? process.env.VITE_CONFIG_SEARCH_COLUMNS.split(',')
-          : [
-              'name',
-              'project.name',
-              'scope.name',
-              'caseSpecification.description',
-            ];
-
-        const newColumnsVisibility: Record<string, boolean> = {};
-
-        sortedOptions.forEach((columnName) => {
-          newColumnsVisibility[columnName] =
-            defaultColumns.includes(columnName);
-        });
-
-        setDefaultColumnsVisibility(newColumnsVisibility);
-
-        const columns = sortedOptions.map((option) => {
-          if (option.startsWith('massdata')) {
-            return columnHelper.accessor('massdata', {
-              id: option,
-              header: (props) => props.column.id,
-              cell: (info) => {
-                const massdataArray = info.row.original.massdata;
-                const key = option.split('.').pop();
-                return key
-                  ? massdataArray
-                      .map((item) => item[key as keyof MassData])
-                      .join('\n')
-                  : '';
-              },
-            });
-          }
-          return columnHelper.accessor(option as any, {
-            id: option,
-            header: (props) => props.column.id,
-            cell: (info) => info.getValue(),
-          });
-        });
-        setColumnData(columns);
-      } else
-        ErrorToast(
-          'ErrorToast.title',
-          response.status,
-          response.statusText,
-          response.data.errorCode,
-        );
-    });
-  }, [indexName]);
+    if (isAdvancedSearchActive && !criteria) {
+      getFilterCriteria(indexName).then((response) => {
+        if (response.ok) {
+          const options: string[] = [];
+          response.data.map((result: Criteria) =>
+            options.push(result.property),
+          );
+          const sortedOptions = options.sort();
+          setIndexAttributes(sortedOptions);
+          setReducedIndexAttributes(sortedOptions);
+          setCriteria(response.data);
+        } else
+          ErrorToast(
+            'ErrorToast.title',
+            response.status,
+            response.statusText,
+            response.data.errorCode,
+          );
+      });
+    }
+  }, [criteria, indexName, isAdvancedSearchActive]);
 
   // Fetch metadata when selected filters or other dependencies change.
   useEffect(() => {
@@ -240,6 +289,9 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
               searchDuration={searchDuration}
               onSetTableData={setTableData}
               onSetHitCount={setHitCount}
+              onAdvancedModeChange={(isActive) =>
+                setIsAdvancedSearchActive(isActive)
+              }
             />
           </Row>
 

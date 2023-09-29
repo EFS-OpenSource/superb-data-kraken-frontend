@@ -166,7 +166,7 @@ export function SearchInputAdvanced({
             type={inputType}
             value={searchValue}
             onChange={(e) => onSetSearchValue(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyPress}
           />
         </Col>
         <Col

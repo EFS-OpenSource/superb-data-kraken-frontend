@@ -30,6 +30,7 @@ export interface SeachBarProps {
   onSetHitCount: (hitCount: number | undefined) => void;
   onSetTableData: (tableData: MeasurementIndex[]) => void;
   onSetSearchValue: (searchValue: string | undefined) => void;
+  onAdvancedModeChange?: (isActive: boolean) => void;
 }
 
 export function SearchBar({
@@ -41,16 +42,21 @@ export function SearchBar({
   onSetHitCount,
   onSetTableData,
   onSetSearchValue,
+  onAdvancedModeChange,
 }: SeachBarProps) {
   const { formatMessage } = useIntl();
   const [advancedMode, setAdvancedMode] = useState<boolean>(false);
 
   const handleToggler = (): void => {
-    setAdvancedMode(!advancedMode);
+    setAdvancedMode((prev) => !prev);
     onSetSelectFilters([]);
     onSetTableData([]);
     onSetHitCount(undefined);
     onSetSearchValue(undefined);
+
+    if (onAdvancedModeChange) {
+      onAdvancedModeChange(!advancedMode);
+    }
   };
 
   return (
