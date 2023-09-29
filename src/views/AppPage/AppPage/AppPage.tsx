@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { ToastContainer } from 'react-toastify';
 
 import React, {
   JSXElementConstructor,
@@ -28,6 +27,7 @@ import React, {
 import { useIntl } from 'react-intl';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import { LoadingIndicator, Tabs } from '@components/index';
 import {
   OrgaRoleType,
@@ -59,7 +59,7 @@ type MapType = {
 const components: MapType = {
   Search: React.lazy(() => import('../../../components/SearchApp/SearchApp')),
   Dashboard: React.lazy(
-    () => import('../../IFrames/OpenSearchApp/OpenSearchApp'),
+    () => import('../../IFrames/OpenSearchApp/OpenSearchApp')
   ),
   Overview: React.lazy(() => import('../Overview/Overview')),
   Description: React.lazy(() => import('../Description/Description')),
@@ -111,7 +111,7 @@ function AppPage() {
       }
 
       return null;
-    },
+    }
   );
 
   const { data: orgaSpacesDataQuery } = useQuery(['spaces', orgID], () => {
@@ -126,7 +126,7 @@ function AppPage() {
   const memoSpace = useMemo(() => spaceDataQuery, [spaceDataQuery]);
   const memoOrgaSpaces = useMemo(
     () => orgaSpacesDataQuery,
-    [orgaSpacesDataQuery],
+    [orgaSpacesDataQuery]
   );
 
   const [orgData, setOrgData] = useState<Organization>();
@@ -150,12 +150,12 @@ function AppPage() {
 
   const userSpaceRoles = useGetRoles<SpaceRoleType>(
     memoSpace?.data.name,
-    'space',
+    'space'
   );
 
   const userOrganizationRoles = useGetRoles<OrgaRoleType>(
     memoOrga?.data.name,
-    'organization',
+    'organization'
   );
 
   const userRoles = spaceID ? userSpaceRoles : userOrganizationRoles;
@@ -191,7 +191,7 @@ function AppPage() {
             spaceData !== undefined
               ? spaceData?.capabilities
               : orgaSpacesCapabilities,
-            AppEnableConditions,
+            AppEnableConditions
           );
 
           const roles = AppEnableConditions[AppID as AppNameType].roles
@@ -206,12 +206,12 @@ function AppPage() {
               return intlWrapper(
                 'AppPage.Tabs.app-disabled-roles-and-capabilities',
                 capabilities,
-                roles,
+                roles
               );
             if (!roles && capabilities)
               return intlWrapper(
                 'AppPage.Tabs.app-disabled-capabilities',
-                capabilities,
+                capabilities
               );
             if (roles && !capabilities)
               return intlWrapper('AppPage.Tabs.app-disabled-roles', roles);
@@ -232,7 +232,7 @@ function AppPage() {
             content: (
               <div
                 style={{ width: '100%', height: '100%', minHeight: '440px' }}
-                className="d-flex flex-column overflow-scroll"
+                className='d-flex flex-column overflow-scroll'
               >
                 <Suspense fallback={<LoadingIndicator />}>
                   <CustomTag orgData={orgData} spaceData={spaceData} />
@@ -240,7 +240,7 @@ function AppPage() {
               </div>
             ),
           };
-        }),
+        })
       ),
     [
       formatMessage,
@@ -249,7 +249,7 @@ function AppPage() {
       userDataState,
       orgaSpacesData,
       userRoles,
-    ],
+    ]
   );
 
   useEffect(() => {
@@ -271,15 +271,15 @@ function AppPage() {
   return (
     <div>
       {orgData && <AppPageHeader orgData={orgData} spaceData={spaceData} />}
-      <div className="justify-content-center m-0 p-0">
+      <div className='justify-content-center m-0 p-0'>
         {appTabs && (
           <Tabs
             tabs={appTabs}
-            variant="tabs"
-            className="bg-light mb-0 mb-0 sticky-top h3"
-            activeStyle="pt-2 pb-2 px-4"
-            inactiveStyle="pt-2 pb-2 px-4"
-            disabledStyle="text-dark"
+            variant='tabs'
+            className='bg-light mb-0 mb-0 sticky-top h3'
+            activeStyle='pt-2 pb-2 px-4'
+            inactiveStyle='pt-2 pb-2 px-4'
+            disabledStyle='text-dark'
           />
         )}
       </div>
