@@ -171,7 +171,7 @@ We welcome contributions to Superb Data Kraken Frontend. If you'd like to contri
 
 - Fork the repository and create a new branch for your feature or bug fix.
 
-- Ensure your code follows the project's coding standards. (CONTRIBUTRION.md -> tbd)
+- Ensure your code follows the project's coding standards. [CONTRIBUTING](CONTRIBUTING.md)
 
 - Create clear and concise commit messages.
 
