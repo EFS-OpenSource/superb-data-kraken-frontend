@@ -20,7 +20,14 @@ import {
   ReactElement,
   SetStateAction,
 } from 'react';
-import { Organization, Space, Owner, User } from '@customTypes/index';
+import {
+  Organization,
+  Space,
+  Owner,
+  User,
+  OrgaUser,
+  SpaceUser,
+} from '@customTypes/index';
 
 export type ModalTypes =
   | 'createOrganization'
@@ -46,7 +53,7 @@ export interface TabData {
   initialUsers?: User[];
   initialOwners?: Owner[];
   onUpdateOwners?: (updatedOwners: string[]) => void;
-  onUpdateUsers?: (updatedUsers: Record<string, unknown>[]) => void;
+  onUpdateUsers?: (updatedUsers: OrgaUser[] | SpaceUser[]) => void;
   isOwner?: boolean;
 }
 

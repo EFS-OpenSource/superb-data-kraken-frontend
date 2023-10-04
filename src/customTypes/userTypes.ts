@@ -14,7 +14,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { Organization } from './organizationTypes';
+import { UserSpaceRoleType } from '@customTypes/spaceTypes';
+import { UserOrgaRoleType, Organization } from '@customTypes/organizationTypes';
 
 export const States = ['OPEN', 'ACCEPTED', 'DECLINED'] as const;
 export type UserState = (typeof States)[number];
@@ -33,7 +34,6 @@ export interface UserDataState {
 }
 
 export interface User {
-  id: string;
   createdTimestamp: number;
   username: string;
   enabled: boolean;
@@ -43,7 +43,18 @@ export interface User {
 }
 
 export interface OrgaSpaceUser<T> extends User {
+  id: string;
   permissions: T[];
+}
+
+export interface OrgaUser extends User {
+  id: string;
+  permissions: UserOrgaRoleType[];
+}
+
+export interface SpaceUser extends User {
+  id: string;
+  permissions: UserSpaceRoleType[];
 }
 
 export interface SetOrgaSpaceUser<T> {
