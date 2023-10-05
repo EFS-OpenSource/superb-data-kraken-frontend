@@ -34,6 +34,7 @@ export interface UserDataState {
 }
 
 export interface User {
+  id: string;
   createdTimestamp: number;
   username: string;
   enabled: boolean;
@@ -43,17 +44,14 @@ export interface User {
 }
 
 export interface OrgaSpaceUser<T> extends User {
-  id: string;
   permissions: T[];
 }
 
 export interface OrgaUser extends User {
-  id: string;
   permissions: UserOrgaRoleType[];
 }
 
 export interface SpaceUser extends User {
-  id: string;
   permissions: UserSpaceRoleType[];
 }
 

@@ -28,6 +28,7 @@ import { useIntl } from 'react-intl';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { LoadingIndicator, Tabs } from '@components/index';
 import {
   OrgaRoleType,
