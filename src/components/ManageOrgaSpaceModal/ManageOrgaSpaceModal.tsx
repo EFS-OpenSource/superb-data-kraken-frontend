@@ -56,7 +56,6 @@ import {
   Organization,
   Owner,
   ModalTabNameType,
-  User,
 } from '@customTypes/index';
 import { OrgSpaceModalParent } from '@views/index';
 
@@ -133,20 +132,6 @@ function ManageOrgaSpaceModal({
     owners.map((owner) => owner.id)
   );
 
-  // interface User {
-  //   email: string;
-  //   permissions: UserOrgaRoleType[] | UserSpaceRoleType[];
-  //   id: string;
-  // }
-
-  // const initialUsers = users
-  //   ? users?.map((user) => ({
-  //       email: user.email,
-  //       permissions: user.permissions,
-  //       id: user.id,
-  //     }))
-  //   : undefined;
-
   const [initialUsers, setInitialUsers] = useState<OrgaUser[] | SpaceUser[]>(
     []
   );
@@ -170,7 +155,6 @@ function ManageOrgaSpaceModal({
           }))
         : undefined;
       setInitialUsers(initialUsersSpace as unknown as SpaceUser[]);
-      // setUpdatedUsers(initialUsersSpace as unknown as SpaceUser[]);
     } else {
       const initialUsersOrga = users
         ? users?.map((user) => ({
@@ -179,7 +163,6 @@ function ManageOrgaSpaceModal({
           }))
         : undefined;
       setInitialUsers(initialUsersOrga as unknown as OrgaUser[]);
-      // setUpdatedUsers(initialUsersOrga as unknown as OrgaUser[]);
     }
   }, [modalData, users]);
 
@@ -203,7 +186,7 @@ function ManageOrgaSpaceModal({
           permissions,
         }: {
           email: string;
-          permissions: UserOrgaRoleType[] | UserSpaceRoleType[];
+          permissions: UserOrgaRoleType | UserSpaceRoleType;
         }) => ({ email, permissions })
       )
       .sort((a: { email: string }, b: { email: string }) =>
@@ -219,8 +202,6 @@ function ManageOrgaSpaceModal({
   ): boolean => stringifyUsers(initial) !== stringifyUsers(updated);
 
   const [activeKey, setActiveKey] = useState(tabNames[0]);
-
-  // const updatedUsersFixed: Array<(typeof updatedUsers)[number]> = updatedUsers;
 
   const updateOrganizationUsersMutation = useMutation(() =>
     updatedUsers
@@ -243,7 +224,7 @@ function ManageOrgaSpaceModal({
         setOrganizationRoleByEmail(
           orgID as string,
           updatedUser.email,
-          updatedUser.permissions
+          updatedUser.permissions as unknown as string[]
         ).then((response) => {
           if (response.ok) {
             queryClient.invalidateQueries(['orgasWithSpaces']);
@@ -304,7 +285,7 @@ function ManageOrgaSpaceModal({
           orgID as string,
           currentSpaceID,
           updatedUser.email,
-          updatedUser.permissions
+          updatedUser.permissions as unknown as string[]
         ).then((response) => {
           if (response.ok) {
             queryClient.invalidateQueries(['spaces', `o_${orgID}`]);
@@ -596,7 +577,11 @@ function ManageOrgaSpaceModal({
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
-            setActiveKey(tabNames[tabNames.indexOf(activeKey) + 1] as any);
+            setActiveKey(
+              tabNames[
+                tabNames.indexOf(activeKey) + 1
+              ] as SetStateAction<'General'>
+            );
           }}
         >
           {formatMessage({
@@ -616,7 +601,7 @@ function ManageOrgaSpaceModal({
   };
 
   const handleSubmit = (event: {
-    currentTarget: any;
+    currentTarget: HTMLInputElement;
     preventDefault: () => void;
     stopPropagation: () => void;
   }) => {

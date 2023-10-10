@@ -31,17 +31,18 @@ import {
   OrgaSpaceUser,
   UserSpaceRoleType,
   UserOrgaRoleType,
+  OrgaUser,
+  SpaceUser,
 } from '@customTypes/index';
 import { useAddRemoveElements } from '@customHooks/index';
 import { MembersTable } from '@views/index';
+import { Draft } from 'immer';
+import { ListIteratee } from 'lodash';
 
 type MembersTabProps = {
   roles: string[];
   initialOwners?: Owner[];
-  initialUsers?: (
-    | OrgaSpaceUser<UserOrgaRoleType>
-    | OrgaSpaceUser<UserSpaceRoleType>
-  )[];
+  initialUsers: OrgaUser[] | SpaceUser[];
   onUpdateOwners?: (updatedOwners: string[]) => void;
   onUpdateUsers?: (updatedUsers: Record<string, unknown>[]) => void;
   isOwner: boolean;
@@ -62,9 +63,11 @@ function MembersTab({
 
   const { spaceID } = useParams();
 
+  const initialUsersFixed: Array<(typeof initialUsers)[number]> = initialUsers;
+
   const handleAddOwner = useCallback(
     (_email: string, email: string) => {
-      const newOwner = (initialUsers || []).filter(
+      const newOwner = (initialUsersFixed || []).filter(
         (user) => user.email === email
       );
       dispatchOwners({
@@ -72,7 +75,7 @@ function MembersTab({
         element: newOwner[0],
       });
     },
-    [dispatchOwners, initialUsers]
+    [dispatchOwners, initialUsersFixed]
   );
 
   const handleRemoveOwner = useCallback(
@@ -90,7 +93,10 @@ function MembersTab({
 
   const {
     reducer: [users, dispatchUsers],
-  } = useAddRemoveElements<OrgaSpaceUser<string>>(initialUsers || [], 'email');
+  } = useAddRemoveElements<OrgaSpaceUser<string>>(
+    (initialUsers as unknown as Draft<OrgaSpaceUser<string>>[]) || [],
+    'email'
+  );
 
   const handleAddUser = useCallback(
     (email: string, role: string) => {
@@ -113,10 +119,10 @@ function MembersTab({
   );
 
   const handleRemoveUser = useCallback(
-    (member: OrgaSpaceUser<UserOrgaRoleType | UserSpaceRoleType>) => {
+    (member: OrgaUser | SpaceUser) => {
       dispatchUsers({
         type: 'remove',
-        predicate: member,
+        predicate: member as unknown as ListIteratee<OrgaSpaceUser<string>>,
       });
     },
     [dispatchUsers]
@@ -214,18 +220,20 @@ function MembersTab({
                 }
                 dropdownOptions={
                   spaceID
-                    ? initialUsers.map((initialUser) => initialUser.email)
-                    : initialUsers
-                        .filter(
-                          (
-                            initialUser: OrgaSpaceUser<
-                              UserOrgaRoleType | UserSpaceRoleType
-                            >
-                          ) =>
-                            initialUser.permissions
-                              .map((permission) => permission.toUpperCase())
-                              .includes('ADMIN')
-                        )
+                    ? initialUsersFixed.map((initialUser) => initialUser.email)
+                    : initialUsersFixed
+                        .filter((initialUser: OrgaUser | SpaceUser) => {
+                          const permissionsFixed: Array<
+                            (typeof initialUser.permissions)[number]
+                          > = initialUser.permissions as unknown as string[];
+
+                          permissionsFixed
+                            .map((permission: string) =>
+                              permission.toUpperCase()
+                            )
+                            .includes('ADMIN');
+                          return null;
+                        })
                         .map((initialUser) => initialUser.email)
                 }
               />
@@ -280,18 +288,19 @@ function MembersTab({
           {users && (
             <MembersTable
               initialMembers={initialUsers}
-              members={users}
+              members={users as unknown as OrgaUser[] | SpaceUser[]}
               onRemoveMember={(member) => handleRemoveUser(member)}
               onHandleChange={(updatedUser) =>
-                handlePermissionChange(updatedUser)
+                handlePermissionChange(
+                  updatedUser as unknown as OrgaSpaceUser<
+                    'access' | 'trustee' | 'admin' | 'user' | 'supplier'
+                  >
+                )
               }
-              roles={roles}
+              roles={roles as unknown as UserOrgaRoleType | UserSpaceRoleType}
             />
           )}
         </div>
-        {/* <div className="w-75 m-auto text-center border">
-          {users && JSON.stringify(users)}
-        </div> */}
       </Form.Group>
     </div>
   );

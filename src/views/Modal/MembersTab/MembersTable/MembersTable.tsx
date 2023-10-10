@@ -27,23 +27,23 @@ import {
   userOrgaRoleTypes,
   UserOrgaRoleType,
   MembersToRenderType,
+  OrgaUser,
+  SpaceUser,
 } from '@customTypes/index';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { IoAdd, IoClose } from 'react-icons/io5';
 
 const columnHelper = createColumnHelper<MembersToRenderType>();
 
-type UsersUnionType =
-  | OrgaSpaceUser<UserOrgaRoleType>
-  | OrgaSpaceUser<UserSpaceRoleType>;
+type UsersUnionType = OrgaSpaceUser<string> | OrgaSpaceUser<string>;
 
 type RolesUnionType = UserOrgaRoleType | UserSpaceRoleType;
 
 type MembersTableProps = {
-  initialMembers: any;
-  members: any;
-  roles: string[];
-  onRemoveMember: (member: UsersUnionType) => void;
+  initialMembers: OrgaUser[] | SpaceUser[];
+  members: OrgaUser[] | SpaceUser[];
+  roles: UserOrgaRoleType | UserSpaceRoleType;
+  onRemoveMember: (member: OrgaUser | SpaceUser) => void;
   onHandleChange: (passedData: UsersUnionType) => void;
 };
 
@@ -57,7 +57,7 @@ function MembersTable({
   const { formatMessage } = useIntl();
 
   const [membersToRender, setMembersToRender] = useState<MembersToRenderType[]>(
-    [],
+    []
   );
 
   const { spaceID } = useParams();
@@ -96,13 +96,37 @@ function MembersTable({
         enableColumnFilter: false,
       }),
     ],
-    [],
+    []
   );
+
+  const [membersToHandle, setMembersToHandle] = useState<
+    OrgaUser[] | SpaceUser[]
+  >([]);
+
+  useEffect(() => {
+    if (spaceID) {
+      const initialMembersSpace = initialMembers
+        ? initialMembers?.map((member) => ({
+            ...member,
+            permissions: member.permissions as unknown as UserSpaceRoleType,
+          }))
+        : undefined;
+      setMembersToHandle(initialMembersSpace as unknown as SpaceUser[]);
+    } else {
+      const initialMembersOrga = initialMembers
+        ? initialMembers?.map((member) => ({
+            ...member,
+            permissions: member.permissions as unknown as UserOrgaRoleType,
+          }))
+        : undefined;
+      setMembersToHandle(initialMembersOrga as unknown as OrgaUser[]);
+    }
+  }, [initialMembers, spaceID]);
 
   const handleAddPermission = useCallback(
     (
-      member: UsersUnionType,
-      permission: any /* //TODO permission has a known type but this collides with AddTagPopover type Definition. AddTagPopover should be generalized  */,
+      member: OrgaUser | SpaceUser,
+      permission: string /* //TODO permission has a known type but this collides with AddTagPopover type Definition. AddTagPopover should be generalized  */
     ) => {
       if (!member.permissions.includes(permission)) {
         onHandleChange({
@@ -113,47 +137,60 @@ function MembersTable({
         });
       }
     },
-    [onHandleChange],
+    [onHandleChange]
   );
 
   const handleRemovePermission = useCallback(
     (
-      member: any /* //TODO */,
-      permission: any /* //TODO permission has a known type but this collides with AddTagPopover type Definition. AddTagPopover should be generalized  */,
+      member: OrgaUser | SpaceUser /* //TODO */,
+      permission: string /* //TODO permission has a known type but this collides with AddTagPopover type Definition. AddTagPopover should be generalized  */
     ) => {
+      const permissionsFixed: Array<(typeof member.permissions)[number]> =
+        member.permissions as unknown as string[];
       onHandleChange({
         ...member,
-        permissions: member.permissions.filter(
-          (p: RolesUnionType) => p !== permission,
-        ),
+        permissions: permissionsFixed.filter((p: string) => p !== permission),
       });
     },
-    [onHandleChange],
+    [onHandleChange]
   );
 
   const handleRemoveAllPermissions = useCallback(
-    (member: any) => {
+    (member: OrgaUser | SpaceUser) => {
       onHandleChange({
         ...member,
         permissions: [],
       });
     },
-    [onHandleChange],
+    [onHandleChange]
   );
 
   const handleRevokeDeletion = useCallback(
-    (member: any) => {
-      const revokedMember = initialMembers
-        ? initialMembers.find(
-            (initialMember: any) => initialMember.email === member.email,
+    (member: OrgaUser | SpaceUser) => {
+      const initialUsersFixed: Array<(typeof membersToHandle)[number]> = spaceID
+        ? (membersToHandle as SpaceUser[])
+        : (membersToHandle as OrgaUser[]);
+
+      const revokedMember = initialUsersFixed
+        ? initialUsersFixed.find(
+            (initialMember: OrgaUser | SpaceUser) =>
+              initialMember.email === member.email
           )
         : [''];
-      onHandleChange({
-        ...member,
-        permissions: revokedMember.permissions,
-      });
+      if (revokedMember && 'permissions' in revokedMember && spaceID) {
+        const perms = revokedMember.permissions as unknown as string[];
+        onHandleChange({
+          ...(member as SpaceUser),
+          permissions: perms,
+        });
+      } else if (revokedMember && 'permissions' in revokedMember && !spaceID) {
+        onHandleChange({
+          ...(member as OrgaUser),
+          permissions: revokedMember.permissions as unknown as string[],
+        });
+      }
     },
-    [initialMembers, onHandleChange],
+    [membersToHandle, onHandleChange, spaceID]
   );
 
   const handleShow = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -163,39 +200,41 @@ function MembersTable({
   const openPopoverButton = useMemo(
     () => (
       <OverlayTrigger
-        placement="right"
+        placement='right'
         transition={false}
         overlay={
-          <Tooltip id="addRoleTooltip">
+          <Tooltip id='addRoleTooltip'>
             {formatMessage({
               id: 'MembersTable.add-role',
             })}
           </Tooltip>
         }
       >
-        <div className="me-2">
+        <div className='me-2'>
           <Icon
-            ariaLabel="openAddMemberPopover"
+            ariaLabel='openAddMemberPopover'
             icon={IoAdd}
             size={20}
-            type="button"
-            className="p-0 ms-2"
+            type='button'
+            className='p-0 ms-2'
           />
         </div>
       </OverlayTrigger>
     ),
-    [formatMessage],
+    [formatMessage]
   );
 
   const buttonPlaceholder = (
-    <div className="me-2">
+    <div className='me-2'>
       <div style={{ width: '28px' }} />
     </div>
   );
 
   useEffect(() => {
     const memberArray: MembersToRenderType[] = [];
-    members?.forEach((member: any) => {
+
+    members?.forEach((member: OrgaUser | SpaceUser) => {
+      const permissionsArray = member.permissions as unknown as string[];
       const popoverButton =
         member.permissions.length < roleCount
           ? openPopoverButton
@@ -207,10 +246,10 @@ function MembersTable({
             : '',
         memberEmail: member.email,
         memberRoles: (
-          <Form.Group className="d-flex m-0">
+          <Form.Group className='d-flex m-0'>
             <InputSelectPopover
-              id="addRolePopover"
-              placement="top"
+              id='addRolePopover'
+              placement='top'
               style={{
                 minWidth: '415px',
                 maxWidth: '415px',
@@ -223,62 +262,61 @@ function MembersTable({
               onSend={(_email, role) =>
                 handleAddPermission(member, role.toUpperCase())
               }
-              dropdownOptions={roles}
+              dropdownOptions={roles as unknown as string[]}
             />
-            {member.permissions.length !== 0 ? (
-              member.permissions.map(
-                (permission: UserOrgaRoleType | UserSpaceRoleType) => (
-                  <Chip
-                    ariaLabel="permissionTagChip"
-                    key={permission}
-                    text={permission.toLocaleLowerCase()}
-                    onClick={() => handleRemovePermission(member, permission)}
-                    icon={
-                      <Icon
-                        ariaLabel="deleteAddEditModalTag"
-                        icon={IoClose}
-                        type="button"
-                        color="text-light"
-                        size={16}
-                      />
-                    }
-                    activeColor="accent"
-                    size="sm"
-                  />
-                ),
-              )
+
+            {permissionsArray.length !== 0 ? (
+              permissionsArray.map((permission: string) => (
+                <Chip
+                  ariaLabel='permissionTagChip'
+                  key={permission}
+                  text={permission.toLocaleLowerCase()}
+                  onClick={() => handleRemovePermission(member, permission)}
+                  icon={
+                    <Icon
+                      ariaLabel='deleteAddEditModalTag'
+                      icon={IoClose}
+                      type='button'
+                      color='text-light'
+                      size={16}
+                    />
+                  }
+                  activeColor='accent'
+                  size='sm'
+                />
+              ))
             ) : (
               <Chip
-                ariaLabel="deletionTagChip"
-                key="deletionTagChip"
+                ariaLabel='deletionTagChip'
+                key='deletionTagChip'
                 text={formatMessage({
                   id: 'AddMemberPopover.remove-member',
                 })}
                 onClick={() => handleRevokeDeletion(member)}
                 icon={
                   <Icon
-                    ariaLabel="deleteAddEditModalTag"
+                    ariaLabel='deleteAddEditModalTag'
                     icon={IoClose}
-                    type="button"
-                    color="text-light"
+                    type='button'
+                    color='text-light'
                     size={16}
                   />
                 }
-                activeColor="danger"
-                size="sm"
+                activeColor='danger'
+                size='sm'
               />
             )}
           </Form.Group>
         ),
         memberAction:
           member.permissions.length !== 0 ? (
-            <div className="d-flex">
+            <div className='d-flex'>
               <Icon
-                ariaLabel="openAddMemberPopover"
+                ariaLabel='openAddMemberPopover'
                 icon={RiDeleteBin6Line}
                 size={20}
-                type="button"
-                className="m-auto"
+                type='button'
+                className='m-auto'
                 onClick={() =>
                   initialMembers
                     ? handleRemoveAllPermissions(member)
@@ -306,17 +344,17 @@ function MembersTable({
 
   return (
     <>
-      <div className="mt-4">
+      <div className='mt-4'>
         <CustomTable
           columns={columns}
           data={membersToRender}
-          tableName="ModalMembersTable"
+          tableName='ModalMembersTable'
           withDropdownColumnSelect={false}
           withDropdownRowCount={false}
           customRowCount={5}
         />
       </div>
-      <p className="text-center mt-4" style={{ fontSize: '0.75rem' }}>
+      <p className='text-center mt-4' style={{ fontSize: '0.75rem' }}>
         <span>
           {!spaceID &&
             formatMessage({

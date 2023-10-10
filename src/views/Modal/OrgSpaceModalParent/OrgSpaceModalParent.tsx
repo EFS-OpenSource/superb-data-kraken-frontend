@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, FormEventHandler, SetStateAction } from 'react';
 import { useIntl } from 'react-intl';
 import { Button, Col, Form, Modal, Row } from 'react-bootstrap';
 import { GrClose } from 'react-icons/gr';
@@ -39,7 +39,7 @@ function OrgSpaceModalParent({
   validated: boolean;
   handleClose: () => void;
   handleSubmit: (event: {
-    currentTarget: any;
+    currentTarget: HTMLInputElement;
     preventDefault: () => void;
     stopPropagation: () => void;
   }) => void;
@@ -65,7 +65,7 @@ function OrgSpaceModalParent({
 
   return (
     <Modal
-      backdrop="static"
+      backdrop='static'
       show={show}
       onHide={handleClose}
       animation={false}
@@ -73,47 +73,49 @@ function OrgSpaceModalParent({
       dialogClassName={styles.spaceModal}
       contentClassName={styles.spaceModalHeight}
     >
-      <Modal.Header className="d-flex mt-4 mb-2 border border-0">
-        <h3 className="font-weight-medium flex-grow-1 text-center m-0 p-0">
+      <Modal.Header className='d-flex mt-4 mb-2 border border-0'>
+        <h3 className='font-weight-medium flex-grow-1 text-center m-0 p-0'>
           {formatMessage({
             id: ModalTitle(),
           })}
         </h3>
 
         <Icon
-          ariaLabel="closeManageOrgaSpaceModal"
+          ariaLabel='closeManageOrgaSpaceModal'
           icon={GrClose}
-          type="button"
+          type='button'
           size={24}
           onClick={handleClose}
-          className="me-4"
+          className='me-4'
         />
       </Modal.Header>
 
-      <Modal.Body className="p-0 m-0 d-flex">
+      <Modal.Body className='p-0 m-0 d-flex'>
         <Form
-          className="w-100 d-flex align-items-start flex-column flex-grow-1"
+          className='w-100 d-flex align-items-start flex-column flex-grow-1'
           noValidate
           validated={validated}
-          onSubmit={handleSubmit}
+          onSubmit={
+            handleSubmit as unknown as FormEventHandler<HTMLFormElement>
+          }
         >
           <TabsWithoutPath
             tabs={modalTabs}
-            activeStyle="text-primary font-weight-medium border-0 border-bottom border-primary border-1"
-            inactiveStyle="text-primary border-0 text-decoration-none"
+            activeStyle='text-primary font-weight-medium border-0 border-bottom border-primary border-1'
+            inactiveStyle='text-primary border-0 text-decoration-none'
             activeKey={activeKey}
             onSetActiveKey={setActiveKey}
           />
 
-          <Row className="mt-auto mb-6 mx-0 w-100 d-flex justify-content-center">
+          <Row className='mt-auto mb-6 mx-0 w-100 d-flex justify-content-center'>
             <Col
               xs={{ span: 4, offset: 4 }}
               xl={{ span: 2, offset: 5 }}
-              className="m-0 p-0 d-flex justify-content-between"
+              className='m-0 p-0 d-flex justify-content-between'
             >
               <Button
-                aria-label="cancelButton"
-                variant="outline-primary"
+                aria-label='cancelButton'
+                variant='outline-primary'
                 onClick={handleClose}
               >
                 {formatMessage({
@@ -121,7 +123,7 @@ function OrgSpaceModalParent({
                 })}
               </Button>
               {modalType === 'editOrganization' || modalType === 'editSpace' ? (
-                <Button aria-label="submitButton" type="submit">
+                <Button aria-label='submitButton' type='submit'>
                   {formatMessage({
                     id: 'AddEditOrgSpacesModal.save-button',
                   })}

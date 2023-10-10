@@ -48,11 +48,11 @@ export interface OrgaSpaceUser<T> extends User {
 }
 
 export interface OrgaUser extends User {
-  permissions: UserOrgaRoleType[];
+  permissions: UserOrgaRoleType;
 }
 
 export interface SpaceUser extends User {
-  permissions: UserSpaceRoleType[];
+  permissions: UserSpaceRoleType;
 }
 
 export interface SetOrgaSpaceUser<T> {
