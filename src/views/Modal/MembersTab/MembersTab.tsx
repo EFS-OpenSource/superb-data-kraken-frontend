@@ -31,17 +31,18 @@ import {
   OrgaSpaceUser,
   UserSpaceRoleType,
   UserOrgaRoleType,
+  OrgaUser,
+  SpaceUser,
 } from '@customTypes/index';
 import { useAddRemoveElements } from '@customHooks/index';
 import { MembersTable } from '@views/index';
+import { Draft } from 'immer';
+import { ListIteratee } from 'lodash';
 
 type MembersTabProps = {
   roles: string[];
   initialOwners?: Owner[];
-  initialUsers?: (
-    | OrgaSpaceUser<UserOrgaRoleType>
-    | OrgaSpaceUser<UserSpaceRoleType>
-  )[];
+  initialUsers: OrgaUser[] | SpaceUser[];
   onUpdateOwners?: (updatedOwners: string[]) => void;
   onUpdateUsers?: (updatedUsers: Record<string, unknown>[]) => void;
   isOwner: boolean;
@@ -62,35 +63,40 @@ function MembersTab({
 
   const { spaceID } = useParams();
 
+  const initialUsersFixed: Array<(typeof initialUsers)[number]> = initialUsers;
+
   const handleAddOwner = useCallback(
     (_email: string, email: string) => {
-      const newOwner = (initialUsers || []).filter(
-        (user) => user.email === email,
+      const newOwner = (initialUsersFixed || []).filter(
+        (user) => user.email === email
       );
       dispatchOwners({
         type: 'add',
         element: newOwner[0],
       });
     },
-    [dispatchOwners, initialUsers],
+    [dispatchOwners, initialUsersFixed]
   );
 
   const handleRemoveOwner = useCallback(
     (owner: Owner) => {
       const ownerToRemove = owners.filter(
-        (currentOwner) => currentOwner.id === owner.id,
+        (currentOwner) => currentOwner.id === owner.id
       );
       dispatchOwners({
         type: 'remove',
         predicate: ownerToRemove[0],
       });
     },
-    [owners, dispatchOwners],
+    [owners, dispatchOwners]
   );
 
   const {
     reducer: [users, dispatchUsers],
-  } = useAddRemoveElements<OrgaSpaceUser<string>>(initialUsers || [], 'email');
+  } = useAddRemoveElements<OrgaSpaceUser<string>>(
+    (initialUsers as unknown as Draft<OrgaSpaceUser<string>>[]) || [],
+    'email'
+  );
 
   const handleAddUser = useCallback(
     (email: string, role: string) => {
@@ -109,17 +115,17 @@ function MembersTab({
         },
       });
     },
-    [dispatchUsers],
+    [dispatchUsers]
   );
 
   const handleRemoveUser = useCallback(
-    (member: OrgaSpaceUser<UserOrgaRoleType | UserSpaceRoleType>) => {
+    (member: OrgaUser | SpaceUser) => {
       dispatchUsers({
         type: 'remove',
-        predicate: member,
+        predicate: member as unknown as ListIteratee<OrgaSpaceUser<string>>,
       });
     },
-    [dispatchUsers],
+    [dispatchUsers]
   );
 
   const handleUpdateUser = useCallback(
@@ -129,16 +135,16 @@ function MembersTab({
         element: currentUsers,
       });
     },
-    [dispatchUsers],
+    [dispatchUsers]
   );
 
   const handlePermissionChange = (
-    updatedUser: OrgaSpaceUser<UserOrgaRoleType | UserSpaceRoleType>,
+    updatedUser: OrgaSpaceUser<UserOrgaRoleType | UserSpaceRoleType>
   ) => {
     const updatedUsers = users.map((user) =>
       user.id === updatedUser.id
         ? { ...user, permissions: updatedUser.permissions }
-        : user,
+        : user
     );
     handleUpdateUser(updatedUsers);
   };
@@ -154,7 +160,7 @@ function MembersTab({
           email: user.email,
           permissions: user.permissions,
           id: user.id,
-        })),
+        }))
       );
   }, [onUpdateUsers, users]);
 
@@ -164,39 +170,39 @@ function MembersTab({
 
   const openPopoverButton = (
     <OverlayTrigger
-      placement="right"
+      placement='right'
       transition={false}
       overlay={
-        <Tooltip id="addOwnerTooltip">
+        <Tooltip id='addOwnerTooltip'>
           {formatMessage({
             id: 'AddMemberPopover.add-owner',
           })}
         </Tooltip>
       }
     >
-      <div className="me-2">
+      <div className='me-2'>
         <Icon
-          ariaLabel="openAddMemberPopover"
+          ariaLabel='openAddMemberPopover'
           icon={IoAdd}
           size={28}
-          type="button"
-          className="p-0 ms-2"
+          type='button'
+          className='p-0 ms-2'
         />
       </div>
     </OverlayTrigger>
   );
   return (
-    <div className="w-85" style={{ width: '85%' }}>
+    <div className='w-85' style={{ width: '85%' }}>
       <Form.Group>
         {initialUsers ? (
-          <div className="m-0 p-0 d-flex align-items-center h3 font-weight-medium">
+          <div className='m-0 p-0 d-flex align-items-center h3 font-weight-medium'>
             {formatMessage({
               id: 'Card.Owner',
             })}
             {isOwner && (
               <InputSelectPopover
-                id="addOwnerPopover"
-                placement="top"
+                id='addOwnerPopover'
+                placement='top'
                 headline={formatMessage({
                   id: 'Card.Owner',
                 })}
@@ -214,17 +220,14 @@ function MembersTab({
                 }
                 dropdownOptions={
                   spaceID
-                    ? initialUsers.map((initialUser) => initialUser.email)
-                    : initialUsers
-                        .filter(
-                          (
-                            initialUser: OrgaSpaceUser<
-                              UserOrgaRoleType | UserSpaceRoleType
-                            >,
-                          ) =>
-                            initialUser.permissions
-                              .map((permission) => permission.toUpperCase())
-                              .includes('ADMIN'),
+                    ? initialUsersFixed.map((initialUser) => initialUser.email)
+                    : initialUsersFixed
+                        .filter((initialUser: Record<string, any>) =>
+                          initialUser.permissions
+                            .map((permission: UserOrgaRoleType) =>
+                              permission.toUpperCase()
+                            )
+                            .includes('ADMIN')
                         )
                         .map((initialUser) => initialUser.email)
                 }
@@ -232,7 +235,7 @@ function MembersTab({
             )}
           </div>
         ) : (
-          <div className="m-0 p-0 d-flex align-items-center h3 font-weight-medium">
+          <div className='m-0 p-0 d-flex align-items-center h3 font-weight-medium'>
             {formatMessage({
               id: 'Card.Owner',
             })}
@@ -242,7 +245,7 @@ function MembersTab({
         {owners &&
           owners.map((owner: Owner) => (
             <Chip
-              ariaLabel="tagChip"
+              ariaLabel='tagChip'
               key={owner.id}
               text={`${owner.firstName} ${owner.lastName}`}
               onClick={() => {
@@ -253,45 +256,46 @@ function MembersTab({
               icon={
                 initialUsers && isOwner ? (
                   <Icon
-                    ariaLabel="deleteAddEditModalTag"
+                    ariaLabel='deleteAddEditModalTag'
                     icon={IoClose}
-                    type="button"
-                    color="text-light"
+                    type='button'
+                    color='text-light'
                     size={16}
                   />
                 ) : (
                   <div />
                 )
               }
-              activeColor="accent"
-              size="sm"
+              activeColor='accent'
+              size='sm'
               disabled={!initialUsers || !isOwner}
             />
           ))}
       </Form.Group>
-      <Form.Group className="mt-3">
+      <Form.Group className='mt-3'>
         <AddMemberPopover
           onSetUserData={(email, role) =>
             handleAddUser(email, role.toUpperCase())
           }
           dropdownOptions={roles}
         />
-        <div className="ms-4">
+        <div className='ms-4'>
           {users && (
             <MembersTable
               initialMembers={initialUsers}
-              members={users}
+              members={users as unknown as OrgaUser[] | SpaceUser[]}
               onRemoveMember={(member) => handleRemoveUser(member)}
               onHandleChange={(updatedUser) =>
-                handlePermissionChange(updatedUser)
+                handlePermissionChange(
+                  updatedUser as unknown as OrgaSpaceUser<
+                    'access' | 'trustee' | 'admin' | 'user' | 'supplier'
+                  >
+                )
               }
-              roles={roles}
+              roles={roles as unknown as UserOrgaRoleType | UserSpaceRoleType}
             />
           )}
         </div>
-        {/* <div className="w-75 m-auto text-center border">
-          {users && JSON.stringify(users)}
-        </div> */}
       </Form.Group>
     </div>
   );

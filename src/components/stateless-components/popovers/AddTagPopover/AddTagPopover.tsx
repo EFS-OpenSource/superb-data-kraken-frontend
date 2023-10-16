@@ -18,14 +18,7 @@ import React, { useRef, useState } from 'react';
 import { useIntl } from 'react-intl';
 import { Icon } from '@components/index';
 import { Tag } from '@customTypes/index';
-import {
-  Form,
-  Popover,
-  OverlayTrigger,
-  Button,
-  Row,
-  Col,
-} from 'react-bootstrap';
+import { Form, Popover, OverlayTrigger, Button, Col } from 'react-bootstrap';
 import { IoAdd, IoClose } from 'react-icons/io5';
 
 interface PopoverProps {
@@ -57,17 +50,17 @@ function AddTagPopover({
   };
 
   return (
-    <Form.Group className="d-flex m-0">
+    <Form.Group className='d-flex m-0'>
       {tagTitle && (
-        <Form.Label className="m-0 p-0 d-flex align-items-center h3 font-weight-medium">
+        <Form.Label className='m-0 p-0 d-flex align-items-center h3 font-weight-medium'>
           {formatMessage({
             id: tagTitle,
           })}
         </Form.Label>
       )}
       <OverlayTrigger
-        placement="right"
-        trigger="click"
+        placement='right'
+        trigger='click'
         show={show}
         onToggle={setShow}
         transition={false}
@@ -75,7 +68,7 @@ function AddTagPopover({
         container={popoverContainer}
         overlay={
           <Popover
-            id="spaceTagsPopover"
+            id='spaceTagsPopover'
             style={{
               minWidth: '615px',
               maxWidth: '615px',
@@ -85,41 +78,41 @@ function AddTagPopover({
             }
           >
             <Popover.Body>
-              <Col className="d-flex justify-content-between m-0 px-4">
+              <Col className='d-flex justify-content-between m-0 px-4'>
                 {tagTitle && (
-                  <div className="font-weight-bolder my-2">
+                  <div className='font-weight-bolder my-2'>
                     {formatMessage({
                       id: tagTitle,
                     })}
                   </div>
                 )}
                 <Button
-                  aria-label="closePopoverButton"
-                  className="font-weight-bold px-0 bg-transparent text-primary border border-0 justify-content-end"
+                  aria-label='closePopoverButton'
+                  className='font-weight-bold px-0 bg-transparent text-primary border border-0 justify-content-end'
                   onClick={handleClose}
                 >
                   <Icon
-                    ariaLabel="closeAddEditModalTagPopover"
+                    ariaLabel='closeAddEditModalTagPopover'
                     icon={IoClose}
                     size={24}
                   />
                 </Button>
               </Col>
 
-              <Col className="d-flex justify-content-between m-0 px-4">
+              <Col className='d-flex justify-content-between m-0 px-4'>
                 <Form.Control
-                  aria-label="tagInput"
-                  type="text"
+                  aria-label='tagInput'
+                  type='text'
                   placeholder={placeholder}
-                  className="w-75"
+                  className='w-75'
                   autoFocus
                   onChange={(e) => setTag({ name: e.target.value })}
                 />
 
                 <Button
-                  aria-label="addTagButton"
-                  variant="primary"
-                  className="p-1 px-2"
+                  aria-label='addTagButton'
+                  variant='primary'
+                  className='p-1 px-2'
                   onClick={
                     tag?.name
                       ? () => [
@@ -139,11 +132,11 @@ function AddTagPopover({
           </Popover>
         }
       >
-        <div className="p-0 mb-0 me-2" ref={popoverContainer}>
+        <div className='p-0 mb-0 me-2' ref={popoverContainer}>
           {openIcon || (
             <Icon
-              ariaLabel="openAddEditSpaceTagPopover"
-              type="button"
+              ariaLabel='openAddEditSpaceTagPopover'
+              type='button'
               icon={IoAdd}
               size={28}
             />

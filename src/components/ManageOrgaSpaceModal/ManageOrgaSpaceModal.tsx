@@ -43,6 +43,7 @@ import {
   Confidentiality,
   Space,
   SpaceState,
+  UserOrgaRoleType,
   UserSpaceRoleType,
   OrganizationModalTabNameType,
   SpaceModalTabNameType,
@@ -50,9 +51,9 @@ import {
   MapType,
   TabData,
   TabWithoutPath,
-  OrgaSpaceUser,
+  OrgaUser,
+  SpaceUser,
   Organization,
-  UserOrgaRoleType,
   Owner,
   ModalTabNameType,
 } from '@customTypes/index';
@@ -68,7 +69,7 @@ type ManageOrgaSpaceModalProps = {
   roles: readonly string[];
   orgData?: Organization;
   spaceData?: Space;
-  users?: OrgaSpaceUser<UserSpaceRoleType | UserOrgaRoleType>[];
+  users?: OrgaUser[] | SpaceUser[];
   onMutation?: (mutationState: boolean) => void;
   isOwner?: boolean;
 };
@@ -122,88 +123,108 @@ function ManageOrgaSpaceModal({
   const [validated, setValidated] = useState<boolean>(false);
   const [modalTabs, setModalTabs] = useState<(TabData & TabWithoutPath)[]>([]);
   const [modalData, setModalData] = useState<Space | Organization>(
-    intialModalData,
+    intialModalData
   );
 
   const initialOwners = owners.map((owner) => owner.id);
 
   const [updatedOwners, setUpdatedOwners] = useState<string[]>(
-    owners.map((owner) => owner.id),
+    owners.map((owner) => owner.id)
   );
 
-  interface User {
-    email: string;
-    permissions: ('user' | 'trustee' | 'supplier' | 'access' | 'admin')[];
-    id: string;
-  }
+  const [initialUsers, setInitialUsers] = useState<OrgaUser[] | SpaceUser[]>(
+    []
+  );
 
-  const initialUsers = users
-    ? users?.map((user) => ({
-        email: user.email,
-        permissions: user.permissions,
-        id: user.id,
-      }))
-    : undefined;
-
-  const [updatedUsers, setUpdatedUsers] = useState<
-    Record<string, any> | undefined
-  >(
+  const [updatedUsers, setUpdatedUsers] = useState<Record<string, any>>(
     users
       ? users?.map((user) => ({
           email: user.email,
           permissions: user.permissions,
           id: user.id,
         }))
-      : undefined,
+      : []
   );
+
+  useEffect(() => {
+    if ('capabilitites' in modalData) {
+      const initialUsersSpace = users
+        ? users?.map((user) => ({
+            ...user,
+            permissions: user.permissions as unknown as UserSpaceRoleType,
+          }))
+        : undefined;
+      setInitialUsers(initialUsersSpace as unknown as SpaceUser[]);
+    } else {
+      const initialUsersOrga = users
+        ? users?.map((user) => ({
+            ...user,
+            permissions: user.permissions as unknown as UserOrgaRoleType,
+          }))
+        : undefined;
+      setInitialUsers(initialUsersOrga as unknown as OrgaUser[]);
+    }
+  }, [modalData, users]);
 
   // HANDLE MODAL ENDPOINTS FUNCTIONALITY AND TOAST FEEDBACKS
 
   const haveOwnersChanged = (initial: string[], updated: string[]): boolean =>
     JSON.stringify(initial.sort()) !== JSON.stringify(updated.sort());
 
-  const stringifyUsers = (
-    usersToStringify: Record<string, any> | undefined,
-  ) => {
+  const stringifyUsers = (usersToStringify: OrgaUser[] | SpaceUser[]) => {
     if (usersToStringify === undefined) return undefined;
-
+    const usersToStringifyFixed: Array<(typeof usersToStringify)[number]> =
+      usersToStringify;
     const usersWithEmail = Array.isArray(usersToStringify)
-      ? usersToStringify.filter((user) => user.email != null)
+      ? usersToStringifyFixed.filter((user) => user.email != null)
       : [];
 
     const sortedUsers = usersWithEmail
-      .map(({ email, permissions }) => ({ email, permissions }))
+      .map(
+        ({
+          email,
+          permissions,
+        }: {
+          email: string;
+          permissions: UserOrgaRoleType | UserSpaceRoleType;
+        }) => ({ email, permissions })
+      )
       .sort((a: { email: string }, b: { email: string }) =>
-        a.email.localeCompare(b.email),
+        a.email.localeCompare(b.email)
       );
 
     return JSON.stringify(sortedUsers);
   };
 
   const haveUsersChanged = (
-    initial: Record<string, any> | undefined,
-    updated: Record<string, any> | undefined,
+    initial: OrgaUser[] | SpaceUser[],
+    updated: OrgaUser[] | SpaceUser[]
   ): boolean => stringifyUsers(initial) !== stringifyUsers(updated);
 
   const [activeKey, setActiveKey] = useState(tabNames[0]);
 
   const updateOrganizationUsersMutation = useMutation(() =>
     updatedUsers
-      ?.filter((updatedUser: { email: string; permissions: any }) => {
-        const initialUser = initialUsers?.find(
-          (user: { email: string }) => user.email === updatedUser.email,
-        );
-        return (
-          !initialUser ||
-          JSON.stringify(initialUser.permissions) !==
-            JSON.stringify(updatedUser.permissions)
-        );
-      })
-      .map((updatedUser: Record<string, any>) =>
+      ?.filter(
+        (updatedUser: { email: string; permissions: UserOrgaRoleType }) => {
+          const initialUsersFixed: Array<(typeof initialUsers)[number]> =
+            initialUsers;
+
+          const initialUser = initialUsersFixed.find(
+            (user: { email: string }) => user.email === updatedUser.email
+          );
+          return (
+            !initialUser ||
+            JSON.stringify(initialUser.permissions) !==
+              JSON.stringify(updatedUser.permissions)
+          );
+        }
+      )
+      .map((updatedUser: OrgaUser | SpaceUser) =>
         setOrganizationRoleByEmail(
           orgID as string,
           updatedUser.email,
-          updatedUser.permissions,
+          updatedUser.permissions as unknown as string[]
         ).then((response) => {
           if (response.ok) {
             queryClient.invalidateQueries(['orgasWithSpaces']);
@@ -214,18 +235,18 @@ function ManageOrgaSpaceModal({
               'ErrorToast.title-users-edit',
               `User: ${updatedUser.email}`,
               response.data.message,
-              response.data.errorCode,
+              response.data.errorCode
             );
           }
-        }),
-      ),
+        })
+      )
   );
 
   const updateOrganizationOwnersMutation = useMutation(
     (newOwners?: string[]) =>
       setOrganizationOwnersByUserId(
         newOwners || updatedOwners,
-        orgID as string,
+        orgID as string
       ),
 
     {
@@ -237,27 +258,34 @@ function ManageOrgaSpaceModal({
       onError: () => {
         ErrorToast('ErrorToast.title-owners-edit');
       },
-    },
+    }
   );
 
   const updateSpaceUsersMutation = useMutation((currentSpaceID: string) =>
     updatedUsers
-      ?.filter((updatedUser: { email: string; permissions: any }) => {
-        const initialUser = initialUsers?.find(
-          (user: { email: string }) => user.email === updatedUser.email,
-        );
-        return (
-          !initialUser ||
-          JSON.stringify(initialUser.permissions) !==
-            JSON.stringify(updatedUser.permissions)
-        );
-      })
-      .map((updatedUser: Record<string, any>) =>
+      ?.filter(
+        (updatedUser: {
+          email: string;
+          permissions: UserOrgaRoleType | UserSpaceRoleType;
+        }) => {
+          const initialUsersFixed: Array<(typeof initialUsers)[number]> =
+            initialUsers;
+          const initialUser = initialUsersFixed.find(
+            (user: { email: string }) => user.email === updatedUser.email
+          );
+          return (
+            !initialUser ||
+            JSON.stringify(initialUser.permissions) !==
+              JSON.stringify(updatedUser.permissions)
+          );
+        }
+      )
+      .map((updatedUser: OrgaUser | SpaceUser) =>
         setSpaceRoleByEmail(
           orgID as string,
           currentSpaceID,
           updatedUser.email,
-          updatedUser.permissions,
+          updatedUser.permissions as unknown as string[]
         ).then((response) => {
           if (response.ok) {
             queryClient.invalidateQueries(['spaces', `o_${orgID}`]);
@@ -272,11 +300,11 @@ function ManageOrgaSpaceModal({
               'ErrorToast.title-users-edit',
               `User: ${updatedUser.email}`,
               response.data.message,
-              response.data.errorCode,
+              response.data.errorCode
             );
           }
-        }),
-      ),
+        })
+      )
   );
 
   const updateSpaceOwnersMutation = useMutation(
@@ -290,7 +318,7 @@ function ManageOrgaSpaceModal({
       setSpaceOwnersByUserId(
         newOwners || updatedOwners,
         orgID as string,
-        currentSpaceID,
+        currentSpaceID
       ),
 
     {
@@ -302,7 +330,7 @@ function ManageOrgaSpaceModal({
       onError: () => {
         ErrorToast('ErrorToast.title-owners-edit');
       },
-    },
+    }
   );
 
   const createOrganizationMutation = useMutation(
@@ -329,18 +357,20 @@ function ManageOrgaSpaceModal({
       onSettled: () => {
         if (onMutation) onMutation(false);
       },
-    },
+    }
   );
 
-  const removeOwnerWithUser = (updated: Record<string, any> | undefined) => {
+  const removeOwnerWithUser = (updated: OrgaUser[] | SpaceUser[]) => {
+    const updatedUsersFixed: Array<(typeof updated)[number]> = updated;
     if (updated) {
-      const removedUsers = updated.filter(
-        (updatedUser: User) => updatedUser.permissions.length === 0,
+      const removedUsers = updatedUsersFixed.filter(
+        (updatedUser: OrgaUser | SpaceUser) =>
+          updatedUser.permissions.length === 0
       );
 
       if (removedUsers) {
         let newOwners = updatedOwners;
-        removedUsers.forEach((removedUser: User) => {
+        removedUsers.forEach((removedUser: OrgaUser | SpaceUser) => {
           if (updatedOwners.includes(removedUser.id)) {
             newOwners = updatedOwners.filter((id) => id !== removedUser.id);
           }
@@ -365,8 +395,8 @@ function ManageOrgaSpaceModal({
         .then((response) => {
           if (!response.ok) throw new Error(response.data.errorCode);
           if (isOwner) {
-            if (haveUsersChanged(initialUsers, updatedUsers)) {
-              removeOwnerWithUser(updatedUsers);
+            if (haveUsersChanged(initialUsers, updatedUsers as SpaceUser[])) {
+              removeOwnerWithUser(updatedUsers as SpaceUser[]);
               updateOrganizationUsersMutation.mutate();
             }
           }
@@ -396,7 +426,7 @@ function ManageOrgaSpaceModal({
       onSettled: () => {
         if (onMutation) onMutation(false);
       },
-    },
+    }
   );
 
   const createSpaceMutation = useMutation(
@@ -423,7 +453,7 @@ function ManageOrgaSpaceModal({
       onSettled: () => {
         if (onMutation) onMutation(false);
       },
-    },
+    }
   );
 
   const updateSpaceMutation = useMutation(
@@ -432,9 +462,9 @@ function ManageOrgaSpaceModal({
         .then((response) => {
           if (!response.ok) throw new Error(response.data.errorCode);
           if (isOwner) {
-            if (haveUsersChanged(initialUsers, updatedUsers)) {
+            if (haveUsersChanged(initialUsers, updatedUsers as SpaceUser[])) {
               updateSpaceUsersMutation.mutate(spaceID as string);
-              removeOwnerWithUser(updatedUsers);
+              removeOwnerWithUser(updatedUsers as SpaceUser[]);
             }
           }
           return response;
@@ -465,7 +495,7 @@ function ManageOrgaSpaceModal({
       onSettled: () => {
         if (onMutation) onMutation(false);
       },
-    },
+    }
   );
 
   // SETUP MODAL CONTENT
@@ -497,7 +527,7 @@ function ManageOrgaSpaceModal({
                     width: '100%',
                     height: '100%',
                   }}
-                  className="d-flex flex-column overflow-scroll"
+                  className='d-flex flex-column overflow-scroll'
                 >
                   <Suspense fallback={<LoadingIndicator />}>
                     {modalData && (
@@ -524,7 +554,7 @@ function ManageOrgaSpaceModal({
 
       setModalTabs(visibleModals as unknown as (TabData & TabWithoutPath)[]);
     },
-    [tabComponents, formatMessage, modalData, users, owners, roles, isOwner],
+    [tabComponents, formatMessage, modalData, users, owners, roles, isOwner]
   );
 
   let nextButton: JSX.Element;
@@ -532,7 +562,7 @@ function ManageOrgaSpaceModal({
   switch (activeKey) {
     case tabNames[tabNames.length - 1]:
       nextButton = (
-        <Button aria-label="submitButton" type="submit">
+        <Button aria-label='submitButton' type='submit'>
           {formatMessage({
             id: 'AddEditOrgSpacesModal.submit-button',
           })}
@@ -543,11 +573,15 @@ function ManageOrgaSpaceModal({
     default:
       nextButton = (
         <Button
-          aria-label="nextButton"
+          aria-label='nextButton'
           onClick={(event) => {
             event.preventDefault();
             event.stopPropagation();
-            setActiveKey(tabNames[tabNames.indexOf(activeKey) + 1] as any);
+            setActiveKey(
+              tabNames[
+                tabNames.indexOf(activeKey) + 1
+              ] as SetStateAction<'General'>
+            );
           }}
         >
           {formatMessage({
@@ -567,7 +601,7 @@ function ManageOrgaSpaceModal({
   };
 
   const handleSubmit = (event: {
-    currentTarget: any;
+    currentTarget: HTMLInputElement;
     preventDefault: () => void;
     stopPropagation: () => void;
   }) => {
@@ -601,7 +635,7 @@ function ManageOrgaSpaceModal({
       tabNames as unknown as (
         | OrganizationModalTabNameType
         | SpaceModalTabNameType
-      )[],
+      )[]
     );
   }, [handleModalTabs, tabNames]);
 
