@@ -37,8 +37,6 @@ const columnHelper = createColumnHelper<MembersToRenderType>();
 
 type UsersUnionType = OrgaSpaceUser<string> | OrgaSpaceUser<string>;
 
-type RolesUnionType = UserOrgaRoleType | UserSpaceRoleType;
-
 type MembersTableProps = {
   initialMembers: OrgaUser[] | SpaceUser[];
   members: OrgaUser[] | SpaceUser[];
