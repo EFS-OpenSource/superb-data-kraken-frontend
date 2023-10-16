@@ -222,18 +222,13 @@ function MembersTab({
                   spaceID
                     ? initialUsersFixed.map((initialUser) => initialUser.email)
                     : initialUsersFixed
-                        .filter((initialUser: OrgaUser | SpaceUser) => {
-                          const permissionsFixed: Array<
-                            (typeof initialUser.permissions)[number]
-                          > = initialUser.permissions as unknown as string[];
-
-                          permissionsFixed
-                            .map((permission: string) =>
+                        .filter((initialUser: Record<string, any>) =>
+                          initialUser.permissions
+                            .map((permission: UserOrgaRoleType) =>
                               permission.toUpperCase()
                             )
-                            .includes('ADMIN');
-                          return null;
-                        })
+                            .includes('ADMIN')
+                        )
                         .map((initialUser) => initialUser.email)
                 }
               />
