@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { render } from '@testing-library/react';
+import { fireEvent, getByText, render } from '@testing-library/react';
 
 import ChipGroup from './ChipGroup';
+import TestWrapperNoOIDC from '@utils/TestWrapper/TestWrapperNoOIDC';
 
 describe('ChipGroup', () => {
   it('should render successfully', () => {
@@ -29,6 +30,34 @@ describe('ChipGroup', () => {
         }}
       />,
     );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render successfully with onClickEvent working, isActive true', () => {
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <ChipGroup
+          options={[{label: 'AnOption', value: 'IAmAnOption'}]}
+          checked={['AnOption']}
+          onChange={function (checked: string[]): void {}}
+        />
+      </TestWrapperNoOIDC>
+    );
+    fireEvent.click(getByText(baseElement, 'IAmAnOption'));
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render successfully with onClickEvent working, isActive false', () => {
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <ChipGroup
+          options={[{label: 'AnOption', value: 'IAmAnOption'}]}
+          checked={['AnotherOption']}
+          onChange={function (checked: string[]): void {
+            console.log('I work');
+          }}
+        />
+      </TestWrapperNoOIDC>
+    );
+    fireEvent.click(getByText(baseElement, 'IAmAnOption'));
     expect(baseElement).toBeTruthy();
   });
 });

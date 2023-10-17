@@ -29,4 +29,12 @@ describe('ApplicationAvatar', () => {
     );
     expect(baseElement).toBeTruthy();
   });
+  it('should render successfully with isActive true', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <ApplicationAvatar icon={BsCircle} size={0} isActive={true}/>
+      </TestWrapper>,
+    );
+    expect(baseElement).toBeTruthy();
+  });
 });

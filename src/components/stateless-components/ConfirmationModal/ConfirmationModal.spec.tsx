@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { render } from '@testing-library/react';
+import { fireEvent, getByTestId, getByText, render } from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 import ConfirmationModal from './ConfirmationModal';
 
@@ -33,6 +33,45 @@ describe('ConfirmationModal', () => {
         />
       </TestWrapper>,
     );
+    expect(baseElement).toBeTruthy();
+  });
+  it('tests the cancel button', () => {
+    const onSetShow = jest.fn();
+    const onHandleSubmit = jest.fn();
+    const { baseElement } = render(
+      <TestWrapper>
+        <ConfirmationModal
+          show={true}
+          confirmButtonText={'asdasd'}
+          onSetShow={onSetShow}
+          onHandleSubmit={onHandleSubmit}
+          message={'esf'}
+        />
+      </TestWrapper>,
+    );
+    const cancelButton = getByTestId(baseElement, "cancel");
+    fireEvent.click(cancelButton);
+    expect(onSetShow).toHaveBeenCalled();
+    expect(baseElement).toBeTruthy();
+  });
+  it('tests the confirm button', () => {
+    const onSetShow = jest.fn();
+    const onHandleSubmit = jest.fn();
+    const { baseElement } = render(
+      <TestWrapper>
+        <ConfirmationModal
+          show={true}
+          confirmButtonText={'asdasd'}
+          onSetShow={onSetShow}
+          onHandleSubmit={onHandleSubmit}
+          message={'esf'}
+        />
+      </TestWrapper>,
+    );
+    const confirmButton = getByText(baseElement, 'asdasd');
+    fireEvent.click(confirmButton);
+    expect(onSetShow).toHaveBeenCalled();
+    expect(onHandleSubmit).toHaveBeenCalled();
     expect(baseElement).toBeTruthy();
   });
 });

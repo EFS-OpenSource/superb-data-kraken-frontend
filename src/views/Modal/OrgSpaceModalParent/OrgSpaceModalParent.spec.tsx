@@ -40,4 +40,58 @@ describe('OrgSpaceModalParent', () => {
     );
     expect(baseElement).toBeTruthy();
   });
+  it('should render successfully with modalType editOrganization', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <OrgSpaceModalParent
+          modalType={'editOrganization'}
+          modalTabs={[]}
+          show={false}
+          validated={false}
+          handleClose={handleClose}
+          handleSubmit={handleSubmit}
+          activeKey={''}
+          setActiveKey={setActiveKey}
+          nextButton={<button />}
+        />
+      </TestWrapper>,
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render successfully with modalType createSpace', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <OrgSpaceModalParent
+          modalType={'createSpace'}
+          modalTabs={[]}
+          show={false}
+          validated={false}
+          handleClose={handleClose}
+          handleSubmit={handleSubmit}
+          activeKey={''}
+          setActiveKey={setActiveKey}
+          nextButton={<button />}
+        />
+      </TestWrapper>,
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render successfully with modalType editSpace', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <OrgSpaceModalParent
+          modalType={'editSpace'}
+          modalTabs={[]}
+          show={false}
+          validated={false}
+          handleClose={handleClose}
+          handleSubmit={handleSubmit}
+          activeKey={''}
+          setActiveKey={setActiveKey}
+          nextButton={<button />}
+        />
+      </TestWrapper>,
+    );
+    expect(baseElement).toBeTruthy();
+  });
 });
