@@ -26,7 +26,7 @@ describe('MembersTab', () => {
     firstName: 'Someone',
     lastName: 'Stranger'}
   
-  const user: SpaceUser = {
+  const user: OrgaUser = {
     id: '0',
     createdTimestamp: 3,
     username: "someUserName",
@@ -34,7 +34,7 @@ describe('MembersTab', () => {
     firstName: "Someone",
     lastName: "strange",
     email: "someone@strange.com",
-    permissions: 'trustee'
+    permissions: ['trustee', 'admin']
   }
 
   const anotherUser: OrgaUser = {
@@ -45,7 +45,7 @@ describe('MembersTab', () => {
     firstName: "Someone",
     lastName: "strangeToo",
     email: "someone@strangeToo.com",
-    permissions: 'admin'
+    permissions: ['admin']
   }
   it('should render successfully', () => {
     const { baseElement } = render(
@@ -133,7 +133,7 @@ describe('MembersTab', () => {
         roles={[]} 
         isOwner={true}
         initialOwners={[owner]}
-        initialUsers={[user, anotherUser]}
+        initialUsers={[user]}
         />
       </TestWrapper>,
     );
