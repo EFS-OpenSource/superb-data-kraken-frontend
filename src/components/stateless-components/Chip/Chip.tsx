@@ -141,7 +141,7 @@ function Chip({
 }
 
 Chip.propTypes = {
-  size: oneOf(['xs', 'sm', 'md', 'lg']),
+  size: oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
   height: string,
   activeColor: oneOf(colors),
   inactiveColor: oneOf(colors),

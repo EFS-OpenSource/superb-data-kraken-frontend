@@ -23,4 +23,12 @@ describe('DashboardLogos', () => {
     const { baseElement } = render(<NavbarLogos type="SDK" />);
     expect(baseElement).toBeTruthy();
   });
+  it('should render successfully with type SuperbDataKraken', () => {
+    const { baseElement } = render(<NavbarLogos type="SuperbDataKraken" />);
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render successfully with type Logo', () => {
+    const { baseElement } = render(<NavbarLogos type="Logo" />);
+    expect(baseElement).toBeTruthy();
+  });
 });

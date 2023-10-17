@@ -46,7 +46,7 @@ function ConfirmationModal({
         })}
       </Modal.Body>
       <Modal.Footer className="border-0 d-flex justify-content-center">
-        <Button variant="outline-primary" onClick={() => onSetShow(false)}>
+        <Button variant="outline-primary" data-testid="cancel" onClick={() => onSetShow(false)}>
           {formatMessage({
             id: 'AddEditOrgSpacesModal.cancel-button',
           })}
