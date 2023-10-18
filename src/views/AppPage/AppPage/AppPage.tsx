@@ -219,7 +219,6 @@ function AppPage() {
             return undefined;
           };
 
-          console.log(`name: ${AppID} availability: ${availability}`);
           return {
             name: `AppPage.${AppID}`,
             id: `${AppID}`,
@@ -260,8 +259,6 @@ function AppPage() {
       spaceData,
       orgaSpacesData,
       userRoles,
-      spaceID,
-      orgID,
       orgData,
       userDataState,
       formatMessage,
