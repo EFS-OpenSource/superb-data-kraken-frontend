@@ -56,6 +56,7 @@ import {
   Organization,
   Owner,
   ModalTabNameType,
+  OrgaSpaceUser,
 } from '@customTypes/index';
 import { OrgSpaceModalParent } from '@views/index';
 
@@ -181,15 +182,10 @@ function ManageOrgaSpaceModal({
       : [];
 
     const sortedUsers = usersWithEmail
-      .map(
-        ({
-          email,
-          permissions,
-        }: {
-          email: string;
-          permissions: UserOrgaRoleType | UserSpaceRoleType;
-        }) => ({ email, permissions })
-      )
+      .map(({ email, permissions }) => ({
+        email,
+        permissions,
+      }))
       .sort((a: { email: string }, b: { email: string }) =>
         a.email.localeCompare(b.email)
       );
