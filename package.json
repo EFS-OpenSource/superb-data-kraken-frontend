@@ -4,6 +4,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "start": "nx serve",
+    "start-prod": "nx serve --configuration:production",
     "build": "nx build",
     "test": "nx test",
     "prepare": "husky install"

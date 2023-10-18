@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /*
 Copyright (C) 2023 e:fs TechHub GmbH (sdk@efs-techhub.com)
 
@@ -230,13 +231,25 @@ function AppPage() {
             userDataState: { userDataState },
             disabled: !availability,
             tooltipMessage: tooltip() !== undefined ? tooltip() : undefined,
+
             content: (
               <div
                 style={{ width: '100%', height: '100%', minHeight: '440px' }}
                 className='d-flex flex-column overflow-scroll'
               >
                 <Suspense fallback={<LoadingIndicator />}>
-                  <CustomTag orgData={orgData} spaceData={spaceData} />
+                  {orgData && userRoles ? (
+                    availability ? (
+                      <CustomTag orgData={orgData} spaceData={spaceData} />
+                    ) : (
+                      <LoadingIndicator />
+                    )
+                  ) : (
+                    <div className='w-auto'>
+                      <LoadingIndicator />
+                      Überprufung der Zugriffsrechte
+                    </div>
+                  )}
                 </Suspense>
               </div>
             ),
@@ -244,12 +257,12 @@ function AppPage() {
         })
       ),
     [
-      formatMessage,
-      orgData,
       spaceData,
-      userDataState,
       orgaSpacesData,
       userRoles,
+      orgData,
+      userDataState,
+      formatMessage,
     ]
   );
 
