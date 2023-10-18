@@ -42,6 +42,7 @@ const MockOrganization: Organization = {
       description: 'SDK Demo Bereich',
       confidentiality: 'INTERNAL',
       metadataGenerate: true,
+      modified: '',
       tags: [
         {
           name: '#sdkDemo',

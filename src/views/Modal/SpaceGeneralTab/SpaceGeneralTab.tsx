@@ -60,7 +60,7 @@ function SpaceGeneralTab({
   };
 
   const [inputName, setInputName] = useState(
-    modalData.displayName || modalData.name,
+    modalData.displayName || modalData.name
   );
   useConvertSpaceDisplayName(inputName, handleChange, modalData);
 
@@ -71,24 +71,24 @@ function SpaceGeneralTab({
   }, [description, handleChange]);
 
   return (
-    <div className="w-85" style={{ width: '85%' }}>
-      <h3 className="font-weight-medium mb-4">
+    <div className='w-85' style={{ width: '85%' }}>
+      <h3 className='font-weight-medium mb-4'>
         {formatMessage({
           id: 'AddEditOrgSpacesModal.space-description',
         })}
       </h3>
       <FormInput
-        id="name"
-        ariaLabel="name"
+        id='name'
+        ariaLabel='name'
         labelText={formatMessage({
           id: 'AddEditOrgSpacesModal.space-name',
         })}
-        labelClassName="h6"
-        groupClassName="mb-0"
+        labelClassName='h6'
+        groupClassName='mb-0'
         placeholder={formatMessage({
           id: 'AddEditOrgSpacesModal.space-name',
         })}
-        fontSize="sm"
+        fontSize='sm'
         value={inputName}
         onChange={(e) => {
           setInputName(e.target.value);
@@ -98,65 +98,65 @@ function SpaceGeneralTab({
           id: 'AddEditOrgSpacesModal.space-name-validation',
         })}
       />
-      <span className="h5 mb-4">{`${formatMessage({
+      <span className='h5 mb-4'>{`${formatMessage({
         id: 'AppPage.container-id',
       })} ${modalData.name}`}</span>
       <FormTextarea
-        id="description"
-        ariaLabel="description"
-        groupClassName="mb-4"
+        id='description'
+        ariaLabel='description'
+        groupClassName='mb-4'
         labelText={`${formatMessage({
           id: 'AddEditOrgSpacesModal.space-description',
         })} (optional)`}
-        labelClassName="h6"
+        labelClassName='h6'
         placeholder={formatMessage({
           id: 'AddEditOrgSpacesModal.space-description',
         })}
-        fontSize="sm"
+        fontSize='sm'
         value={description}
         inputStyle={{ resize: 'none' }}
         onChange={(e) => {
           setDescription(e.target.value);
         }}
       />
-      <Form.Group className="mb-4">
+      <Form.Group className='mb-4'>
         <AddTagPopover
           handleAddTag={(name) => {
             handleAddSpaceTag({ name });
           }}
-          tagTitle="AddEditOrgSpacesModal.space-add-tag"
-          placeholder="Tag"
+          tagTitle='AddEditOrgSpacesModal.space-add-tag'
+          placeholder='Tag'
         />
         {modalData.tags &&
           modalData.tags.map((currentTag) => (
             <Chip
-              ariaLabel="tagChip"
+              ariaLabel='tagChip'
               key={currentTag.name}
               text={currentTag.name}
               onClick={() => handleRemoveSpaceTag(currentTag)}
               icon={
                 <Icon
-                  ariaLabel="deleteAddEditModalTag"
+                  ariaLabel='deleteAddEditModalTag'
                   icon={IoClose}
-                  type="button"
-                  color="text-light"
+                  type='button'
+                  color='text-light'
                   size={16}
                 />
               }
-              activeColor="accent"
-              size="sm"
+              activeColor='accent'
+              size='sm'
             />
           ))}
       </Form.Group>
       <div>
         <FormRadioButtons
-          groupClassName="mb-4"
-          id="confidentiality"
-          labelClassName="font-weight-medium d-flex me-2"
+          groupClassName='mb-4'
+          id='confidentiality'
+          labelClassName='font-weight-medium d-flex me-2'
           labelText={formatMessage({
             id: 'AddEditOrgSpacesModal.space-confidentiality',
           })}
-          labelToolTipIcon={<Icon icon={FiInfo} size={19} type="button" />}
+          labelToolTipIcon={<Icon icon={FiInfo} size={19} type='button' />}
           labelToolTipText={
             <ul>
               <li>
@@ -209,10 +209,10 @@ function SpaceGeneralTab({
 
         {Object.prototype.hasOwnProperty.call(modalData, 'id') && (
           <FormRadioButtons
-            id="state"
-            groupClassName="mb-4"
-            labelClassName="font-weight-medium d-flex"
-            labelToolTipIcon={<Icon icon={FiInfo} size={19} type="button" />}
+            id='state'
+            groupClassName='mb-4'
+            labelClassName='font-weight-medium d-flex'
+            labelToolTipIcon={<Icon icon={FiInfo} size={19} type='button' />}
             labelToolTipText={
               <ul>
                 <li>
@@ -270,9 +270,9 @@ function SpaceGeneralTab({
 
       <div>
         <FormCheckbox
-          labelClassName="font-weight-medium d-flex mb-2"
-          labelToolTipIcon={<Icon icon={FiInfo} size={19} type="button" />}
-          groupClassName="mb-4"
+          labelClassName='font-weight-medium d-flex mb-2'
+          labelToolTipIcon={<Icon icon={FiInfo} size={19} type='button' />}
+          groupClassName='mb-4'
           labelToolTipText={
             <ul>
               <li>
@@ -295,7 +295,7 @@ function SpaceGeneralTab({
           labelText={formatMessage({
             id: 'AddEditOrgSpacesModal.space-capabilities',
           })}
-          id="capabilities"
+          id='capabilities'
           labelsAndValues={Capabilities.map((capability) => ({
             name: capability.toLowerCase(),
             value: modalData.capabilities.includes(capability),
@@ -315,9 +315,9 @@ function SpaceGeneralTab({
                 : {
                     ...modalData,
                     capabilities: modalData?.capabilities?.filter(
-                      (c) => c !== e.target.value.toUpperCase(),
+                      (c) => c !== e.target.value.toUpperCase()
                     ),
-                  },
+                  }
             );
           }}
           inline
@@ -326,11 +326,11 @@ function SpaceGeneralTab({
       <div>
         <FormCheckbox
           disabled={data ? (data as Response<Space>).data.gdprRelevant : false}
-          labelClassName="font-weight-medium mb-2"
+          labelClassName='font-weight-medium mb-2'
           labelText={formatMessage({
             id: 'Gdpr.space-checkbox-title',
           })}
-          id="gdprRelevant"
+          id='gdprRelevant'
           inline
           labelsAndValues={[
             {

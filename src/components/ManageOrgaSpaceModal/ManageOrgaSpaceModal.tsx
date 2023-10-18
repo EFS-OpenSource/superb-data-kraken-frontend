@@ -105,6 +105,7 @@ function ManageOrgaSpaceModal({
         capabilities: [],
         defaultRetentionTime: 365,
         metadataGenerate: true,
+        modified: '',
       };
     }
 
