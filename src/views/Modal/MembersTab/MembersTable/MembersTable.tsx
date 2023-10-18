@@ -123,7 +123,7 @@ function MembersTable({
 
   const handleAddPermission = useCallback(
     (
-      member: OrgaUser | SpaceUser,
+      member: OrgaSpaceUser<string>,
       permission: string /* //TODO permission has a known type but this collides with AddTagPopover type Definition. AddTagPopover should be generalized  */
     ) => {
       if (!member.permissions.includes(permission)) {
@@ -258,7 +258,10 @@ function MembersTable({
               handleShow={handleShow}
               popoverOpenButton={popoverButton}
               onSend={(_email, role) =>
-                handleAddPermission(member, role.toUpperCase())
+                handleAddPermission(
+                  member as OrgaSpaceUser<string>,
+                  role.toUpperCase()
+                )
               }
               dropdownOptions={roles as unknown as string[]}
             />
