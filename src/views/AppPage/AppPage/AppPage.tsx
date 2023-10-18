@@ -27,7 +27,7 @@ import React, {
 } from 'react';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@tanstack/react-query';
-import { Navigate, useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { LoadingIndicator, Tabs } from '@components/index';
 import {
@@ -160,7 +160,6 @@ function AppPage() {
   );
 
   const userRoles = spaceID ? userSpaceRoles : userOrganizationRoles;
-  const location = useLocation();
 
   const handleAppTabs = useCallback(
     (appConfig: any) =>
@@ -195,11 +194,6 @@ function AppPage() {
               : orgaSpacesCapabilities,
             AppEnableConditions
           );
-
-          // Rediraction path to org/space overview in case of url input without correct capability/roles
-          const overviewPath = spaceID
-            ? `/org/${orgID}/space/${spaceID}/Overview`
-            : `/org/${orgID}/Overview`;
 
           const roles = AppEnableConditions[AppID as AppNameType].roles
             ?.map((role: any) => ` ${role}`)
