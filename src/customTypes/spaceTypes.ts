@@ -45,25 +45,26 @@ export interface AppConfig {
 }
 
 export interface Space {
-  id: number;
-  orgId?: number;
-  tags?: Tag[];
-  capabilities: Capability[];
-  owners?: string[];
   appConfigs?: AppConfig[];
-  metadataGenerate: boolean;
-  name: string;
-  identifier?: string;
-  defaultRetentionTime?: number;
-  state: SpaceState;
-  description?: string;
+  capabilities: Capability[];
   confidentiality?: Confidentiality;
-  displayName?: string;
-  schemaRef?: string;
+  defaultRetentionTime?: number;
+  description?: string;
   descriptionRef?: string;
-  metadataIndexName?: string;
+  displayName?: string;
   gdprRelevant: boolean;
+  identifier?: string;
   members?: Member[];
+  metadataGenerate: boolean;
+  metadataIndexName?: string;
+  modified: string;
+  name: string;
+  orgId?: number;
+  schemaRef?: string;
+  state: SpaceState;
+  tags?: Tag[];
+  id: number;
+  owners?: string[];
 }
 
 export const userSpaceRoleTypes = ['user', 'trustee', 'supplier'] as const;

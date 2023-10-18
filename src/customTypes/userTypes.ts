@@ -34,13 +34,13 @@ export interface UserDataState {
 }
 
 export interface User {
-  id: string;
   createdTimestamp: number;
-  username: string;
+  email: string;
   enabled: boolean;
   firstName: string;
+  id: string;
   lastName: string;
-  email: string;
+  username: string;
 }
 
 export interface OrgaSpaceUser<T> extends User {
@@ -66,15 +66,14 @@ export interface UserRequestOrganization {
   role: string;
 }
 
-export interface UserRequestSpace extends UserRequestOrganization {
-  spaceId: string;
-}
-
 export interface UserRequestOrganizationState extends UserRequestOrganization {
-  id: number;
   created: Date;
+  id: number;
   modified: Date;
   state: UserState;
+}
+export interface UserRequestSpace extends UserRequestOrganization {
+  spaceId: string;
 }
 
 export interface UserRequestSpaceState

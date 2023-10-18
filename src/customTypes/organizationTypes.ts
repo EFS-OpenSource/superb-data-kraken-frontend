@@ -17,16 +17,16 @@ limitations under the License.
 import { Confidentiality, Tag, AppConfig, Space } from './spaceTypes';
 
 export interface Organization {
-  id: number;
-  name: string;
-  confidentiality: Confidentiality;
-  company: string | undefined;
-  spaces: Space[];
-  description?: string;
-  tags?: Tag[];
-  owners?: string[];
-  displayName?: string;
   appConfigs?: AppConfig[];
+  company: string | undefined;
+  confidentiality: Confidentiality;
+  description?: string;
+  displayName?: string;
+  name: string;
+  spaces: Space[];
+  tags?: Tag[];
+  id: number;
+  owners?: string[];
 }
 
 export interface OrganizationBaseInfo {
