@@ -48,14 +48,14 @@ function OverviewApp({ orgData, spaceData }: OverviewAppType) {
             <Row>
               <Col xs={12} className="h3 font-weight-medium">
                 {formatMessage({
-                  id: 'AppPage.information',
+                  id: 'Overview.information',
                 })}
               </Col>
             </Row>
             <Row className="my-2">
               <Col xs={2}>
                 {formatMessage({
-                  id: spaceID ? 'AppPage.space' : 'AppPage.organization',
+                  id: spaceID ? 'Overview.space' : 'Overview.organization',
                 })}
               </Col>
               <Col xs={10}>
@@ -67,7 +67,7 @@ function OverviewApp({ orgData, spaceData }: OverviewAppType) {
             <Row className="my-2">
               <Col xs={2}>
                 {formatMessage({
-                  id: 'AppPage.container-id',
+                  id: 'Overview.container-id',
                 })}
               </Col>
               <Col xs={10}>{spaceID ? spaceData?.name : orgData?.name}</Col>
@@ -75,7 +75,7 @@ function OverviewApp({ orgData, spaceData }: OverviewAppType) {
             <Row className=" my-2">
               <Col xs={2} aria-label="title-description">
                 {formatMessage({
-                  id: 'AppPage.Description',
+                  id: 'Overview.Description',
                 })}
               </Col>
               <Col xs={10}>
@@ -85,7 +85,7 @@ function OverviewApp({ orgData, spaceData }: OverviewAppType) {
             <Row className="my-2">
               <Col xs={2}>
                 {formatMessage({
-                  id: 'AppPage.owners',
+                  id: 'Overview.owners',
                 })}
               </Col>
               <Col xs={10}>

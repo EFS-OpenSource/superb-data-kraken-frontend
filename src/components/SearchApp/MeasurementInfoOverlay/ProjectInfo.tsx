@@ -38,7 +38,7 @@ function ProjectInfo({ data }: ProjectInfoProps): JSX.Element {
               <Row className="px-0">
                 <span className="text-dark">
                   {formatMessage({
-                    id: 'MeasuremenentInfoOverlay.project-name',
+                    id: 'ProjectInfo.project-name',
                   })}
                 </span>
               </Row>
@@ -52,7 +52,7 @@ function ProjectInfo({ data }: ProjectInfoProps): JSX.Element {
               <Row className="px-0">
                 <span className="text-dark">
                   {formatMessage({
-                    id: 'MeasuremenentInfoOverlay.project-purpose',
+                    id: 'ProjectInfo.project-purpose',
                   })}
                 </span>
               </Row>
@@ -67,7 +67,7 @@ function ProjectInfo({ data }: ProjectInfoProps): JSX.Element {
               <Row>
                 <span className="text-dark">
                   {formatMessage({
-                    id: 'MeasuremenentInfoOverlay.project-confidentiality',
+                    id: 'ProjectInfo.project-confidentiality',
                   })}
                 </span>
               </Row>
@@ -81,7 +81,7 @@ function ProjectInfo({ data }: ProjectInfoProps): JSX.Element {
               <Row>
                 <span className="text-dark">
                   {formatMessage({
-                    id: 'MeasuremenentInfoOverlay.measurement-name',
+                    id: 'ProjectInfo.measurement-name',
                   })}
                 </span>
               </Row>
@@ -95,7 +95,7 @@ function ProjectInfo({ data }: ProjectInfoProps): JSX.Element {
               <Row>
                 <span className="text-dark">
                   {formatMessage({
-                    id: 'MeasuremenentInfoOverlay.measurement-scope',
+                    id: 'ProjectInfo.measurement-scope',
                   })}
                 </span>
               </Row>
@@ -109,7 +109,7 @@ function ProjectInfo({ data }: ProjectInfoProps): JSX.Element {
               <Row>
                 <span className="text-dark">
                   {formatMessage({
-                    id: 'MeasuremenentInfoOverlay.measurement-createdAt',
+                    id: 'ProjectInfo.measurement-createdAt',
                   })}
                 </span>
               </Row>
@@ -128,7 +128,7 @@ function ProjectInfo({ data }: ProjectInfoProps): JSX.Element {
               <Row>
                 <span className="text-dark">
                   {formatMessage({
-                    id: 'MeasuremenentInfoOverlay.measurement-environment',
+                    id: 'ProjectInfo.measurement-environment',
                   })}
                 </span>
               </Row>

@@ -233,7 +233,7 @@ function MeasurementInfoOverlay({
         onClick={() => onOverlayToggler(undefined)}
       >
         {formatMessage({
-          id: 'MeasuremenentInfoOverlay.back-button',
+          id: 'MeasurementInfoOverlay.back-button',
         })}
       </Button>
     </Container>
