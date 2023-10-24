@@ -14,10 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
-// import { MembersTable } from '@e-fs-frontend-applications/apps/sdk-frontend/src/components/manage-orgas-spaces/MembersTable';
+import { useQuery } from '@tanstack/react-query';
 import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { IoAdd, IoClose } from 'react-icons/io5';
 import {
@@ -33,11 +33,13 @@ import {
   UserOrgaRoleType,
   OrgaUser,
   SpaceUser,
+  DropdownOptions,
 } from '@customTypes/index';
 import { useAddRemoveElements } from '@customHooks/index';
 import { MembersTable } from '@views/index';
 import { Draft } from 'immer';
 import { ListIteratee } from 'lodash';
+import { getOrganizationUsers } from '@services/index';
 
 type MembersTabProps = {
   roles: string[];
@@ -61,9 +63,41 @@ function MembersTab({
     reducer: [owners, dispatchOwners],
   } = useAddRemoveElements<Owner>(initialOwners || [], 'id');
 
-  const { spaceID } = useParams();
+  const { spaceID, orgID } = useParams();
+
+  const { data } = useQuery(['orgaUsers', orgID], () => {
+    if (orgID) {
+      return getOrganizationUsers(orgID);
+    }
+
+    return null;
+  });
+
+  const [emails, setEmails] = useState<DropdownOptions[]>([]);
+
+  useEffect(() => {
+    if (data) {
+      const orgaUsersEmails = data.data.map((user: { email: string }) => ({
+        label: user.email,
+        value: user.email,
+      }));
+      setEmails(orgaUsersEmails);
+    }
+  }, [data]);
 
   const initialUsersFixed: Array<(typeof initialUsers)[number]> = initialUsers;
+
+  const initialOwnersPresent = initialOwners || [];
+
+  const ids1 = new Set(initialOwnersPresent.map((user) => user.id));
+  const ids2 = new Set(initialUsersFixed.map((user) => user.id));
+
+  const uniqueUsers = [
+    ...initialUsersFixed.filter((user) => !ids1.has(user.id)),
+    ...initialOwnersPresent.filter((user) => !ids2.has(user.id)),
+  ];
+
+  const possibleOwners = uniqueUsers as unknown as (OrgaUser | SpaceUser)[];
 
   const handleAddOwner = useCallback(
     (_email: string, email: string) => {
@@ -220,8 +254,8 @@ function MembersTab({
                 }
                 dropdownOptions={
                   spaceID
-                    ? initialUsersFixed.map((initialUser) => initialUser.email)
-                    : initialUsersFixed
+                    ? possibleOwners.map((initialUser) => initialUser.email)
+                    : possibleOwners
                         .filter((initialUser: Record<string, any>) =>
                           initialUser.permissions
                             .map((permission: UserOrgaRoleType) =>
@@ -278,6 +312,7 @@ function MembersTab({
             handleAddUser(email, role.toUpperCase())
           }
           dropdownOptions={roles}
+          options={spaceID ? emails : []}
         />
         <div className='ms-4'>
           {users && (

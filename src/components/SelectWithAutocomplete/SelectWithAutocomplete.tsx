@@ -14,22 +14,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import Select from 'react-select';
+import Select, {
+  CSSObjectWithLabel,
+  GroupBase,
+  StylesConfig,
+} from 'react-select';
 import { DropdownOptions } from '@customTypes/index';
 
 export interface SelectWithAutocompleteProps {
   options: DropdownOptions[];
   onChange: (value: DropdownOptions | null) => void;
   placeholder: string;
-  value: DropdownOptions | null;
+  value?: DropdownOptions | null;
   isDisabled?: boolean;
   isLoading?: boolean;
   isSearchable?: boolean;
-  styles?: any;
+  styles?:
+    | StylesConfig<DropdownOptions, false, GroupBase<DropdownOptions>>
+    | undefined;
 }
 
 const defaultStyles = {
-  container: (base: any) => ({
+  container: (base: CSSObjectWithLabel) => ({
     ...base,
     minWidth: '180px',
     maxHeight: '34px',
@@ -57,19 +63,19 @@ const defaultStyles = {
     display: 'flex',
     alignItems: 'center',
   }),
-  menu: (base: any) => ({
+  menu: (base: CSSObjectWithLabel) => ({
     ...base,
     zIndex: 1000,
     width: '700px',
     minHeight: '300px',
   }),
-  menuList: (base: any) => ({
+  menuList: (base: CSSObjectWithLabel) => ({
     ...base,
     zIndex: 1000,
     width: '700px',
     minHeight: '300px',
   }),
-  menuPortal: (base: any) => ({
+  menuPortal: (base: CSSObjectWithLabel) => ({
     ...base,
     zIndex: 1000,
     width: '700px',

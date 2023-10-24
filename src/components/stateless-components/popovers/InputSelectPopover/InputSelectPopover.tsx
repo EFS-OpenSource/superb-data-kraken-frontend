@@ -16,9 +16,13 @@ limitations under the License.
 
 import { useRef, useState, CSSProperties } from 'react';
 import { useIntl } from 'react-intl';
-import { Icon } from '@components/index';
-import { UserOrgaRoleType, UserSpaceRoleType } from '@customTypes/index';
-import { Button, Col, OverlayTrigger, Popover, Row } from 'react-bootstrap';
+import { Icon, SelectWithAutocomplete } from '@components/index';
+import {
+  DropdownOptions,
+  UserOrgaRoleType,
+  UserSpaceRoleType,
+} from '@customTypes/index';
+import { Button, Col, OverlayTrigger, Popover } from 'react-bootstrap';
 import { IoClose } from 'react-icons/io5';
 import { Placement } from 'node_modules/@restart/ui/esm/usePopper';
 
@@ -36,6 +40,12 @@ interface InputSelectPopoverType {
   inputValue?: string;
   disabled?: boolean;
   onSend?: (inputText: string, dropdownOption: string) => void;
+  // properties for SelectWithAutocomplete
+  selectOptions?: DropdownOptions[];
+  selectValue?: string;
+  selectPlaceholder?: string;
+  selectIsSearchable?: boolean;
+  onChange?: any;
 }
 
 function InputSelectPopover({
@@ -44,7 +54,6 @@ function InputSelectPopover({
   style,
   headline,
   inputLabel,
-
   inputPlaceholder,
   inputValue,
   disabled,
@@ -53,6 +62,11 @@ function InputSelectPopover({
   handleShow,
   onSend,
   dropdownOptions,
+  selectOptions,
+  selectValue,
+  selectPlaceholder,
+  selectIsSearchable,
+  onChange,
 }: InputSelectPopoverType) {
   const { formatMessage } = useIntl();
   const [show, setShow] = useState(false);
@@ -85,14 +99,34 @@ function InputSelectPopover({
         inputText,
         dropdownOption,
       };
-      if (onSend) {
+      if (onSend && inputText) {
         onSend(dataToSend.inputText, dataToSend.dropdownOption);
         setInputText('');
         setDropdownOption(dropdownOptions.includes('user') ? 'user' : 'access');
       }
-    } else return;
+    }
 
-    // TODO send data to corresponding endpoint
+    if (selectValue !== undefined && dropdownOption) {
+      dataToSend = {
+        selectValue,
+        dropdownOption,
+      };
+      if (onSend && selectValue) {
+        onSend(dataToSend.selectValue, dataToSend.dropdownOption);
+        setDropdownOption(dropdownOptions.includes('user') ? 'user' : 'access');
+      }
+    }
+
+    if ((!selectValue && dropdownOption) || (!inputText && dropdownOption)) {
+      dataToSend = {
+        dropdownOption,
+      };
+      if (onSend) {
+        console.log(dropdownOption);
+        onSend(dropdownOption, dropdownOption);
+        setDropdownOption(dropdownOptions.includes('user') ? 'user' : 'access');
+      }
+    }
 
     setShow(false);
   };
@@ -100,7 +134,7 @@ function InputSelectPopover({
   return (
     <OverlayTrigger
       placement={placement}
-      trigger="click"
+      trigger='click'
       show={show}
       onToggle={setShow}
       transition={false}
@@ -109,42 +143,51 @@ function InputSelectPopover({
       overlay={
         <Popover id={id} style={style} onClick={handleShow}>
           <Popover.Body>
-            <Col className="d-flex justify-content-between m-0 px-4">
-              <div className="font-weight-bold my-2">{headline}</div>
+            <Col className='d-flex justify-content-between m-0 px-4'>
+              <div className='font-weight-bold my-2'>{headline}</div>
 
               <Icon
                 ariaLabel={`close-${id}`}
-                type="button"
+                type='button'
                 icon={IoClose}
                 size={24}
                 onClick={handleClose}
               />
             </Col>
             {inputLabel && (
-              <Col className="d-flex justify-content-between m-0 px-4">
+              <Col className='d-flex justify-content-between m-0 px-4'>
                 <small>
                   <strong>{inputLabel}</strong>
                 </small>
               </Col>
             )}
-            <Col className="d-flex justify-content-between m-0 px-4">
-              {inputPlaceholder && (
+            <Col className='d-flex justify-content-between m-0 px-4'>
+              {selectOptions && selectOptions.length < 1 && (
                 <input
-                  type="text"
+                  type='text'
                   value={inputValue}
                   placeholder={inputPlaceholder}
                   disabled={disabled}
                   onChange={(e) => onChangeNameHandler(e)}
                 />
               )}
+              {selectOptions && selectOptions.length > 0 && (
+                <SelectWithAutocomplete
+                  options={selectOptions}
+                  // value={selectValue || { label: '', value: '' }}
+                  placeholder={selectPlaceholder || ''}
+                  onChange={onChange}
+                  isSearchable={selectIsSearchable}
+                />
+              )}
               <select
-                aria-label="role"
-                name="role"
-                id="role"
-                className="p-1 pe-2"
+                aria-label='role'
+                name='role'
+                id='role'
+                className='p-1 pe-2'
                 onChange={(e) => onRoleSelectHandler(e)}
               >
-                <option value="">
+                <option value=''>
                   --
                   {formatMessage({
                     id: 'ApplyRolesPopover.select-role',
@@ -159,8 +202,8 @@ function InputSelectPopover({
               </select>
               <Button
                 aria-label={`${id}-addButton`}
-                variant="primary"
-                className="p-1 px-2"
+                variant='primary'
+                className='p-1 px-2'
                 onClick={handleAddData}
               >
                 {buttonLabel}

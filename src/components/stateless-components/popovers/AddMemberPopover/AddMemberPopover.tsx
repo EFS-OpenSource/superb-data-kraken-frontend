@@ -18,28 +18,47 @@ import { useIntl } from 'react-intl';
 import { IoAdd } from 'react-icons/io5';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Icon, InputSelectPopover } from '@components/index';
+import { DropdownOptions } from '@customTypes/reactSelectTypes';
+import React, { useState } from 'react';
 
 interface AddMemberPopoverType {
   dropdownOptions: readonly string[];
   onSetUserData: (email: string, role: string) => void;
+  options: DropdownOptions[];
+  // value: DropdownOptions | null;
 }
 
 function AddMemberPopover({
   dropdownOptions,
   onSetUserData,
-}: AddMemberPopoverType) {
+  options,
+}: // value,
+AddMemberPopoverType) {
   const { formatMessage } = useIntl();
 
   const handleShow = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
   };
 
+  const [userEmail, setUserEmail] = useState('');
+
+  const onSetUserEmail = (
+    e: React.DetailedHTMLProps<
+      React.SelectHTMLAttributes<HTMLSelectElement>,
+      HTMLSelectElement
+    >
+  ) => {
+    if (e.value && typeof e.value === 'string') {
+      setUserEmail(e.value);
+    }
+  };
+
   const openPopoverButton = (
     <OverlayTrigger
-      placement="right"
+      placement='right'
       transition={false}
       overlay={
-        <Tooltip id="addSpaceTooltip">
+        <Tooltip id='addSpaceTooltip'>
           {formatMessage({
             id: 'AddMemberPopover.add-member',
           })}
@@ -48,26 +67,26 @@ function AddMemberPopover({
     >
       <div>
         <Icon
-          ariaLabel="openAddMemberPopover"
+          ariaLabel='openAddMemberPopover'
           icon={IoAdd}
           size={28}
-          type="button"
-          className="p-0 ms-2"
+          type='button'
+          className='p-0 ms-2'
         />
       </div>
     </OverlayTrigger>
   );
 
   return (
-    <div className="m-0 d-flex align-items-center">
-      <h3 className="m-0 p-0 font-weight-medium">
+    <div className='m-0 d-flex align-items-center'>
+      <h3 className='m-0 p-0 font-weight-medium'>
         {formatMessage({
           id: 'OrgaSpaceManagement.Members',
         })}
       </h3>
       <InputSelectPopover
-        id="addMemberPopover"
-        placement="right"
+        id='addMemberPopover'
+        placement='right'
         style={{
           minWidth: '615px',
           maxWidth: '615px',
@@ -75,14 +94,23 @@ function AddMemberPopover({
         headline={formatMessage({
           id: 'AddMemberPopover.add-member',
         })}
-        inputPlaceholder="Email"
         buttonLabel={formatMessage({
           id: 'AddMemberPopover.addMember-button',
         })}
         handleShow={handleShow}
         popoverOpenButton={openPopoverButton}
         onSend={onSetUserData}
+        onChange={(
+          e: React.DetailedHTMLProps<
+            React.SelectHTMLAttributes<HTMLSelectElement>,
+            HTMLSelectElement
+          >
+        ) => onSetUserEmail(e)}
         dropdownOptions={dropdownOptions}
+        selectPlaceholder='Mitglied hinzufügen'
+        selectValue={userEmail}
+        selectOptions={options}
+        selectIsSearchable
       />
     </div>
   );

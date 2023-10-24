@@ -40,6 +40,7 @@ const statusCodesArray: { [code: string]: string } = {
   '40000': 'ErrorToast.status-code-validation-error',
   '40001': 'ErrorToast.status-code-unable-delete-orga',
   '50000': 'ErrorToast.status-code-unknown-error',
+  // TODO: 50200 abdecken
   '50201': 'ErrorToast.status-code-metadata-service-error',
   '50202': 'ErrorToast.status-code-storagemanager-service-error',
 };

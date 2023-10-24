@@ -59,6 +59,7 @@ function MembersTable({
   );
 
   const { spaceID } = useParams();
+
   const roleCount = spaceID
     ? userSpaceRoleTypes.length
     : userOrgaRoleTypes.length;
@@ -126,6 +127,7 @@ function MembersTable({
       member: OrgaSpaceUser<string>,
       permission: string /* //TODO permission has a known type but this collides with AddTagPopover type Definition. AddTagPopover should be generalized  */
     ) => {
+      console.log(member, permission);
       if (!member.permissions.includes(permission)) {
         onHandleChange({
           ...member,
@@ -233,6 +235,19 @@ function MembersTable({
 
     members?.forEach((member: OrgaUser | SpaceUser) => {
       const permissionsArray = member.permissions as unknown as string[];
+
+      const roles1 = new Set(
+        permissionsArray.map((perm) => perm.toUpperCase())
+      );
+      const roles2 = new Set(
+        Array.from(roles).map((role) => role.toUpperCase())
+      );
+
+      const uniqueRoles = [
+        ...permissionsArray.filter((perm) => !roles2.has(perm.toUpperCase())),
+        ...Array.from(roles).filter((perm) => !roles1.has(perm.toUpperCase())),
+      ];
+
       const popoverButton =
         member.permissions.length < roleCount
           ? openPopoverButton
@@ -263,7 +278,7 @@ function MembersTable({
                   role.toUpperCase()
                 )
               }
-              dropdownOptions={roles as unknown as string[]}
+              dropdownOptions={uniqueRoles}
             />
 
             {permissionsArray.length !== 0 ? (
