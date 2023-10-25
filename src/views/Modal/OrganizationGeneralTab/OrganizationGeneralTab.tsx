@@ -89,7 +89,7 @@ function OrganizationGeneralTab({
         required
       />
       <span className="h5">{`${formatMessage({
-        id: 'AppPage.container-id',
+        id: 'Overview.container-id',
       })} ${modalData.name}`}</span>
       <FormInput
         ariaLabel="company"

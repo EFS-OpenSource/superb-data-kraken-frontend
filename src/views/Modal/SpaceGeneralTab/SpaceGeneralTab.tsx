@@ -99,7 +99,7 @@ function SpaceGeneralTab({
         })}
       />
       <span className='h5 mb-4'>{`${formatMessage({
-        id: 'AppPage.container-id',
+        id: 'Overview.container-id',
       })} ${modalData.name}`}</span>
       <FormTextarea
         id='description'
