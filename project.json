@@ -41,6 +41,7 @@
           "hmr": true
         },
         "production": {
+          "browserTarget": "superb-data-kraken-frontend:build:production",
           "buildTarget": "superb-data-kraken-frontend:build:production",
           "hmr": false
         }

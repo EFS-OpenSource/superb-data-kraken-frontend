@@ -40,7 +40,7 @@ import {
 } from './factories';
 
 const baseURL =
-  process.env['NODE_process.env'] === 'production'
+  process.env['NODE_ENV'] === 'production'
     ? (process.env.VITE_SDK_BACKEND_URL as string)
     : (process.env.VITE_SDK_BACKEND_LOCAL_URL as string);
 
@@ -61,7 +61,7 @@ const urlOptionsV2: AxiosOptions = {
 const getOrganizations_ = getFactory<Organization[]>(urlOptionsV1, baseURL);
 
 export const getOrganizations = (
-  permissions?: 'WRITE' | 'READ',
+  permissions?: 'WRITE' | 'READ'
 ): Promise<Response<Organization[]> | ResponseError> =>
   getOrganizations_('organization', {
     queryParams: permissions ? { permissions } : {},
@@ -72,7 +72,7 @@ export const getOrganizations = (
 const getSpaces_ = getFactory<Space[]>(urlOptionsV2, baseURL);
 export const getSpaces = (
   orgaId: string,
-  permissions?: 'WRITE' | 'READ',
+  permissions?: 'WRITE' | 'READ'
 ): Promise<Response<Space[]> | ResponseError> =>
   getSpaces_('organization/:orgaId/space', {
     pathParams: { orgaId },
@@ -83,7 +83,7 @@ export const getSpaces = (
 
 const getOrganization_ = getFactory<Organization>(urlOptionsV1, baseURL);
 export const getOrganization = (
-  id: string,
+  id: string
 ): Promise<Response<Organization> | ResponseError> =>
   getOrganization_('organization/:id', {
     pathParams: { id },
@@ -94,7 +94,7 @@ export const getOrganization = (
 const getSpace_ = getFactory<Space>(urlOptionsV2, baseURL);
 export const getSpace = (
   orgaId: string,
-  spaceId: string,
+  spaceId: string
 ): Promise<Response<Space> | ResponseError> =>
   getSpace_('organization/:orgaId/space/:spaceId', {
     pathParams: { orgaId, spaceId },
@@ -133,16 +133,23 @@ export const getOrganizationsWithSpaces = async () => {
 
 const updateOrganization_ = putFactory<Organization, Organization>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const updateOrganization = (
   payload: Organization,
   id: string | number,
-): Promise<Response<Organization> | ResponseError> =>
-  updateOrganization_('organization/:id', payload, {
-    pathParams: { id },
-  });
-
+  hasOrganizationChanged = true
+): Promise<Response<Organization> | ResponseError> => {
+  if (hasOrganizationChanged) {
+    return updateOrganization_('organization/:id', payload, {
+      pathParams: { id },
+    });
+  }
+  return Promise.resolve({
+    ok: true,
+    data: payload,
+  } as Response<Organization>);
+};
 /* Update space  */
 
 const updateSpace_ = putFactory<Space, Space>(urlOptionsV2, baseURL);
@@ -150,19 +157,24 @@ export const updateSpace = (
   payload: Space,
   orgaId: number | string,
   spaceId: number | string,
-): Promise<Response<Space> | ResponseError> =>
-  updateSpace_('organization/:orgaId/space/:spaceId', payload, {
-    pathParams: { orgaId, spaceId },
-  });
+  hasSpaceChanged = true
+): Promise<Response<Space> | ResponseError> => {
+  if (hasSpaceChanged) {
+    return updateSpace_('organization/:orgaId/space/:spaceId', payload, {
+      pathParams: { orgaId, spaceId },
+    });
+  }
+  return Promise.resolve({ ok: true, data: payload } as Response<Space>);
+};
 
 /* Create organization  */
 
 const createOrganization_ = postFactory<Organization, Organization>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const createOrganization = (
-  payload: Organization,
+  payload: Organization
 ): Promise<Response<Organization> | ResponseError> =>
   createOrganization_('organization', payload);
 
@@ -171,7 +183,7 @@ export const createOrganization = (
 const createSpace_ = postFactory<Space, Space>(urlOptionsV2, baseURL);
 export const createSpace = (
   payload: Space,
-  orgaId: number | string,
+  orgaId: number | string
 ): Promise<Response<Space> | ResponseError> =>
   createSpace_('organization/:orgaId/space', payload, {
     pathParams: { orgaId },
@@ -182,7 +194,7 @@ export const createSpace = (
 const deleteSpace_ = deleteFactory(urlOptionsV2, baseURL);
 export const deleteSpace = (
   orgaId: number | string,
-  spaceId: number | string,
+  spaceId: number | string
 ): Promise<ResponseDelete | ResponseError> =>
   deleteSpace_('organization/:orgaId/space/:spaceId', {
     pathParams: { orgaId, spaceId },
@@ -192,13 +204,13 @@ export const deleteSpace = (
 
 const setDeletionStateSpace_ = putFactory<undefined, Space>(
   urlOptionsV2,
-  baseURL,
+  baseURL
 );
 export const setDeletionStateSpace = (
   orgaId: number | string,
   spaceId: number | string,
   willBeDeleted: boolean,
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<Space> | ResponseError> =>
   setDeletionStateSpace_(
     'organization/:orgaId/space/:spaceId/setDeletionState',
@@ -206,17 +218,17 @@ export const setDeletionStateSpace = (
     {
       pathParams: { orgaId, spaceId },
       queryParams: { willBeDeleted },
-    },
+    }
   );
 
 /* Get users of organization */
 
 const getOrganizationUsers_ = getFactory<OrgaSpaceUser<UserOrgaRoleType>[]>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const getOrganizationUsers = (
-  orgaId: number | string,
+  orgaId: number | string
 ): Promise<Response<OrgaSpaceUser<UserOrgaRoleType>[]> | ResponseError> =>
   getOrganizationUsers_('organization/:orgaId/users', {
     pathParams: { orgaId },
@@ -226,11 +238,11 @@ export const getOrganizationUsers = (
 
 const getSpaceUsers_ = getFactory<OrgaSpaceUser<UserSpaceRoleType>[]>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const getSpaceUsers = (
   orgaId: number | string,
-  spaceId: number | string,
+  spaceId: number | string
 ): Promise<Response<OrgaSpaceUser<UserSpaceRoleType>[]> | ResponseError> =>
   getSpaceUsers_('organization/:orgaId/space/:spaceId/users', {
     pathParams: { orgaId, spaceId },
@@ -240,13 +252,13 @@ export const getSpaceUsers = (
 
 const setOrganizationRoleById_ = putFactory<undefined, User>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const setOrganizationRoleById = (
   orgaId: number | string,
   userId: number | string,
   roleScopes: string[],
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<User> | ResponseError> =>
   setOrganizationRoleById_('organization/:orgaId/users/:userId', payload, {
     pathParams: { orgaId, userId },
@@ -261,7 +273,7 @@ export const setSpaceRoleById = (
   spaceId: number | string,
   userId: number | string,
   roleScopes: string[],
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<User> | ResponseError> =>
   setSpaceRoleById_(
     'organization/:orgaId/space/:spaceId/users/:userId',
@@ -269,20 +281,20 @@ export const setSpaceRoleById = (
     {
       pathParams: { orgaId, spaceId, userId },
       queryParams: { roleScopes },
-    },
+    }
   );
 
 /* Set user role in Organization by user name */
 
 const setOrganizationRoleByName_ = putFactory<undefined, User>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const setOrganizationRoleByName = (
   orgaId: number | string,
   userName: string,
   roleScopes: string[],
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<User> | ResponseError> =>
   setOrganizationRoleByName_(
     'organization/:orgaId/users/name/:userName',
@@ -290,7 +302,7 @@ export const setOrganizationRoleByName = (
     {
       pathParams: { orgaId, userName },
       queryParams: { roleScopes },
-    },
+    }
   );
 
 /* Set user role in Space by user id */
@@ -301,7 +313,7 @@ export const setSpaceRoleByName = (
   spaceId: number | string,
   userName: string,
   roleScopes: string[],
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<User> | ResponseError> =>
   setSpaceRoleByName_(
     'organization/:orgaId/space/:spaceId/users/name/:userName',
@@ -309,20 +321,20 @@ export const setSpaceRoleByName = (
     {
       pathParams: { orgaId, spaceId, userName },
       queryParams: { roleScopes },
-    },
+    }
   );
 
 /* Set user role in Organization by user email */
 
 const setOrganizationRoleByEmail_ = putFactory<undefined, User>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const setOrganizationRoleByEmail = (
   orgaId: number | string,
   userEmail: string,
   roleScopes: string[],
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<User> | ResponseError> =>
   setOrganizationRoleByEmail_(
     'organization/:orgaId/users/email/:userEmail',
@@ -330,7 +342,7 @@ export const setOrganizationRoleByEmail = (
     {
       pathParams: { orgaId, userEmail },
       queryParams: { roleScopes },
-    },
+    }
   );
 
 /* Set user role in Space by user email */
@@ -341,7 +353,7 @@ export const setSpaceRoleByEmail = (
   spaceId: number | string,
   userEmail: string,
   roleScopes: string[],
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<User> | ResponseError> =>
   setSpaceRoleByEmail_(
     'organization/:orgaId/space/:spaceId/users/email/:userEmail',
@@ -349,17 +361,17 @@ export const setSpaceRoleByEmail = (
     {
       pathParams: { orgaId, spaceId, userEmail },
       queryParams: { roleScopes },
-    },
+    }
   );
 
 /* Get organization user requests */
 
 const getOrganizationUserRequests_ = getFactory<UserRequestOrganizationState[]>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const getOrganizationUserRequests = (
-  orgaId: number | string,
+  orgaId: number | string
 ): Promise<Response<UserRequestOrganizationState[]> | ResponseError> =>
   getOrganizationUserRequests_('organization/:orgaId/userrequests', {
     pathParams: { orgaId },
@@ -369,11 +381,11 @@ export const getOrganizationUserRequests = (
 
 const getSpaceUserRequests_ = getFactory<UserRequestSpaceState[]>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const getSpaceUserRequests = (
   orgaId: number | string,
-  spaceId: number | string,
+  spaceId: number | string
 ): Promise<Response<UserRequestSpaceState[]> | ResponseError> =>
   getSpaceUserRequests_('organization/:orgaId/space/:spaceId/userrequests', {
     pathParams: { orgaId, spaceId },
@@ -387,7 +399,7 @@ const createOrganizationUserRequest_ = postFactory<
 >(urlOptionsV1, baseURL);
 export const createOrganizationUserRequest = (
   payload: UserRequestOrganization,
-  orgaId: number | string,
+  orgaId: number | string
 ): Promise<Response<UserRequestOrganizationState> | ResponseError> =>
   createOrganizationUserRequest_('organization/:orgaId/userrequests', payload, {
     pathParams: { orgaId },
@@ -402,14 +414,14 @@ const createSpaceUserRequest_ = postFactory<
 export const createSpaceUserRequest = (
   payload: UserRequestSpace,
   orgaId: number | string,
-  spaceId: number | string,
+  spaceId: number | string
 ): Promise<Response<UserRequestSpaceState> | ResponseError> =>
   createSpaceUserRequest_(
     'organization/:orgaId/space/:spaceId/userrequests',
     payload,
     {
       pathParams: { orgaId, spaceId },
-    },
+    }
   );
 
 /* Accept user request in organization */
@@ -421,34 +433,34 @@ const acceptOrganizationUserRequest_ = putFactory<
 export const acceptOrganizationUserRequest = (
   orgaId: number | string,
   id: number | string,
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<UserRequestOrganizationState> | ResponseError> =>
   acceptOrganizationUserRequest_(
     'organization/:orgaId/userrequests/:id/accept',
     payload,
     {
       pathParams: { orgaId, id },
-    },
+    }
   );
 
 /* Accept user request in space */
 
 const acceptSpaceUserRequest_ = putFactory<undefined, UserRequestSpaceState>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const acceptSpaceUserRequest = (
   orgaId: number | string,
   spaceId: number | string,
   id: number | string,
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<UserRequestSpaceState> | ResponseError> =>
   acceptSpaceUserRequest_(
     'organization/:orgaId/space/:spaceId/userrequests/:id/accept',
     payload,
     {
       pathParams: { orgaId, spaceId, id },
-    },
+    }
   );
 
 /* Decline user request in organization */
@@ -460,41 +472,41 @@ const declineOrganizationUserRequest_ = putFactory<
 export const declineOrganizationUserRequest = (
   orgaId: number | string,
   id: number | string,
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<UserRequestOrganizationState> | ResponseError> =>
   declineOrganizationUserRequest_(
     'organization/:orgaId/userrequests/:id/decline',
     payload,
     {
       pathParams: { orgaId, id },
-    },
+    }
   );
 
 /* Decline user request in space */
 
 const declineSpaceUserRequest_ = putFactory<undefined, UserRequestSpaceState>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const declineSpaceUserRequest = (
   orgaId: number | string,
   spaceId: number | string,
   id: number | string,
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<UserRequestSpaceState> | ResponseError> =>
   declineSpaceUserRequest_(
     'organization/:orgaId/space/:spaceId/userrequests/:id/decline',
     payload,
     {
       pathParams: { orgaId, spaceId, id },
-    },
+    }
   );
 
 /* Get organization owners */
 
 const getOrganizationOwners_ = getFactory<Owner[]>(urlOptionsV1, baseURL);
 export const getOrganizationOwners = (
-  orgaId: string,
+  orgaId: string
 ): Promise<Response<Owner[]> | ResponseError> =>
   getOrganizationOwners_('organization/:orgaId/owners', {
     pathParams: { orgaId },
@@ -505,7 +517,7 @@ export const getOrganizationOwners = (
 const getSpaceOwners_ = getFactory<Owner[]>(urlOptionsV1, baseURL);
 export const getSpaceOwners = (
   orgaId: number | string,
-  spaceId: number | string,
+  spaceId: number | string
 ): Promise<Response<Owner[]> | ResponseError> =>
   getSpaceOwners_('organization/:orgaId/space/:spaceId/owners', {
     pathParams: { orgaId, spaceId },
@@ -515,11 +527,11 @@ export const getSpaceOwners = (
 
 const setOrganizationOwnersByUserId_ = putFactory<string[], Organization>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const setOrganizationOwnersByUserId = (
   payload: string[],
-  orgaId: number | string,
+  orgaId: number | string
 ): Promise<Response<Organization> | ResponseError> =>
   setOrganizationOwnersByUserId_('organization/:orgaId/owners', payload, {
     pathParams: { orgaId },
@@ -529,95 +541,95 @@ export const setOrganizationOwnersByUserId = (
 
 const setSpaceOwnersByUserId_ = putFactory<string[], Space>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const setSpaceOwnersByUserId = (
   payload: string[],
   orgaId: number | string,
-  spaceId: number | string,
+  spaceId: number | string
 ): Promise<Response<Space> | ResponseError> =>
   setSpaceOwnersByUserId_(
     'organization/:orgaId/space/:spaceId/owners',
     payload,
     {
       pathParams: { orgaId, spaceId },
-    },
+    }
   );
 
 /* Add owner to organization by username */
 
 const addOrganizationOwnerByUsername_ = putFactory<undefined, Organization>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const addOrganizationOwnerByUsername = (
   orgaId: number | string,
   userName: string,
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<Organization> | ResponseError> =>
   addOrganizationOwnerByUsername_(
     'organization/:orgaId/owners/name/:userName',
     payload,
     {
       pathParams: { orgaId, userName },
-    },
+    }
   );
 
 /* Add owner to space by username */
 
 const addSpaceOwnerByUsername_ = putFactory<undefined, Space>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const addSpaceOwnerByUsername = (
   orgaId: number | string,
   spaceId: number | string,
   userName: string,
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<Space> | ResponseError> =>
   addSpaceOwnerByUsername_(
     'organization/:orgaId/space/:spaceId/owners/name/:userName',
     payload,
     {
       pathParams: { orgaId, spaceId, userName },
-    },
+    }
   );
 
 /* Add owner to organization by email */
 
 const addOrganizationOwnerByEmail_ = putFactory<undefined, Organization>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const addOrganizationOwnerByEmail = (
   orgaId: number | string,
   email: string,
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<Organization> | ResponseError> =>
   addOrganizationOwnerByEmail_(
     'organization/:orgaId/owners/email/:email',
     payload,
     {
       pathParams: { orgaId, email },
-    },
+    }
   );
 
 /* Add owner to space by email */
 
 const addSpaceOwnerByEmail_ = putFactory<undefined, Space>(
   urlOptionsV1,
-  baseURL,
+  baseURL
 );
 export const addSpaceOwnerByEmail = (
   orgaId: number | string,
   spaceId: number | string,
   email: string,
-  payload = undefined,
+  payload = undefined
 ): Promise<Response<Space> | ResponseError> =>
   addSpaceOwnerByEmail_(
     'organization/:orgaId/space/:spaceId/owners/email/:email',
     payload,
     {
       pathParams: { orgaId, spaceId, email },
-    },
+    }
   );
