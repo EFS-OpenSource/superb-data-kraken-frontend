@@ -19,6 +19,7 @@ import Select, {
   GroupBase,
   StylesConfig,
 } from 'react-select';
+import { useIntl } from 'react-intl';
 import { DropdownOptions } from '@customTypes/index';
 
 export interface SelectWithAutocompleteProps {
@@ -29,9 +30,10 @@ export interface SelectWithAutocompleteProps {
   isDisabled?: boolean;
   isLoading?: boolean;
   isSearchable?: boolean;
-  styles?:
+  selectStyles?:
     | StylesConfig<DropdownOptions, false, GroupBase<DropdownOptions>>
     | undefined;
+  noOptionsMessage?: string;
 }
 
 const defaultStyles = {
@@ -91,7 +93,8 @@ function SelectWithAutocomplete({
   isDisabled,
   isLoading,
   isSearchable,
-  styles,
+  selectStyles,
+  noOptionsMessage,
 }: SelectWithAutocompleteProps) {
   return (
     <Select
@@ -102,8 +105,9 @@ function SelectWithAutocomplete({
       isDisabled={isDisabled ?? false}
       isLoading={isLoading ?? false}
       isSearchable={isSearchable ?? true}
-      styles={styles ?? defaultStyles}
+      styles={selectStyles ?? defaultStyles}
       hideSelectedOptions
+      noOptionsMessage={() => noOptionsMessage}
     />
   );
 }

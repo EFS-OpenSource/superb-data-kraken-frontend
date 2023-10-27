@@ -100,7 +100,7 @@ function MembersTab({
   const possibleOwners = uniqueUsers as unknown as (OrgaUser | SpaceUser)[];
 
   const handleAddOwner = useCallback(
-    (_email: string, email: string) => {
+    (email: string) => {
       const newOwner = (initialUsersFixed || []).filter(
         (user) => user.email === email
       );
@@ -133,7 +133,7 @@ function MembersTab({
   );
 
   const handleAddUser = useCallback(
-    (email: string, role: string) => {
+    (role: string, email: string) => {
       if (!email) return;
       dispatchUsers({
         type: 'add',
@@ -249,9 +249,9 @@ function MembersTab({
                 })}
                 handleShow={handleShow}
                 popoverOpenButton={openPopoverButton}
-                onSend={(_inputText: string, email: string) =>
-                  handleAddOwner(email, email)
-                }
+                onSend={(email) => {
+                  handleAddOwner(email.value);
+                }}
                 dropdownOptions={
                   spaceID
                     ? possibleOwners.map((initialUser) => initialUser.email)
@@ -265,6 +265,22 @@ function MembersTab({
                         )
                         .map((initialUser) => initialUser.email)
                 }
+                selectPlaceholder2={formatMessage({
+                  id: 'AddMemberPopover.add-owner',
+                })}
+                selectStyles={{
+                  container: (baseStyles) => ({
+                    ...baseStyles,
+                    width: '320px',
+                  }),
+                  menuList: (baseStyles) => ({
+                    ...baseStyles,
+                    width: 'auto',
+                  }),
+                }}
+                noOptionsMessage={formatMessage({
+                  id: 'AddMemberPopover.no-more-owners-available',
+                })}
               />
             )}
           </div>
@@ -308,9 +324,9 @@ function MembersTab({
       </Form.Group>
       <Form.Group className='mt-3'>
         <AddMemberPopover
-          onSetUserData={(email, role) =>
-            handleAddUser(email, role.toUpperCase())
-          }
+          onSetUserData={(role, email) => {
+            handleAddUser(role.value.toUpperCase(), email as string);
+          }}
           dropdownOptions={roles}
           options={spaceID ? emails : []}
         />

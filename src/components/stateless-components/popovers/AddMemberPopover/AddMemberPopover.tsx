@@ -22,10 +22,12 @@ import { DropdownOptions } from '@customTypes/reactSelectTypes';
 import React, { useState } from 'react';
 
 interface AddMemberPopoverType {
-  dropdownOptions: readonly string[];
-  onSetUserData: (email: string, role: string) => void;
+  dropdownOptions: string[];
+  onSetUserData: (
+    role: { label: string; value: string },
+    email?: string
+  ) => void;
   options: DropdownOptions[];
-  // value: DropdownOptions | null;
 }
 
 function AddMemberPopover({
@@ -88,8 +90,8 @@ AddMemberPopoverType) {
         id='addMemberPopover'
         placement='right'
         style={{
-          minWidth: '615px',
-          maxWidth: '615px',
+          minWidth: '715px',
+          maxWidth: '715px',
         }}
         headline={formatMessage({
           id: 'AddMemberPopover.add-member',
@@ -107,10 +109,33 @@ AddMemberPopoverType) {
           >
         ) => onSetUserEmail(e)}
         dropdownOptions={dropdownOptions}
-        selectPlaceholder='Mitglied hinzufügen'
+        selectPlaceholder={formatMessage({
+          id: 'AddMemberPopover.add-member',
+        })}
+        selectPlaceholder2={formatMessage({
+          id: 'MembersTable.add-role',
+        })}
         selectValue={userEmail}
         selectOptions={options}
         selectIsSearchable
+        noOptionsMessage={formatMessage({
+          id: 'AddMemberPopover.no-more-members-available',
+        })}
+        selectStyles={{
+          container: (baseStyles) => ({
+            ...baseStyles,
+            width: '320px',
+            paddingRight: '1em',
+          }),
+          menu: (baseStyles) => ({
+            ...baseStyles,
+            width: '400px',
+          }),
+          menuList: (baseStyles) => ({
+            ...baseStyles,
+            width: '400px',
+          }),
+        }}
       />
     </div>
   );

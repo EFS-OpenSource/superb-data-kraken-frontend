@@ -95,7 +95,7 @@ function MembersTable({
         enableColumnFilter: false,
       }),
     ],
-    []
+    [formatMessage]
   );
 
   const [membersToHandle, setMembersToHandle] = useState<
@@ -124,10 +124,10 @@ function MembersTable({
 
   const handleAddPermission = useCallback(
     (
-      member: OrgaSpaceUser<string>,
-      permission: string /* //TODO permission has a known type but this collides with AddTagPopover type Definition. AddTagPopover should be generalized  */
+      permission: string,
+      member: OrgaSpaceUser<string>
+      /* //TODO permission has a known type but this collides with AddTagPopover type Definition. AddTagPopover should be generalized  */
     ) => {
-      console.log(member, permission);
       if (!member.permissions.includes(permission)) {
         onHandleChange({
           ...member,
@@ -272,13 +272,26 @@ function MembersTable({
               })}
               handleShow={handleShow}
               popoverOpenButton={popoverButton}
-              onSend={(_email, role) =>
+              onSend={(role) => {
                 handleAddPermission(
-                  member as OrgaSpaceUser<string>,
-                  role.toUpperCase()
-                )
-              }
+                  role.value.toUpperCase(),
+                  member as OrgaSpaceUser<string>
+                );
+              }}
               dropdownOptions={uniqueRoles}
+              selectPlaceholder2={formatMessage({
+                id: 'MembersTable.add-role',
+              })}
+              selectStyles={{
+                container: (baseStyles) => ({
+                  ...baseStyles,
+                  width: '200px',
+                }),
+                menuList: (baseStyles) => ({
+                  ...baseStyles,
+                  width: 'auto',
+                }),
+              }}
             />
 
             {permissionsArray.length !== 0 ? (

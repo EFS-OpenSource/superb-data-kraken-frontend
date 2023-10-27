@@ -15,7 +15,6 @@ limitations under the License.
  */
 
 import { useRef, useState, CSSProperties } from 'react';
-import { useIntl } from 'react-intl';
 import { Icon, SelectWithAutocomplete } from '@components/index';
 import {
   DropdownOptions,
@@ -25,6 +24,7 @@ import {
 import { Button, Col, OverlayTrigger, Popover } from 'react-bootstrap';
 import { IoClose } from 'react-icons/io5';
 import { Placement } from 'node_modules/@restart/ui/esm/usePopper';
+import { StylesConfig, GroupBase } from 'react-select';
 
 interface InputSelectPopoverType {
   id: string;
@@ -39,13 +39,18 @@ interface InputSelectPopoverType {
   inputPlaceholder?: string;
   inputValue?: string;
   disabled?: boolean;
-  onSend?: (inputText: string, dropdownOption: string) => void;
+  onSend?: (dropdownOption: any, inputText?: string) => void;
   // properties for SelectWithAutocomplete
   selectOptions?: DropdownOptions[];
   selectValue?: string;
   selectPlaceholder?: string;
+  selectPlaceholder2?: string;
   selectIsSearchable?: boolean;
   onChange?: any;
+  selectStyles?:
+    | StylesConfig<DropdownOptions, false, GroupBase<DropdownOptions>>
+    | undefined;
+  noOptionsMessage?: string;
 }
 
 function InputSelectPopover({
@@ -65,10 +70,12 @@ function InputSelectPopover({
   selectOptions,
   selectValue,
   selectPlaceholder,
+  selectPlaceholder2,
   selectIsSearchable,
   onChange,
+  selectStyles,
+  noOptionsMessage,
 }: InputSelectPopoverType) {
-  const { formatMessage } = useIntl();
   const [show, setShow] = useState(false);
 
   const popoverContainer = useRef<HTMLDivElement>(null);
@@ -81,11 +88,16 @@ function InputSelectPopover({
     UserSpaceRoleType | UserOrgaRoleType
   >();
 
-  const onRoleSelectHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setDropdownOption(e.target.value as UserSpaceRoleType | UserOrgaRoleType);
+  const onRoleSelectHandler = (e: DropdownOptions | null) => {
+    setDropdownOption(e as unknown as UserSpaceRoleType | UserOrgaRoleType);
   };
 
   const [inputText, setInputText] = useState(inputValue || '');
+
+  const dropdownOptionsForReactSelect = dropdownOptions.map((option) => ({
+    label: option,
+    value: option,
+  }));
 
   const onChangeNameHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(e.target.value);
@@ -100,7 +112,7 @@ function InputSelectPopover({
         dropdownOption,
       };
       if (onSend && inputText) {
-        onSend(dataToSend.inputText, dataToSend.dropdownOption);
+        onSend(dataToSend.dropdownOption, dataToSend.inputText);
         setInputText('');
         setDropdownOption(dropdownOptions.includes('user') ? 'user' : 'access');
       }
@@ -112,7 +124,7 @@ function InputSelectPopover({
         dropdownOption,
       };
       if (onSend && selectValue) {
-        onSend(dataToSend.selectValue, dataToSend.dropdownOption);
+        onSend(dataToSend.dropdownOption, dataToSend.selectValue);
         setDropdownOption(dropdownOptions.includes('user') ? 'user' : 'access');
       }
     }
@@ -122,8 +134,7 @@ function InputSelectPopover({
         dropdownOption,
       };
       if (onSend) {
-        console.log(dropdownOption);
-        onSend(dropdownOption, dropdownOption);
+        onSend(dropdownOption);
         setDropdownOption(dropdownOptions.includes('user') ? 'user' : 'access');
       }
     }
@@ -174,32 +185,21 @@ function InputSelectPopover({
               {selectOptions && selectOptions.length > 0 && (
                 <SelectWithAutocomplete
                   options={selectOptions}
-                  // value={selectValue || { label: '', value: '' }}
                   placeholder={selectPlaceholder || ''}
                   onChange={onChange}
                   isSearchable={selectIsSearchable}
+                  selectStyles={selectStyles}
+                  noOptionsMessage={noOptionsMessage}
                 />
               )}
-              <select
-                aria-label='role'
-                name='role'
-                id='role'
-                className='p-1 pe-2'
+              <SelectWithAutocomplete
+                options={dropdownOptionsForReactSelect as DropdownOptions[]}
+                placeholder={selectPlaceholder2 || ''}
                 onChange={(e) => onRoleSelectHandler(e)}
-              >
-                <option value=''>
-                  --
-                  {formatMessage({
-                    id: 'ApplyRolesPopover.select-role',
-                  })}
-                  --
-                </option>
-                {dropdownOptions.map((spaceRole) => (
-                  <option key={spaceRole} value={spaceRole}>
-                    {spaceRole}
-                  </option>
-                ))}
-              </select>
+                isSearchable={selectIsSearchable}
+                selectStyles={selectStyles}
+                noOptionsMessage={noOptionsMessage}
+              />
               <Button
                 aria-label={`${id}-addButton`}
                 variant='primary'
