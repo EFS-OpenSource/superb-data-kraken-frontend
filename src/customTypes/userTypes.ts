@@ -87,7 +87,8 @@ export interface Owner {
 }
 
 export interface MembersToRenderType {
-  memberName?: string;
+  memberFirstName?: string;
+  memberLastName?: string;
   memberEmail: string;
   memberRoles: JSX.Element;
   memberAction: JSX.Element | undefined;

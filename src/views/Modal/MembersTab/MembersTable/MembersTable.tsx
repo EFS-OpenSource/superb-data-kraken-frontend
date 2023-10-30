@@ -65,9 +65,15 @@ function MembersTable({
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('memberName', {
+      columnHelper.accessor('memberLastName', {
         header: formatMessage({
-          id: 'MembersTable.name',
+          id: 'MembersTable.Lastname',
+        }),
+        cell: (info) => info.getValue(),
+      }),
+      columnHelper.accessor('memberFirstName', {
+        header: formatMessage({
+          id: 'MembersTable.Firstname',
         }),
         cell: (info) => info.getValue(),
       }),
@@ -238,10 +244,14 @@ function MembersTable({
           ? openPopoverButton
           : buttonPlaceholder;
       memberArray.push({
-        memberName:
-          member && member.firstName && member.lastName
-            ? `${member.firstName} ${member.lastName}`
+        memberLastName:
+          member && member.lastName
+            ? `${member.lastName}`
             : '',
+        memberFirstName:
+          member && member.firstName 
+          ? `${member.firstName}`
+          : '',
         memberEmail: member.email,
         memberRoles: (
           <Form.Group className='d-flex m-0'>
