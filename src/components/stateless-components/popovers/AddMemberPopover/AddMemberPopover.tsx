@@ -20,6 +20,7 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Icon, InputSelectPopover } from '@components/index';
 import { DropdownOptions } from '@customTypes/reactSelectTypes';
 import React, { useState } from 'react';
+import { OrgaUser, SpaceUser } from '@customTypes/userTypes';
 
 interface AddMemberPopoverType {
   dropdownOptions: string[];
@@ -28,12 +29,14 @@ interface AddMemberPopoverType {
     email?: string
   ) => void;
   options: DropdownOptions[];
+  membersInTable: OrgaUser[] | SpaceUser[];
 }
 
 function AddMemberPopover({
   dropdownOptions,
   onSetUserData,
   options,
+  membersInTable,
 }: // value,
 AddMemberPopoverType) {
   const { formatMessage } = useIntl();
@@ -43,6 +46,19 @@ AddMemberPopoverType) {
   };
 
   const [userEmail, setUserEmail] = useState('');
+
+  const membersInTableFixed: Array<(typeof membersInTable)[number]> =
+    membersInTable;
+
+  const filteredMembers = options.filter((member) => member.value !== null);
+
+  const members1 = new Set(filteredMembers.map((user) => user.value));
+  const members2 = new Set(membersInTable.map((user) => user.email));
+
+  const membersLeftToAdd = [
+    ...filteredMembers.filter((user) => !members2.has(user.value)),
+    ...membersInTableFixed.filter((user) => !members1.has(user.email)),
+  ];
 
   const onSetUserEmail = (
     e: React.DetailedHTMLProps<
@@ -116,7 +132,7 @@ AddMemberPopoverType) {
           id: 'MembersTable.add-role',
         })}
         selectValue={userEmail}
-        selectOptions={options}
+        selectOptions={membersLeftToAdd as unknown as DropdownOptions[]}
         selectIsSearchable
         noOptionsMessage={formatMessage({
           id: 'AddMemberPopover.no-more-members-available',

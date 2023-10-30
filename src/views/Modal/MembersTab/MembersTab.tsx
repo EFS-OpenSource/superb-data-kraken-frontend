@@ -329,6 +329,7 @@ function MembersTab({
           }}
           dropdownOptions={roles}
           options={spaceID ? emails : []}
+          membersInTable={users as unknown as OrgaUser[] | SpaceUser[]}
         />
         <div className='ms-4'>
           {users && (
