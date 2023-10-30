@@ -59,6 +59,7 @@ import {
   OrgaSpaceUser,
 } from '@customTypes/index';
 import { OrgSpaceModalParent } from '@views/index';
+import _ from 'lodash';
 
 type ManageOrgaSpaceModalProps = {
   show: boolean;
@@ -387,8 +388,12 @@ function ManageOrgaSpaceModal({
   };
 
   const updateOrganizationMutation = useMutation(
-    () =>
-      updateOrganization(modalData as Organization, orgID as string)
+    (hasOrganizationChanged?: boolean) =>
+      updateOrganization(
+        modalData as Organization,
+        orgID as string,
+        hasOrganizationChanged
+      )
         .then((response) => {
           if (!response.ok) throw new Error(response.data.errorCode);
           if (isOwner) {
@@ -454,8 +459,13 @@ function ManageOrgaSpaceModal({
   );
 
   const updateSpaceMutation = useMutation(
-    () =>
-      updateSpace(modalData as Space, orgID as string, spaceID as string)
+    (hasSpaceChanged?: boolean) =>
+      updateSpace(
+        modalData as Space,
+        orgID as string,
+        spaceID as string,
+        hasSpaceChanged
+      )
         .then((response) => {
           if (!response.ok) throw new Error(response.data.errorCode);
           if (isOwner) {
@@ -619,10 +629,12 @@ function ManageOrgaSpaceModal({
       createSpaceMutation.mutate();
     }
     if (modalType === 'editOrganization') {
-      updateOrganizationMutation.mutate();
+      const hasOrganizationChanged = !_.isEqual(orgData, modalData);
+      updateOrganizationMutation.mutate(hasOrganizationChanged);
     }
     if (modalType === 'editSpace') {
-      updateSpaceMutation.mutate();
+      const hasSpaceChanged = !_.isEqual(spaceData, modalData);
+      updateSpaceMutation.mutate(hasSpaceChanged);
     }
     handleClose();
   };
