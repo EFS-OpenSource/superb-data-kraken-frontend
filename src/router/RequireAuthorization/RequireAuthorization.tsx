@@ -20,7 +20,7 @@ import { LoadingIndicator } from '@components/index';
 import validParams from '@utils/validParams';
 import { getOrganizationsWithSpaces } from '@services/index';
 
-const RequireAuthorization = () => {
+function RequireAuthorization() {
   const { orgID, spaceID } = useParams();
   const location = useLocation();
 
@@ -32,7 +32,7 @@ const RequireAuthorization = () => {
       const validParamsReturn = validParams(orgID, spaceID, orgData);
 
       return validParamsReturn;
-    },
+    }
   );
 
   if (isLoading) {
@@ -41,8 +41,8 @@ const RequireAuthorization = () => {
   return valid ? (
     <Outlet />
   ) : (
-    <Navigate to="/home/overview" state={{ from: location.pathname }} replace />
+    <Navigate to='/home/overview' state={{ from: location.pathname }} replace />
   );
-};
+}
 
 export default RequireAuthorization;

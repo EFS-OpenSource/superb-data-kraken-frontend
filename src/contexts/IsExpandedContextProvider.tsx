@@ -26,11 +26,11 @@ export const IsExpandedContext = createContext<IsExpandedContextProps>({
   updateIsExpanded: (isExpanded = false) => isExpanded,
 });
 
-export const IsExpandedContextProvider = ({
+export function IsExpandedContextProvider({
   children,
 }: {
   children: ReactNode;
-}): JSX.Element => {
+}): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const updateIsExpanded = (newIsExpanded: boolean): void => {
@@ -39,7 +39,7 @@ export const IsExpandedContextProvider = ({
 
   const IsExpandedContextValues = useMemo(
     () => ({ isExpanded, updateIsExpanded }),
-    [isExpanded],
+    [isExpanded]
   );
 
   return (
@@ -47,4 +47,4 @@ export const IsExpandedContextProvider = ({
       {children}
     </IsExpandedContext.Provider>
   );
-};
+}

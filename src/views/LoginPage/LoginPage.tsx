@@ -22,7 +22,7 @@ interface LocationState {
   from: { pathname: string };
 }
 
-const LoginPage = () => {
+function LoginPage() {
   const { login, isAuthenticated } = useOidc();
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,6 +37,6 @@ const LoginPage = () => {
   }, [from, isAuthenticated, navigate, login]);
 
   return <Outlet />;
-};
+}
 
 export default LoginPage;

@@ -24,16 +24,18 @@ export interface CustomCardProps {
   style?: CSSProperties;
 }
 
-const CustomCard = ({
+function CustomCard({
   cardTitleElement,
   cardBodyElement,
   style,
   className,
-}: CustomCardProps) => (
-  <Card className={`${className} rounded`} style={style}>
-    <Card.Title className="m-4 ps-3">{cardTitleElement}</Card.Title>
-    <Card.Body className="mx-4 p-0 ps-3 pe-6">{cardBodyElement}</Card.Body>
-  </Card>
-);
+}: CustomCardProps) {
+  return (
+    <Card className={`${className} rounded`} style={style}>
+      <Card.Title className='m-4 ps-3'>{cardTitleElement}</Card.Title>
+      <Card.Body className='mx-4 p-0 ps-3 pe-6'>{cardBodyElement}</Card.Body>
+    </Card>
+  );
+}
 
 export default CustomCard;

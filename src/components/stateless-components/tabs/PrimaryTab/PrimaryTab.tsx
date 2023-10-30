@@ -30,7 +30,7 @@ interface PrimaryTabProps {
   tooltipMessage?: string;
 }
 
-const PrimaryTab = ({
+function PrimaryTab({
   tab,
   activePath,
   activeStyle,
@@ -38,11 +38,11 @@ const PrimaryTab = ({
   tabPath,
   disabled,
   tooltipMessage,
-}: PrimaryTabProps) => {
+}: PrimaryTabProps) {
   const { formatMessage } = useIntl();
 
   const TabComponent = (
-    <Nav.Item className="text-center tab-width">
+    <Nav.Item className='text-center tab-width'>
       <Nav.Link
         as={NavLink}
         to={tabPath}
@@ -65,7 +65,7 @@ const PrimaryTab = ({
   return disabled ? (
     <OverlayTrigger
       key={tab}
-      placement="bottom"
+      placement='bottom'
       transition={false}
       overlay={<Tooltip id={`tooltip-${tab}`}>{tooltipMessage}</Tooltip>}
     >
@@ -74,6 +74,6 @@ const PrimaryTab = ({
   ) : (
     TabComponent
   );
-};
+}
 
 export default PrimaryTab;

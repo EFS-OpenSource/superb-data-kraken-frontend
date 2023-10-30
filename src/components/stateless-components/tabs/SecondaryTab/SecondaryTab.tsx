@@ -22,11 +22,11 @@ interface SecondaryTabProps {
   disabled?: boolean;
 }
 
-const SecondaryTab = ({ tab, disabled }: SecondaryTabProps) => {
+function SecondaryTab({ tab, disabled }: SecondaryTabProps) {
   const { formatMessage } = useIntl();
 
   return (
-    <Nav.Item className="text-left me-4 tab-width">
+    <Nav.Item className='text-left me-4 tab-width'>
       <Nav.Link disabled={disabled}>
         <div>
           {formatMessage({
@@ -36,6 +36,6 @@ const SecondaryTab = ({ tab, disabled }: SecondaryTabProps) => {
       </Nav.Link>
     </Nav.Item>
   );
-};
+}
 
 export default SecondaryTab;

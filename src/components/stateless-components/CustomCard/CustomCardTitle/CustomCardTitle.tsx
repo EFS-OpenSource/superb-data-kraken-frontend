@@ -22,20 +22,11 @@ import { RiDeleteBin2Line } from 'react-icons/ri';
 import { Button } from 'react-bootstrap';
 import { useIntl } from 'react-intl';
 
-import {
-  Space,
-  userOrgaRoleTypes,
-  userSpaceRoleTypes,
-  OrgSpaceUserType,
-} from '@customTypes/index';
+import { Space, OrgSpaceUserType } from '@customTypes/index';
 import Chip from '../../Chip/Chip';
 import Icon from '../../Icon/Icon';
 
-const CustomCardTitleLayout = ({
-  data,
-  userName,
-  cardType,
-}: OrgSpaceUserType) => {
+function CustomCardTitleLayout({ data, userName, cardType }: OrgSpaceUserType) {
   // const { featureFlag } = React.useContext(FeatureFlags);
   const { formatMessage } = useIntl();
 
@@ -45,8 +36,8 @@ const CustomCardTitleLayout = ({
 
   const openPopoverButton = (
     <Button
-      aria-label="applyAccessButton"
-      size="sm"
+      aria-label='applyAccessButton'
+      size='sm'
       onClick={(e) => handleShow(e)}
     >
       {formatMessage({
@@ -87,8 +78,8 @@ const CustomCardTitleLayout = ({
 
   return (
     <>
-      <div className="mt-2 mb-3 d-flex align-items-center">
-        <h3 className="font-weight-medium mb-0 me-4">
+      <div className='mt-2 mb-3 d-flex align-items-center'>
+        <h3 className='font-weight-medium mb-0 me-4'>
           {data.displayName && (
             <div>
               {data.displayName.length > 20
@@ -109,7 +100,7 @@ const CustomCardTitleLayout = ({
             icon={iconState}
             tooltip={tooltipState}
             size={26}
-            className="ms-1 me-4"
+            className='ms-1 me-4'
             color={
               dataForState().state === 'DELETION'
                 ? 'text-danger'
@@ -121,18 +112,18 @@ const CustomCardTitleLayout = ({
           text={
             data && data.confidentiality && data.confidentiality.toLowerCase()
           }
-          size="sm"
-          activeColor="outline-accent"
-          activeTextColor="accent"
+          size='sm'
+          activeColor='outline-accent'
+          activeTextColor='accent'
           disabled
           tooltip={`Confidentiality.${data.confidentiality}-description`}
-          className="ml-1"
+          className='ml-1'
         />
         <Chip
           text={cardType?.toLowerCase()}
-          size="sm"
-          activeColor="outline-accent"
-          activeTextColor="accent"
+          size='sm'
+          activeColor='outline-accent'
+          activeTextColor='accent'
           disabled
         />
         {/* {featureFlag.requestPermissions && (
@@ -163,21 +154,21 @@ const CustomCardTitleLayout = ({
           </div>
         )} */}
       </div>
-      <div className="pt-1">
+      <div className='pt-1'>
         {data.tags &&
           data.tags.length > 0 &&
           data.tags.map((tag) => (
             <Chip
               key={tag.name}
               text={tag.name}
-              size="sm"
-              activeColor="accent"
+              size='sm'
+              activeColor='accent'
               disabled
             />
           ))}
       </div>
     </>
   );
-};
+}
 
 export default CustomCardTitleLayout;
