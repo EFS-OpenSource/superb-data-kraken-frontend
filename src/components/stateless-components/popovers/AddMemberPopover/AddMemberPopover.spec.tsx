@@ -23,8 +23,13 @@ describe('AddMemberPopover', () => {
     const onSetUserData = jest.fn();
     const { baseElement } = render(
       <TestWrapper>
-        <AddMemberPopover dropdownOptions={[]} onSetUserData={onSetUserData} />
-      </TestWrapper>,
+        <AddMemberPopover
+          dropdownOptions={[]}
+          onSetUserData={onSetUserData}
+          options={[]}
+          membersInTable={[]}
+        />
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });

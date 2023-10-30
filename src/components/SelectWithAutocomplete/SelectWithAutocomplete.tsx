@@ -14,22 +14,30 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import Select from 'react-select';
+import Select, {
+  CSSObjectWithLabel,
+  GroupBase,
+  StylesConfig,
+} from 'react-select';
+import { useIntl } from 'react-intl';
 import { DropdownOptions } from '@customTypes/index';
 
 export interface SelectWithAutocompleteProps {
   options: DropdownOptions[];
   onChange: (value: DropdownOptions | null) => void;
   placeholder: string;
-  value: DropdownOptions | null;
+  value?: DropdownOptions | null;
   isDisabled?: boolean;
   isLoading?: boolean;
   isSearchable?: boolean;
-  styles?: any;
+  selectStyles?:
+    | StylesConfig<DropdownOptions, false, GroupBase<DropdownOptions>>
+    | undefined;
+  noOptionsMessage?: string;
 }
 
 const defaultStyles = {
-  container: (base: any) => ({
+  container: (base: CSSObjectWithLabel) => ({
     ...base,
     minWidth: '180px',
     maxHeight: '34px',
@@ -57,19 +65,19 @@ const defaultStyles = {
     display: 'flex',
     alignItems: 'center',
   }),
-  menu: (base: any) => ({
+  menu: (base: CSSObjectWithLabel) => ({
     ...base,
     zIndex: 1000,
     width: '700px',
     minHeight: '300px',
   }),
-  menuList: (base: any) => ({
+  menuList: (base: CSSObjectWithLabel) => ({
     ...base,
     zIndex: 1000,
     width: '700px',
     minHeight: '300px',
   }),
-  menuPortal: (base: any) => ({
+  menuPortal: (base: CSSObjectWithLabel) => ({
     ...base,
     zIndex: 1000,
     width: '700px',
@@ -85,7 +93,8 @@ function SelectWithAutocomplete({
   isDisabled,
   isLoading,
   isSearchable,
-  styles,
+  selectStyles,
+  noOptionsMessage,
 }: SelectWithAutocompleteProps) {
   return (
     <Select
@@ -96,8 +105,9 @@ function SelectWithAutocomplete({
       isDisabled={isDisabled ?? false}
       isLoading={isLoading ?? false}
       isSearchable={isSearchable ?? true}
-      styles={styles ?? defaultStyles}
+      styles={selectStyles ?? defaultStyles}
       hideSelectedOptions
+      noOptionsMessage={() => noOptionsMessage}
     />
   );
 }

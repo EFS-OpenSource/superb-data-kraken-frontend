@@ -59,6 +59,7 @@ function MembersTable({
   );
 
   const { spaceID } = useParams();
+
   const roleCount = spaceID
     ? userSpaceRoleTypes.length
     : userOrgaRoleTypes.length;
@@ -100,7 +101,7 @@ function MembersTable({
         enableColumnFilter: false,
       }),
     ],
-    []
+    [formatMessage]
   );
 
   const [membersToHandle, setMembersToHandle] = useState<
@@ -129,8 +130,9 @@ function MembersTable({
 
   const handleAddPermission = useCallback(
     (
-      member: OrgaSpaceUser<string>,
-      permission: string /* //TODO permission has a known type but this collides with AddTagPopover type Definition. AddTagPopover should be generalized  */
+      permission: string,
+      member: OrgaSpaceUser<string>
+      /* //TODO permission has a known type but this collides with AddTagPopover type Definition. AddTagPopover should be generalized  */
     ) => {
       if (!member.permissions.includes(permission)) {
         onHandleChange({
@@ -239,6 +241,19 @@ function MembersTable({
 
     members?.forEach((member: OrgaUser | SpaceUser) => {
       const permissionsArray = member.permissions as unknown as string[];
+
+      const roles1 = new Set(
+        permissionsArray.map((perm) => perm.toUpperCase())
+      );
+      const roles2 = new Set(
+        Array.from(roles).map((role) => role.toUpperCase())
+      );
+
+      const uniqueRoles = [
+        ...permissionsArray.filter((perm) => !roles2.has(perm.toUpperCase())),
+        ...Array.from(roles).filter((perm) => !roles1.has(perm.toUpperCase())),
+      ];
+
       const popoverButton =
         member.permissions.length < roleCount
           ? openPopoverButton
@@ -267,13 +282,26 @@ function MembersTable({
               })}
               handleShow={handleShow}
               popoverOpenButton={popoverButton}
-              onSend={(_email, role) =>
+              onSend={(role) => {
                 handleAddPermission(
-                  member as OrgaSpaceUser<string>,
-                  role.toUpperCase()
-                )
-              }
-              dropdownOptions={roles as unknown as string[]}
+                  role.value.toUpperCase(),
+                  member as OrgaSpaceUser<string>
+                );
+              }}
+              dropdownOptions={uniqueRoles}
+              selectPlaceholder2={formatMessage({
+                id: 'MembersTable.add-role',
+              })}
+              selectStyles={{
+                container: (baseStyles) => ({
+                  ...baseStyles,
+                  width: '200px',
+                }),
+                menuList: (baseStyles) => ({
+                  ...baseStyles,
+                  width: 'auto',
+                }),
+              }}
             />
 
             {permissionsArray.length !== 0 ? (

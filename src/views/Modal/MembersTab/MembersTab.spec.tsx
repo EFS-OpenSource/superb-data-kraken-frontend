@@ -14,114 +14,138 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { fireEvent, getByTestId, getByText, queryByText, render, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
+import {
+  fireEvent,
+  getByTestId,
+  getByText,
+  queryByText,
+  render,
+  waitFor,
+  waitForElementToBeRemoved,
+} from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 import MembersTab from './MembersTab';
-import { OrgaSpaceUser, OrgaUser, Owner, SpaceUser } from '@customTypes/userTypes';
+import {
+  OrgaSpaceUser,
+  OrgaUser,
+  Owner,
+  SpaceUser,
+} from '@customTypes/userTypes';
 import { UserOrgaRoleType } from '@customTypes/organizationTypes';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const client = new QueryClient();
 
 describe('MembersTab', () => {
   const owner: Owner = {
     id: '0',
     firstName: 'Someone',
-    lastName: 'Stranger'}
-  
+    lastName: 'Stranger',
+  };
+
   const user: OrgaUser = {
     id: '0',
     createdTimestamp: 3,
-    username: "someUserName",
+    username: 'someUserName',
     enabled: true,
-    firstName: "Someone",
-    lastName: "strange",
-    email: "someone@strange.com",
-    permissions: ['trustee', 'admin']
-  }
+    firstName: 'Someone',
+    lastName: 'strange',
+    email: 'someone@strange.com',
+    permissions: ['trustee', 'admin'],
+  };
 
   const anotherUser: OrgaUser = {
     id: '1',
     createdTimestamp: 4,
-    username: "anotherUserName",
+    username: 'anotherUserName',
     enabled: true,
-    firstName: "Someone",
-    lastName: "strangeToo",
-    email: "someone@strangeToo.com",
-    permissions: ['admin']
-  }
+    firstName: 'Someone',
+    lastName: 'strangeToo',
+    email: 'someone@strangeToo.com',
+    permissions: ['admin'],
+  };
   it('should render successfully', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <MembersTab 
-          roles={[]}
-          isOwner={true} 
-          initialUsers={[]}        />
-      </TestWrapper>,
+        <QueryClientProvider client={client}>
+          <MembersTab roles={[]} isOwner={true} initialUsers={[]} />
+        </QueryClientProvider>
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
   it('should render successfully with initialOwners', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <MembersTab 
-          roles={[]}
-          isOwner={true}
-          initialOwners={[owner]} initialUsers={[]}        />
-      </TestWrapper>,
+        <QueryClientProvider client={client}>
+          <MembersTab
+            roles={[]}
+            isOwner={false}
+            initialOwners={[owner]}
+            initialUsers={[anotherUser]}
+          />
+        </QueryClientProvider>
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
   it('should render successfully with initialUsers', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <MembersTab 
-        roles={[]} 
-        isOwner={true}
-        initialUsers={[user]}
-        />
-      </TestWrapper>,
+        <QueryClientProvider client={client}>
+          <MembersTab roles={[]} isOwner={true} initialUsers={[user]} />
+        </QueryClientProvider>
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
   it('should render successfully with initialUsers & initialOwners', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <MembersTab 
-        roles={[]} 
-        isOwner={true}
-        initialOwners={[owner]}
-        initialUsers={[user]}
-        />
-      </TestWrapper>,
+        <QueryClientProvider client={client}>
+          <MembersTab
+            roles={[]}
+            isOwner={true}
+            initialOwners={[owner]}
+            initialUsers={[user]}
+          />
+        </QueryClientProvider>
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
   it('should render successfully with onUpdateOwners', () => {
-    const onUpdateOwners = jest.fn()
+    const onUpdateOwners = jest.fn();
     const { baseElement } = render(
       <TestWrapper>
-        <MembersTab 
-        onUpdateOwners={onUpdateOwners}
-        roles={[]} 
-        isOwner={true}
-        initialOwners={[owner]}
-        initialUsers={[user]}
-        />
-      </TestWrapper>,
+        <QueryClientProvider client={client}>
+          <MembersTab
+            onUpdateOwners={onUpdateOwners}
+            roles={[]}
+            isOwner={true}
+            initialOwners={[owner]}
+            initialUsers={[user]}
+          />
+        </QueryClientProvider>
+      </TestWrapper>
     );
     expect(onUpdateOwners).toHaveBeenCalled();
     expect(baseElement).toBeTruthy();
   });
   it('should render successfully with onUpdateUsers', () => {
-    const onUpdateUsers = jest.fn()
+    const onUpdateUsers = jest.fn();
     const { baseElement } = render(
       <TestWrapper>
-        <MembersTab 
-        onUpdateUsers={onUpdateUsers}
-        roles={[]} 
-        isOwner={true}
-        initialOwners={[owner]}
-        initialUsers={[user, anotherUser]}
-        />
-      </TestWrapper>,
+        <QueryClientProvider client={client}>
+          <MembersTab
+            onUpdateUsers={onUpdateUsers}
+            roles={[]}
+            isOwner={true}
+            initialOwners={[owner]}
+            initialUsers={[user, anotherUser]}
+          />
+        </QueryClientProvider>
+      </TestWrapper>
     );
     expect(onUpdateUsers).toHaveBeenCalled();
     expect(baseElement).toBeTruthy();
@@ -129,18 +153,26 @@ describe('MembersTab', () => {
   it('test removing owner', async () => {
     const { baseElement } = render(
       <TestWrapper>
-        <MembersTab 
-        roles={[]} 
-        isOwner={true}
-        initialOwners={[owner]}
-        initialUsers={[user]}
-        />
-      </TestWrapper>,
+        <QueryClientProvider client={client}>
+          <MembersTab
+            roles={[]}
+            isOwner={true}
+            initialOwners={[owner]}
+            initialUsers={[user]}
+          />
+        </QueryClientProvider>
+      </TestWrapper>
     );
-    const ownerChipBefore = getByText(baseElement, `${owner.firstName} ${owner.lastName}`);
+    const ownerChipBefore = getByText(
+      baseElement,
+      `${owner.firstName} ${owner.lastName}`
+    );
     expect(ownerChipBefore).toBeTruthy();
     fireEvent.click(ownerChipBefore);
-    const ownerChipAfter = queryByText(baseElement, `${owner.firstName} ${owner.lastName}`);
+    const ownerChipAfter = queryByText(
+      baseElement,
+      `${owner.firstName} ${owner.lastName}`
+    );
     expect(ownerChipAfter).toBeFalsy();
     expect(baseElement).toBeTruthy();
   });
