@@ -57,7 +57,9 @@ AddMemberPopoverType) {
 
   const membersLeftToAdd = [
     ...filteredMembers.filter((user) => !members2.has(user.value)),
-    ...membersInTableFixed.filter((user) => !members1.has(user.email)),
+    ...membersInTableFixed.filter(
+      (user) => !members1.has(user.email) && !user.id
+    ),
   ];
 
   const onSetUserEmail = (
