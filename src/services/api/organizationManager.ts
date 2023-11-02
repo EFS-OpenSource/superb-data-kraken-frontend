@@ -39,11 +39,7 @@ import {
   deleteFactory,
 } from './factories';
 
-const baseURL =
-  process.env['NODE_ENV'] === 'production' ||
-  process.env['VITE_DEV_BACKEND'] === 'remote'
-    ? (process.env.VITE_SDK_BACKEND_URL as string)
-    : (process.env.VITE_SDK_BACKEND_LOCAL_URL as string);
+const baseURL = process.env.VITE_SDK_BACKEND_URL as string;
 
 const urlOptionsV1: AxiosOptions = {
   url: baseURL,

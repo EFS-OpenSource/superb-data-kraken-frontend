@@ -23,11 +23,7 @@ import {
 } from '@customTypes/index.js';
 import { getFactory } from '@services/api/factories';
 
-const baseURL =
-  process.env['NODE_process.env'] === 'production' ||
-  process.env['VITE_DEV_BACKEND'] === 'remote'
-    ? (process.env.VITE_SDK_BACKEND_URL as string)
-    : (process.env.VITE_SDK_SEARCH_LOCAL_URL as string);
+const baseURL = process.env.VITE_SDK_BACKEND_URL as string;
 
 export const searchOptions: AxiosOptions = {
   url: baseURL ?? '',
