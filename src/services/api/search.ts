@@ -23,10 +23,7 @@ import {
 } from '@customTypes/index.js';
 import { getFactory } from '@services/api/factories';
 
-const baseURL =
-  process.env['NODE_process.env'] === 'production'
-    ? (process.env.VITE_SDK_BACKEND_URL as string)
-    : (process.env.VITE_SDK_SEARCH_LOCAL_URL as string);
+const baseURL = process.env.VITE_SDK_BACKEND_URL as string;
 
 export const searchOptions: AxiosOptions = {
   url: baseURL ?? '',
@@ -36,12 +33,12 @@ export const searchOptions: AxiosOptions = {
 
 const getFilterCriteria_ = getFactory<Criteria[]>(searchOptions, baseURL);
 export const getFilterCriteria = (
-  index: string,
+  index: string
 ): Promise<Response<Criteria[]> | ResponseError> =>
   getFilterCriteria_('criteria', { queryParams: { index } });
 
 const getResultProperties_ = getFactory<string[]>(searchOptions, baseURL);
 export const getResultProperties = (
-  index: string,
+  index: string
 ): Promise<Response<string[]> | ResponseError> =>
   getResultProperties_('resultproperties', { queryParams: { index } });
