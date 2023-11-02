@@ -31,7 +31,7 @@ type ChipGroupProps = {
   inactiveTextColor?: string;
 };
 
-const ChipGroup = ({
+function ChipGroup({
   options,
   checked,
   disabled,
@@ -42,7 +42,7 @@ const ChipGroup = ({
   inactiveColor,
   activeTextColor,
   inactiveTextColor,
-}: ChipGroupProps) => {
+}: ChipGroupProps) {
   const handleClick = (value: string, isActive: boolean): void => {
     if (isActive) {
       const index = checked.indexOf(value);
@@ -79,7 +79,7 @@ const ChipGroup = ({
       ))}
     </>
   );
-};
+}
 
 ChipGroup.propTypes = {
   size: oneOf(['xs', 'sm', 'md', 'lg']),

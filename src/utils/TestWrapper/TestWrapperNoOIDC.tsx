@@ -25,16 +25,16 @@ const messages: Record<string, unknown> = {
 
 // const client = new QueryClient();
 
-const TestWrapperNoOIDC = ({ children }: { children: React.ReactNode }) => (
-  /* <QueryClientProvider client={client}> */
-  <IntlProvider
-    locale="de"
-    defaultLocale="de"
-    messages={(messages['de'] as Record<string, string>) ?? messages.de}
-  >
-    {children}
-  </IntlProvider>
-  /* </QueryClientProvider> */
-);
+function TestWrapperNoOIDC({ children }: { children: React.ReactNode }) {
+  return (
+    <IntlProvider
+      locale='de'
+      defaultLocale='de'
+      messages={(messages['de'] as Record<string, string>) ?? messages.de}
+    >
+      {children}
+    </IntlProvider>
+  );
+}
 
 export default TestWrapperNoOIDC;

@@ -29,14 +29,14 @@ interface TabsProps {
   disabledStyle?: string;
 }
 
-const Tabs = ({
+function Tabs({
   tabs,
   className,
   variant,
   activeStyle,
   inactiveStyle,
   disabledStyle,
-}: TabsProps) => {
+}: TabsProps) {
   const location = useLocation();
 
   return (
@@ -66,22 +66,22 @@ const Tabs = ({
               key={tab.name}
               disabled={tab.disabled}
             />
-          ),
+          )
         )}
       </Nav>
       <Tab.Content
-        className="ms-0 flex-grow-1"
+        className='ms-0 flex-grow-1'
         style={{ height: `calc(100%-60px)` }}
       >
         <Routes>
           {tabs.map((tab) => (
             <Route key={tab.path} path={tab.path} element={tab.content} />
           ))}
-          <Route path="*" element={<Navigate to={tabs[0].path} replace />} />
+          <Route path='*' element={<Navigate to={tabs[0].path} replace />} />
         </Routes>
       </Tab.Content>
     </Tab.Container>
   );
-};
+}
 
 export default Tabs;

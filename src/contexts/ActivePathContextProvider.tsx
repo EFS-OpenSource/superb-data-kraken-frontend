@@ -27,16 +27,16 @@ export const ActivePathContext = createContext<ActivePathContextProps>({
   onChangeActivePath: (path: string) => path,
 });
 
-export const ActivePathContextProvider = ({
+export function ActivePathContextProvider({
   children,
 }: {
   children: React.ReactNode;
-}): JSX.Element => {
+}): JSX.Element {
   const location = useLocation();
   const [activePath, setActivePath] = useState(
     location.pathname === '/home/overview' || location.pathname === '/'
       ? '/home/*'
-      : location.pathname,
+      : location.pathname
   );
 
   const onChangeActivePath = (path: string): void => {
@@ -45,7 +45,7 @@ export const ActivePathContextProvider = ({
 
   const memo = useMemo(
     () => ({ activePath, onChangeActivePath }),
-    [activePath],
+    [activePath]
   );
 
   return (
@@ -53,4 +53,4 @@ export const ActivePathContextProvider = ({
       {children}
     </ActivePathContext.Provider>
   );
-};
+}

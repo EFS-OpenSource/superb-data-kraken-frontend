@@ -35,7 +35,7 @@ interface IconProps {
   toolptipPlacement?: Placement | undefined;
 }
 
-const Icon = ({
+function Icon({
   ariaLabel,
   icon,
   size,
@@ -46,7 +46,7 @@ const Icon = ({
   style,
   tooltip,
   toolptipPlacement,
-}: IconProps) => {
+}: IconProps) {
   const IconName = icon;
   const { formatMessage } = useIntl();
 
@@ -80,7 +80,7 @@ const Icon = ({
       role={type === 'button' ? 'button' : ''}
     />
   );
-};
+}
 
 Icon.propTypes = {
   size: number,

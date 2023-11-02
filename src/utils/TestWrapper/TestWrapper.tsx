@@ -27,16 +27,18 @@ const messages: Record<string, unknown> = {
 
 // const client = new QueryClient();
 
-const TestWrapper = ({ children }: { children: React.ReactNode }) => (
-  <OidcProvider configuration={oidcConfiguration}>
-    <IntlProvider
-      locale="de"
-      defaultLocale="de"
-      messages={(messages['de'] as Record<string, string>) ?? messages.de}
-    >
-      {children}
-    </IntlProvider>
-  </OidcProvider>
-);
+function TestWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <OidcProvider configuration={oidcConfiguration}>
+      <IntlProvider
+        locale='de'
+        defaultLocale='de'
+        messages={(messages['de'] as Record<string, string>) ?? messages.de}
+      >
+        {children}
+      </IntlProvider>
+    </OidcProvider>
+  );
+}
 
 export default TestWrapper;
