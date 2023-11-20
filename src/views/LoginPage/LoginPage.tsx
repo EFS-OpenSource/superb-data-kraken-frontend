@@ -28,7 +28,7 @@ function LoginPage() {
   const location = useLocation();
 
   const from =
-    (location.state !== null && (location?.state as LocationState).from) ||
+    (location.state !== null && (location.state as LocationState).from) ||
     '/home/overview';
 
   useEffect(() => {

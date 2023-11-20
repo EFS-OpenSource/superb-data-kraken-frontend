@@ -15,52 +15,32 @@ limitations under the License.
  */
 
 import { lazy } from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper';
 import ManageOrgaSpaceModal from './ManageOrgaSpaceModal';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { SpaceTabs } from '@views/Modal/tabComponents';
+import { SpaceTabs, OrganizationTabs } from '@views/Modal/tabComponents';
 import { MapType } from '@customTypes/ManageOrgaSpaceModalTypes';
-
+import MockOrganization from '@assets/UserData';
 import 'cross-fetch/polyfill';
+import { MemoryRouter } from 'react-router-dom';
+import TestWrapperNoOIDC from '@utils/TestWrapper/TestWrapperNoOIDC';
+import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
 
 const client = new QueryClient();
 
-describe('ManageOrgaSpaceModal', () => {
-  jest.mock('@axa-fr/react-oidc', () => ({
-    useOidc: () => ({
-      oidcUser: {
-        profile: { sub: '123' },
-        tokens: {
-          id_token: 'abc123',
-          access_token: 'xyz456',
-          access_token_invalid: 'asd',
-        },
-      },
-      login: jest.fn(),
-      oidcLogout: jest.fn(),
-    }),
-    useOidcIdToken: () => ({
-      oidcUser: {
-        profile: { sub: '123' },
-        tokens: {
-          id_token: 'abc123',
-          access_token: 'xyz456',
-          access_token_invalid: 'asd',
-        },
-      },
-    }),
-    useOidcIdUser: () => ({
-      oidcUser: {
-        profile: { sub: '123' },
-        tokens: {
-          id_token: 'abc123',
-          access_token: 'xyz456',
-          access_token_invalid: 'asd',
-        },
-      },
-    }),
+beforeEach(() => {
+  jest.mock('./ManageOrgaSpaceModal', () => ({
+    ...jest.requireActual('./ManageOrgaSpaceModal'),
   }));
+});
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
+describe('ManageOrgaSpaceModal', () => {
   it('should render successfully', () => {
     const setShow = jest.fn();
     const { baseElement } = render(
@@ -76,8 +56,107 @@ describe('ManageOrgaSpaceModal', () => {
             roles={[]}
           />
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
+  });
+  it('should be able to cancel the modal', async () => {
+    const setShow = jest.fn();
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <ManageOrgaSpaceModal
+            show={true}
+            setShow={setShow}
+            owners={[]}
+            users={[]}
+            tabNames={['General', 'Members']}
+            modalType={'createOrganization'}
+            tabComponents={OrganizationTabs(true) as unknown as MapType}
+            roles={[]}
+            orgData={MockOrganization}
+          />
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+
+    expect(baseElement).toBeTruthy();
+
+    const cancelButton = await screen.findByRole('button', {
+      name: 'cancelButton',
+    });
+
+    fireEvent.click(cancelButton);
+  });
+  it('should be able to go to next page of the modal', async () => {
+    const setShow = jest.fn();
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <ManageOrgaSpaceModal
+            show={true}
+            setShow={setShow}
+            owners={[]}
+            users={[]}
+            tabNames={['General', 'Members']}
+            modalType={'createOrganization'}
+            tabComponents={OrganizationTabs(true) as unknown as MapType}
+            roles={[]}
+            orgData={MockOrganization}
+          />
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+
+    expect(baseElement).toBeTruthy();
+
+    const nextButton = await screen.findByRole('button', {
+      name: 'nextButton',
+    });
+
+    fireEvent.click(nextButton);
+  });
+  it('should be able to go to next page of the modal and then submit', async () => {
+    const user = userEvent.setup();
+    const setShow = jest.fn();
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <ManageOrgaSpaceModal
+            show={true}
+            setShow={setShow}
+            owners={[]}
+            users={[]}
+            tabNames={['General', 'Members']}
+            modalType={'createOrganization'}
+            tabComponents={OrganizationTabs(true) as unknown as MapType}
+            roles={[]}
+          />
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+
+    expect(baseElement).toBeTruthy();
+
+    const nameInput = await screen.findByRole('textbox', { name: 'name' });
+
+    const nextButton = screen.getByRole('button', {
+      name: 'nextButton',
+    });
+
+    act(() => {
+      user.type(nameInput, 'test name');
+      user.click(nextButton);
+    });
+
+    const submitButton = await screen.findByRole('button', {
+      name: 'submitButton',
+    });
+
+    act(() => {
+      user.click(submitButton);
+    });
+
+    console.log(baseElement.innerHTML);
   });
 });

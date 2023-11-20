@@ -25,7 +25,8 @@
     "jsx-a11y/click-events-have-key-events": "off",
     "react/jsx-props-no-spreading": "off",
     "no-underscore-dangle": "off",
-    "naming-convention": "off"
+    "naming-convention": "off",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }]
   },
   "root": true,
   // ignore test files

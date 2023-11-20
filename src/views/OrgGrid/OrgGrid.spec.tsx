@@ -14,23 +14,57 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { render, fireEvent, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
-import TestWrapperNoOIDC from '@utils/TestWrapper/TestWrapperNoOIDC';
+import {
+  render,
+  fireEvent,
+  screen,
+  waitFor,
+  act,
+} from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { OrgGrid } from '@views/index';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import TestWrapper from '@utils/TestWrapper/TestWrapper';
+import 'cross-fetch/polyfill';
+import TestWrapperNoOIDC from '@utils/TestWrapper/TestWrapperNoOIDC';
+import MockOrganization from '@assets/UserData';
 
 const client = new QueryClient();
+
+const userinfo = {
+  roles: ['org_create_permission'],
+  given_name: 'Martin',
+  family_name: 'Guenduez',
+  sub: 'asdaef',
+};
+beforeEach(() => {
+  jest.mock('./OrgGrid', () => ({
+    ...jest.requireActual('./OrgGrid'),
+    sdkAdmin: () => {
+      return [
+        {
+          firstName: 'Martin',
+          lastName: 'Guenduez',
+          id: 'usbad',
+        },
+      ];
+    },
+  }));
+});
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 describe('OrgGrid', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
       <TestWrapperNoOIDC>
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Overview']}>
-            <OrgGrid username="Peter" orgasWithSpaces={[]} userInfo={[]} />
+            <OrgGrid username='Peter' orgasWithSpaces={[]} userInfo={[]} />
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapperNoOIDC>,
+      </TestWrapperNoOIDC>
     );
     expect(baseElement).toBeTruthy();
   });
@@ -42,10 +76,10 @@ describe('Filter Chips', () => {
       <TestWrapperNoOIDC>
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Overview']}>
-            <OrgGrid username="Peter" orgasWithSpaces={[]} userInfo={[]} />
+            <OrgGrid username='Peter' orgasWithSpaces={[]} userInfo={[]} />
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapperNoOIDC>,
+      </TestWrapperNoOIDC>
     );
 
     const chipOrgas = screen.getByRole('button', { name: 'Organisationen' });
@@ -76,10 +110,10 @@ describe('Searchbar', () => {
       <TestWrapperNoOIDC>
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Overview']}>
-            <OrgGrid username="Peter" orgasWithSpaces={[]} userInfo={[]} />
+            <OrgGrid username='Peter' orgasWithSpaces={[]} userInfo={[]} />
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapperNoOIDC>,
+      </TestWrapperNoOIDC>
     );
     const searchBar = screen.getByRole('textbox', { name: 'searchBar' });
     const chipOrgas = screen.getByRole('button', { name: 'Organisationen' });
@@ -108,5 +142,59 @@ describe('Searchbar', () => {
     fireEvent.click(all);
 
     fireEvent.submit(searchBar);
+  });
+});
+describe('Add Org Button', () => {
+  it('clicking add organization button should open modal', async () => {
+    const baseElement = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <MemoryRouter initialEntries={['/home/overview']}>
+            <OrgGrid
+              username='Martin'
+              orgasWithSpaces={[]}
+              userInfo={userinfo}
+            />
+          </MemoryRouter>
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+
+    const addOrgaButton = await screen.findByRole('button', {
+      name: 'addOrganizationButton',
+    });
+    act(() => {
+      fireEvent.click(addOrgaButton);
+    });
+    expect(baseElement).toBeDefined();
+
+    expect(addOrgaButton).toBeDefined();
+  });
+});
+describe('Map organizations and spaces', () => {
+  it('should map all orgs and spaces the user has access to', async () => {
+    render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <MemoryRouter initialEntries={['/home/overview']}>
+            <OrgGrid
+              username='Martin'
+              orgasWithSpaces={[MockOrganization]}
+              userInfo={[]}
+            />
+          </MemoryRouter>
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+
+    const orgCard = await screen.findByText('sdkcorestorage');
+
+    expect(orgCard).toBeDefined();
+    fireEvent.click(orgCard);
+
+    const spaceCard = await screen.findByText('sdkdemo');
+
+    expect(spaceCard).toBeDefined();
+    fireEvent.click(spaceCard);
   });
 });

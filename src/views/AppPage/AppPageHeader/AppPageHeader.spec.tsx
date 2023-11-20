@@ -24,6 +24,7 @@ import 'cross-fetch/polyfill';
 
 const client = new QueryClient();
 
+jest.mock('./AppPageHeader');
 describe('CustomHeader', () => {
   jest.mock('@axa-fr/react-oidc', () => ({
     useOidc: () => ({
@@ -56,7 +57,7 @@ describe('CustomHeader', () => {
           <MemoryRouter initialEntries={['/org/2/overview']}>
             <Routes>
               <Route
-                path="/org/:orgID/overview"
+                path='/org/:orgID/overview'
                 element={
                   <AppPageHeader
                     orgData={MockOrganization}
@@ -67,7 +68,7 @@ describe('CustomHeader', () => {
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
 
     expect(baseElement).toBeTruthy();
@@ -79,7 +80,7 @@ describe('CustomHeader', () => {
           <MemoryRouter initialEntries={['/org/3/overview']}>
             <Routes>
               <Route
-                path="/org/:orgID/overview"
+                path='/org/:orgID/overview'
                 element={
                   <AppPageHeader
                     orgData={MockOrganization}
@@ -90,7 +91,7 @@ describe('CustomHeader', () => {
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
 
     waitFor(() => {

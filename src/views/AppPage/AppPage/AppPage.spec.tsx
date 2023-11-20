@@ -49,22 +49,20 @@ describe('AppPage', () => {
     }),
   }));
 
-  it('should render the header successfully', async () => {
-    const baseElement = render(
+  it('should render the header successfully', () => {
+    const { baseElement } = render(
       <TestWrapper>
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Overview']}>
             <Routes>
-              <Route path="/org/:orgID/Overview/*" element={<AppPage />} />
+              <Route path='/org/:orgID/Overview/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
 
-    await waitFor(() => {
-      expect(baseElement).toBeTruthy();
-    });
+    expect(baseElement).toBeTruthy();
   });
 
   it('should render tabs sucessfully for an organization', (done) => {
@@ -73,11 +71,11 @@ describe('AppPage', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Overview']}>
             <Routes>
-              <Route path="/org/:orgID/Overview/*" element={<AppPage />} />
+              <Route path='/org/:orgID/Overview/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     const overview = baseElement.findByText('Übersicht', {
       selector: 'div',
@@ -98,13 +96,13 @@ describe('AppPage', () => {
             <MemoryRouter initialEntries={['/org/2/space/234/Overview']}>
               <Routes>
                 <Route
-                  path="/org/:orgID/space/:spaceID/*"
+                  path='/org/:orgID/space/:spaceID/*'
                   element={<AppPage />}
                 />
               </Routes>
             </MemoryRouter>
           </QueryClientProvider>
-        </TestWrapper>,
+        </TestWrapper>
       );
     });
 
