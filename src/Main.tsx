@@ -24,7 +24,7 @@ import { IntlWrapper } from '@contexts/index';
 import oidcConfiguration from '@utils/authConf';
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
+  document.getElementById('root') as HTMLElement
 );
 
 const queryClient = new QueryClient({
@@ -42,20 +42,20 @@ root.render(
     // callbackSuccessComponent={oidcProps.callbackSuccessComponent}
     // authenticatingComponent={oidcProps.authenticatingComponent}
   >
-    <BrowserRouter basename={import.meta.env.DEV ? '/' : '/sdk-frontend'}>
+    <BrowserRouter>
       <StrictMode>
         <IntlWrapper>
           <QueryClientProvider client={queryClient}>
             <Routes>
               {navigator.serviceWorker.controller ? (
-                <Route path="/*" element={<SdkRouter />} />
+                <Route path='/*' element={<SdkRouter />} />
               ) : (
-                <Route path="/login" element={<SdkRouter />} />
+                <Route path='/login' element={<SdkRouter />} />
               )}
             </Routes>
           </QueryClientProvider>
         </IntlWrapper>
       </StrictMode>
     </BrowserRouter>
-  </OidcProvider>,
+  </OidcProvider>
 );

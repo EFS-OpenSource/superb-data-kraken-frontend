@@ -21,8 +21,10 @@ const oidcConfiguration = {
   redirect_uri: `${window.location.origin}/home/overview#callback`,
   silent_redirect_uri: `${window.location.origin}/home/overview#silent-callback`,
   scope: 'openid',
-  authority: 'https://sdk-dev.efs.ai/auth/realms/efs-sdk',
+  authority: process.env.VITE_SDK_KEYCLOAK_REALM_URL as string,
   service_worker_relative_url: '/OidcServiceWorker.js',
+  // service_worker_relative_url: `${process.env.VITE_PUBLIC_URL}OidcServiceWorker.js`,
+  // service_worker_keep_alive_path: `${process.env.VITE_PUBLIC_URL}/`,
   service_worker_only: true,
   token_renew_mode: TokenRenewMode.access_token_invalid,
 };

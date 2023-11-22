@@ -6,14 +6,16 @@
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "node ./node_modules/@axa-fr/react-oidc/bin/copy-service-worker-files.mjs public"
   },
   "private": true,
   "dependencies": {
     "@aws-sdk/client-s3": "^3.391.0",
     "@aws-sdk/lib-storage": "^3.391.0",
     "@aws-sdk/s3-request-presigner": "^3.391.0",
-    "@axa-fr/react-oidc": "^6.24.1",
+    "@axa-fr/oidc-client": "7.9.2",
+    "@axa-fr/react-oidc": "7.9.2",
     "@azure/storage-blob": "^12.15.0",
     "@popperjs/core": "^2.11.8",
     "@swc/helpers": "~0.5.0",
