@@ -97,11 +97,11 @@ function MembersTab({
     ...initialOwnersPresent.filter((user) => !ids2.has(user.id)),
   ];
 
-  const possibleOwners = uniqueUsers as unknown as (OrgaUser | SpaceUser)[];
+  const [possibleOwners, setPossibleOwners] = useState(uniqueUsers as unknown as (OrgaUser | SpaceUser)[]);
 
   const handleAddOwner = useCallback(
     (email: string) => {
-      const newOwner = (initialUsersFixed || []).filter(
+      const newOwner = (possibleOwners || []).filter(
         (user) => user.email === email
       );
       dispatchOwners({
@@ -109,7 +109,7 @@ function MembersTab({
         element: newOwner[0],
       });
     },
-    [dispatchOwners, initialUsersFixed]
+    [dispatchOwners, possibleOwners]
   );
 
   const handleRemoveOwner = useCallback(
@@ -148,8 +148,22 @@ function MembersTab({
           lastName: '',
         },
       });
+      let spaceRole: any;
+      if (spaceID) {
+        spaceRole = role as UserSpaceRoleType;
+      } else {
+        spaceRole = role as UserOrgaRoleType;
+      }
+      setPossibleOwners([...possibleOwners, { id: email,
+        email,
+        permissions: [spaceRole],
+        createdTimestamp: 0,
+        username: '',
+        enabled: true,
+        firstName: '',
+        lastName: '',}]);
     },
-    [dispatchUsers]
+    [dispatchUsers, possibleOwners]
   );
 
   const handleRemoveUser = useCallback(
@@ -168,6 +182,7 @@ function MembersTab({
         type: 'update',
         element: currentUsers,
       });
+      // TODO: need to something in here if permissions are changed
     },
     [dispatchUsers]
   );
@@ -180,6 +195,7 @@ function MembersTab({
         ? { ...user, permissions: updatedUser.permissions }
         : user
     );
+    // TODO: Or do i need to do something in here
     handleUpdateUser(updatedUsers);
   };
 
@@ -201,6 +217,13 @@ function MembersTab({
   const handleShow = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     e.preventDefault();
   };
+
+  const showOwnerName = (owner: Owner) => {
+    if(!owner.firstName && owner.firstName.trim().length === 0) {
+      return owner.id;
+    }
+    return `${owner.firstName} ${owner.lastName}`;
+  } 
 
   const openPopoverButton = (
     <OverlayTrigger
@@ -254,16 +277,16 @@ function MembersTab({
                 }}
                 dropdownOptions={
                   spaceID
-                    ? possibleOwners.map((initialUser) => initialUser.email)
+                    ? possibleOwners.map((possibleOwner) => possibleOwner.email)
                     : possibleOwners
-                        .filter((initialUser: Record<string, any>) =>
-                          initialUser.permissions
+                        .filter((possibleOwner: Record<string, any>) =>
+                          possibleOwner.permissions
                             .map((permission: UserOrgaRoleType) =>
                               permission.toUpperCase()
                             )
                             .includes('ADMIN')
                         )
-                        .map((initialUser) => initialUser.email)
+                        .map((possibleOwner) => possibleOwner.email)
                 }
                 selectPlaceholder2={formatMessage({
                   id: 'AddMemberPopover.add-owner',
@@ -297,7 +320,7 @@ function MembersTab({
             <Chip
               ariaLabel='tagChip'
               key={owner.id}
-              text={`${owner.firstName} ${owner.lastName}`}
+              text={showOwnerName(owner)}
               onClick={() => {
                 if (initialUsers) {
                   handleRemoveOwner(owner);

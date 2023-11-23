@@ -38,6 +38,8 @@ import {
   setSpaceOwnersByUserId,
   setOrganizationRoleByEmail,
   setSpaceRoleByEmail,
+  addOrganizationOwnerByEmail,
+  addSpaceOwnerByEmail
 } from '@services/index';
 import {
   Confidentiality,
@@ -243,9 +245,28 @@ function ManageOrgaSpaceModal({
   const updateOrganizationOwnersMutation = useMutation(
     (newOwners?: string[]) =>
       setOrganizationOwnersByUserId(
-        newOwners || updatedOwners,
+        newOwners || updatedOwners.filter(owner => !owner.includes('@')),
         orgID as string
       ),
+
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['orgasWithSpaces']);
+        queryClient.invalidateQueries(['organization', orgID]);
+        queryClient.invalidateQueries(['orgaOwners', orgID]);
+      },
+      onError: () => {
+        ErrorToast('ErrorToast.title-owners-edit');
+      },
+    }
+  );
+
+  const addOrganizationOwnerByEmailMutation = useMutation(
+    (newOwner: string) =>
+    addOrganizationOwnerByEmail(
+      orgID as string,
+      newOwner
+    ),
 
     {
       onSuccess: () => {
@@ -314,9 +335,35 @@ function ManageOrgaSpaceModal({
       newOwners?: string[];
     }) =>
       setSpaceOwnersByUserId(
-        newOwners || updatedOwners,
+        newOwners || updatedOwners.filter((owner) => !owner.includes('@')),
         orgID as string,
         currentSpaceID
+      ),
+
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['spaces', `o_${orgID}`]);
+        queryClient.invalidateQueries(['space', spaceID, `o_${orgID}`]);
+        queryClient.invalidateQueries(['spaceOwners', spaceID, `o_${orgID}`]);
+      },
+      onError: () => {
+        ErrorToast('ErrorToast.title-owners-edit');
+      },
+    }
+  );
+
+  const addSpaceOwnersByEmailMutation = useMutation(
+    ({
+      currentSpaceID,
+      newOwnersEmail,
+    } : {
+      currentSpaceID: string;
+      newOwnersEmail: string;
+    }) => 
+      addSpaceOwnerByEmail(
+        orgID as string,
+        currentSpaceID,
+        newOwnersEmail
       ),
 
     {
@@ -367,7 +414,7 @@ function ManageOrgaSpaceModal({
       );
 
       if (removedUsers) {
-        let newOwners = updatedOwners;
+        let newOwners = updatedOwners.filter((id) => !id.includes('@'));
         removedUsers.forEach((removedUser: OrgaUser | SpaceUser) => {
           if (updatedOwners.includes(removedUser.id)) {
             newOwners = updatedOwners.filter((id) => id !== removedUser.id);
@@ -409,6 +456,13 @@ function ManageOrgaSpaceModal({
           if (isOwner) {
             if (haveOwnersChanged(initialOwners, updatedOwners)) {
               updateOrganizationOwnersMutation.mutate(updatedOwners);
+
+              const newUsersOwners = updatedOwners.filter(owner => owner.includes('@'));
+              if(newUsersOwners.length !== 0) {
+                newUsersOwners.forEach((owner) => {
+                  addOrganizationOwnerByEmailMutation.mutate(owner);
+                })
+              }
             }
           }
           return response;
@@ -479,10 +533,22 @@ function ManageOrgaSpaceModal({
         .then((response) => {
           if (!response.ok) throw new Error();
           if (isOwner) {
-            if (haveOwnersChanged(initialOwners, updatedOwners))
+            if (haveOwnersChanged(initialOwners, updatedOwners)) {
               updateSpaceOwnersMutation.mutate({
                 currentSpaceID: spaceID as string,
               });
+
+              const newUsersOwners = updatedOwners.filter(owner => owner.includes('@'));
+              if(newUsersOwners.length !== 0) {
+                newUsersOwners.forEach((owner) => {
+                  addSpaceOwnersByEmailMutation.mutate( {
+                    currentSpaceID: spaceID as string,
+                    newOwnersEmail: owner
+                  }
+                  )
+                })
+              }
+            }
           }
           return response;
         }),
