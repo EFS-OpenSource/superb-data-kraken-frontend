@@ -12,7 +12,7 @@ const TokenRenewMode = {
   id_token_invalid: 'id_token_invalid',
 };
 const openidWellknownUrlEndWith = '/.well-known/openid-configuration';
-const version = '7.1.0';
+const version = '7.9.2';
 function checkDomain(domains, endpoint) {
   if (!endpoint) {
     return;
@@ -54,13 +54,14 @@ const getCurrentDatabaseDomain = (database2, url, trustedDomains2) => {
     }
     if (
       oidcServerConfiguration.tokenEndpoint &&
-      url === oidcServerConfiguration.tokenEndpoint
+      normalizeUrl(url) === normalizeUrl(oidcServerConfiguration.tokenEndpoint)
     ) {
       continue;
     }
     if (
       oidcServerConfiguration.revocationEndpoint &&
-      url === oidcServerConfiguration.revocationEndpoint
+      normalizeUrl(url) ===
+        normalizeUrl(oidcServerConfiguration.revocationEndpoint)
     ) {
       continue;
     }
@@ -93,6 +94,56 @@ const getCurrentDatabaseDomain = (database2, url, trustedDomains2) => {
   }
   return null;
 };
+function normalizeUrl(url) {
+  url = url.trim();
+  const hasRelativeProtocol = url.startsWith('//');
+  const isRelativeUrl = !hasRelativeProtocol && /^\.*\//.test(url);
+  if (!isRelativeUrl) {
+    url = url.replace(/^(?!(?:\w+:)?\/\/)|^\/\//, 'https:');
+  }
+  const urlObject = new URL(url);
+  if (urlObject.pathname) {
+    const protocolRegex = /\b[a-z][a-z\d+\-.]{1,50}:\/\//g;
+    let lastIndex = 0;
+    let result = '';
+    for (;;) {
+      const match = protocolRegex.exec(urlObject.pathname);
+      if (!match) {
+        break;
+      }
+      const protocol = match[0];
+      const protocolAtIndex = match.index;
+      const intermediate = urlObject.pathname.slice(lastIndex, protocolAtIndex);
+      result += intermediate.replace(/\/{2,}/g, '/');
+      result += protocol;
+      lastIndex = protocolAtIndex + protocol.length;
+    }
+    const remnant = urlObject.pathname.slice(
+      lastIndex,
+      urlObject.pathname.length
+    );
+    result += remnant.replace(/\/{2,}/g, '/');
+    urlObject.pathname = result;
+  }
+  if (urlObject.pathname) {
+    try {
+      urlObject.pathname = decodeURI(urlObject.pathname);
+    } catch {}
+  }
+  if (urlObject.hostname) {
+    urlObject.hostname = urlObject.hostname.replace(/\.$/, '');
+  }
+  urlObject.searchParams.sort();
+  try {
+    urlObject.search = decodeURIComponent(urlObject.search);
+  } catch {}
+  urlObject.pathname = urlObject.pathname.replace(/\/$/, '');
+  url = urlObject.toString();
+  if (urlObject.hash === '') {
+    url = url.replace(/\/$/, '');
+  }
+  return url;
+}
 function serializeHeaders(headers) {
   const headersObj = {};
   for (const key of headers.keys()) {
@@ -154,25 +205,54 @@ const isTokensOidcValid = (tokens, nonce, oidcServerConfiguration) => {
   if (tokens.idTokenPayload) {
     const idTokenPayload = tokens.idTokenPayload;
     if (oidcServerConfiguration.issuer !== idTokenPayload.iss) {
-      return { isValid: false, reason: 'Issuer does not match' };
+      return {
+        isValid: false,
+        reason: `Issuer does not match (oidcServerConfiguration issuer) ${oidcServerConfiguration.issuer} !== (idTokenPayload issuer) ${idTokenPayload.iss}`,
+      };
     }
     const currentTimeUnixSecond = /* @__PURE__ */ new Date().getTime() / 1e3;
     if (idTokenPayload.exp && idTokenPayload.exp < currentTimeUnixSecond) {
-      return { isValid: false, reason: 'Token expired' };
+      return {
+        isValid: false,
+        reason: `Token expired at (idTokenPayload exp) ${idTokenPayload.exp} < (currentTimeUnixSecond) ${currentTimeUnixSecond}`,
+      };
     }
     const timeInSevenDays = 60 * 60 * 24 * 7;
     if (
       idTokenPayload.iat &&
       idTokenPayload.iat + timeInSevenDays < currentTimeUnixSecond
     ) {
-      return { isValid: false, reason: 'Token is used from too long time' };
+      return {
+        isValid: false,
+        reason: `Token is used from too long time (idTokenPayload iat + timeInSevenDays) ${
+          idTokenPayload.iat + timeInSevenDays
+        } < (currentTimeUnixSecond) ${currentTimeUnixSecond}`,
+      };
     }
     if (nonce && idTokenPayload.nonce && idTokenPayload.nonce !== nonce) {
-      return { isValid: false, reason: 'Nonce does not match' };
+      return {
+        isValid: false,
+        reason: `Nonce does not match (nonce) ${nonce} !== (idTokenPayload nonce) ${idTokenPayload.nonce}`,
+      };
     }
   }
   return { isValid: true, reason: '' };
 };
+function extractedIssueAt(tokens, accessTokenPayload, _idTokenPayload) {
+  if (!tokens.issued_at) {
+    if (accessTokenPayload && accessTokenPayload.iat) {
+      return accessTokenPayload.iat;
+    } else if (_idTokenPayload && _idTokenPayload.iat) {
+      return _idTokenPayload.iat;
+    } else {
+      const currentTimeUnixSecond = /* @__PURE__ */ new Date().getTime() / 1e3;
+      return currentTimeUnixSecond;
+    }
+  } else if (typeof tokens.issued_at == 'string') {
+    return parseInt(tokens.issued_at, 10);
+  }
+  return tokens.issued_at;
+}
 function _hideTokens(tokens, currentDatabaseElement, configurationName) {
   if (!tokens.issued_at) {
     const currentTimeUnixSecond = /* @__PURE__ */ new Date().getTime() / 1e3;
@@ -203,6 +283,11 @@ function _hideTokens(tokens, currentDatabaseElement, configurationName) {
   if (tokens.refresh_token) {
     secureTokens.refresh_token = TOKEN.REFRESH_TOKEN + '_' + configurationName;
   }
+  tokens.issued_at = extractedIssueAt(
+    tokens,
+    accessTokenPayload,
+    _idTokenPayload
+  );
   const expireIn =
     typeof tokens.expires_in == 'string'
       ? parseInt(tokens.expires_in, 10)
@@ -278,6 +363,20 @@ function replaceCodeVerifier(codeVerifier, newCodeVerifier) {
   const regex = /code_verifier=[A-Za-z0-9_-]+/i;
   return codeVerifier.replace(regex, `code_verifier=${newCodeVerifier}`);
 }
+if (
+  typeof trustedTypes !== 'undefined' &&
+  typeof trustedTypes.createPolicy == 'function'
+) {
+  trustedTypes.createPolicy('default', {
+    createScriptURL: function (url) {
+      if (url == scriptFilename) {
+        return url;
+      } else {
+        throw new Error('Untrusted script URL blocked: ' + url);
+      }
+    },
+  });
+}
 const _self = self;
 _self.importScripts(scriptFilename);
 const id = Math.round(/* @__PURE__ */ new Date().getTime() / 1e3).toString();
@@ -291,18 +390,7 @@ const handleActivate = (event) => {
   event.waitUntil(_self.clients.claim());
 };
 let currentLoginCallbackConfigurationName = null;
-const database = {
-  default: {
-    configurationName: 'default',
-    tokens: null,
-    status: null,
-    state: null,
-    codeVerifier: null,
-    nonce: null,
-    oidcServerConfiguration: null,
-    hideAccessToken: true,
-  },
-};
+const database = {};
 const getCurrentDatabasesTokenEndpoint = (database2, url) => {
   const databases = [];
   for (const [, value] of Object.entries(database2)) {
@@ -361,29 +449,41 @@ const handleFetch = async (event) => {
     ) {
       await sleep(200);
     }
-    const newRequest =
-      originalRequest.mode === 'navigate'
-        ? new Request(originalRequest, {
-            headers: {
-              ...serializeHeaders(originalRequest.headers),
-              authorization:
-                'Bearer ' +
-                currentDatabaseForRequestAccessToken.tokens.access_token,
-            },
-          })
-        : new Request(originalRequest, {
-            headers: {
-              ...serializeHeaders(originalRequest.headers),
-              authorization:
-                'Bearer ' +
-                currentDatabaseForRequestAccessToken.tokens.access_token,
-            },
-            mode: currentDatabaseForRequestAccessToken.oidcConfiguration
-              .service_worker_convert_all_requests_to_cors
-              ? 'cors'
-              : originalRequest.mode,
-          });
-    event.waitUntil(event.respondWith(fetch(newRequest)));
+    let requestMode = originalRequest.mode;
+    if (
+      originalRequest.mode !== 'navigate' &&
+      currentDatabaseForRequestAccessToken.convertAllRequestsToCorsExceptNavigate
+    ) {
+      requestMode = 'cors';
+    }
+    let headers;
+    if (
+      originalRequest.mode == 'navigate' &&
+      !currentDatabaseForRequestAccessToken.setAccessTokenToNavigateRequests
+    ) {
+      headers = {
+        ...serializeHeaders(originalRequest.headers),
+      };
+    } else {
+      headers = {
+        ...serializeHeaders(originalRequest.headers),
+        authorization:
+          'Bearer ' + currentDatabaseForRequestAccessToken.tokens.access_token,
+      };
+    }
+    let init;
+    if (originalRequest.mode === 'navigate') {
+      init = {
+        headers,
+      };
+    } else {
+      init = {
+        headers,
+        mode: requestMode,
+      };
+    }
+    const newRequest = new Request(originalRequest, init);
+    event.respondWith(fetch(newRequest));
     return;
   }
   if (event.request.method !== 'POST') {
@@ -505,27 +605,32 @@ const handleFetch = async (event) => {
           reject(err);
         });
     });
-    event.waitUntil(event.respondWith(maPromesse));
+    event.respondWith(maPromesse);
   }
 };
-const trustedDomainsShowAccessToken = {};
 const handleMessage = (event) => {
   const port = event.ports[0];
   const data = event.data;
+  if (event.data.type === 'claim') {
+    _self.clients.claim().then(() => port.postMessage({}));
+    return;
+  }
   const configurationName = data.configurationName;
   let currentDatabase = database[configurationName];
   if (trustedDomains == null) {
     trustedDomains = {};
   }
   if (!currentDatabase) {
-    if (trustedDomainsShowAccessToken[configurationName] === void 0) {
-      const trustedDomain = trustedDomains[configurationName];
-      trustedDomainsShowAccessToken[configurationName] = Array.isArray(
-        trustedDomain
-      )
-        ? false
-        : trustedDomain.showAccessToken;
-    }
+    const trustedDomain = trustedDomains[configurationName];
+    const showAccessToken = Array.isArray(trustedDomain)
+      ? false
+      : trustedDomain.showAccessToken;
+    const doNotSetAccessTokenToNavigateRequests = Array.isArray(trustedDomain)
+      ? true
+      : trustedDomain.setAccessTokenToNavigateRequests;
+    const convertAllRequestsToCorsExceptNavigate = Array.isArray(trustedDomain)
+      ? false
+      : trustedDomain.convertAllRequestsToCorsExceptNavigate;
     database[configurationName] = {
       tokens: null,
       state: null,
@@ -535,7 +640,13 @@ const handleMessage = (event) => {
       nonce: null,
       status: null,
       configurationName,
-      hideAccessToken: !trustedDomainsShowAccessToken[configurationName],
+      hideAccessToken: !showAccessToken,
+      setAccessTokenToNavigateRequests:
+        doNotSetAccessTokenToNavigateRequests ?? true,
+      convertAllRequestsToCorsExceptNavigate:
+        convertAllRequestsToCorsExceptNavigate ?? false,
+      demonstratingProofOfPossessionNonce: null,
+      demonstratingProofOfPossessionJwkJson: null,
     };
     currentDatabase = database[configurationName];
     if (!trustedDomains[configurationName]) {
@@ -609,6 +720,32 @@ const handleMessage = (event) => {
       }
       return;
     }
+    case 'setDemonstratingProofOfPossessionNonce':
+      currentDatabase.demonstratingProofOfPossessionNonce =
+        data.data.demonstratingProofOfPossessionNonce;
+      port.postMessage({ configurationName });
+      return;
+    case 'getDemonstratingProofOfPossessionNonce':
+      const demonstratingProofOfPossessionNonce =
+        currentDatabase.demonstratingProofOfPossessionNonce;
+      port.postMessage({
+        configurationName,
+        demonstratingProofOfPossessionNonce,
+      });
+      return;
+    case 'setDemonstratingProofOfPossessionJwk':
+      currentDatabase.demonstratingProofOfPossessionJwkJson =
+        data.data.demonstratingProofOfPossessionJwkJson;
+      port.postMessage({ configurationName });
+      return;
+    case 'getDemonstratingProofOfPossessionJwk':
+      const demonstratingProofOfPossessionJwkJson =
+        currentDatabase.demonstratingProofOfPossessionJwkJson;
+      port.postMessage({
+        configurationName,
+        demonstratingProofOfPossessionJwkJson,
+      });
+      return;
     case 'setState':
       currentDatabase.state = data.data.state;
       port.postMessage({ configurationName });
