@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { render } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 import OrganizationAddTagPopover from './OrganizationAddTagPopover';
 
@@ -24,8 +24,64 @@ describe('OrganizationAddTagPopover', () => {
     const { baseElement } = render(
       <TestWrapper>
         <OrganizationAddTagPopover handleAddOrgaTag={handleAddOrgaTag} />
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
+    console.log(baseElement.innerHTML);
+  });
+  it('should click the + button to open the modal, enter a tag and add it', () => {
+    const handleAddOrgaTag = jest.fn();
+    render(
+      <TestWrapper>
+        <OrganizationAddTagPopover handleAddOrgaTag={handleAddOrgaTag} />
+      </TestWrapper>
+    );
+    const openPopoverButton = screen.getByRole('button', {
+      name: 'openAddEditSpaceTagPopover',
+    });
+    expect(openPopoverButton).toBeTruthy();
+
+    act(() => {
+      fireEvent.click(openPopoverButton);
+    });
+
+    const tagInputField = screen.getByRole('textbox', { name: 'tagInput' });
+    expect(tagInputField).toBeTruthy();
+
+    act(() => {
+      fireEvent.change(tagInputField, { target: { value: 'test tag' } });
+    });
+
+    const addTagButton = screen.getByRole('button', { name: 'addTagButton' });
+    expect(addTagButton).toBeTruthy();
+
+    act(() => {
+      fireEvent.click(addTagButton);
+    });
+  });
+  it('should click the + button to open the modal and then x button to close the modal', () => {
+    const handleAddOrgaTag = jest.fn();
+    render(
+      <TestWrapper>
+        <OrganizationAddTagPopover handleAddOrgaTag={handleAddOrgaTag} />
+      </TestWrapper>
+    );
+    const openPopoverButton = screen.getByRole('button', {
+      name: 'openAddEditSpaceTagPopover',
+    });
+    expect(openPopoverButton).toBeTruthy();
+
+    act(() => {
+      fireEvent.click(openPopoverButton);
+    });
+
+    const closePopoverButton = screen.getByRole('button', {
+      name: 'closePopoverButton',
+    });
+    expect(closePopoverButton).toBeTruthy();
+
+    act(() => {
+      fireEvent.click(closePopoverButton);
+    });
   });
 });

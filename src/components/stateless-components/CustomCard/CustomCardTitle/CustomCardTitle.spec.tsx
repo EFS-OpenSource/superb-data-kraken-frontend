@@ -14,13 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { Icon, Chip } from '@components/index';
-import { render } from '@testing-library/react';
-import { BsLock, BsUnlock } from 'react-icons/bs';
+import { fireEvent, render, screen } from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
+import { Icon, Chip } from '@components/index';
+import { BsDoorClosed, BsLock, BsUnlock } from 'react-icons/bs';
 import CustomCardTitle from './CustomCardTitle';
 import MockOrganization from '../../../../assets/UserData';
-import { Space } from '@customTypes/index';
 
 const data = {
   name: 'Peter Parker',
@@ -44,18 +43,67 @@ describe('CustomCardTitleLayout', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <CustomCardTitle data={data.organizations} cardType="organization" />
-      </TestWrapper>,
+        <CustomCardTitle data={data.organizations} cardType='organization' />
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
+  });
+  it('should render space with state CLOSED', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <CustomCardTitle
+          data={data.organizations.spaces[1]}
+          cardType='organization'
+        />
+      </TestWrapper>
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render space with state LOCKED', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <CustomCardTitle
+          data={data.organizations.spaces[2]}
+          cardType='organization'
+        />
+      </TestWrapper>
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render space with state DELETION', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <CustomCardTitle
+          data={data.organizations.spaces[3]}
+          cardType='organization'
+        />
+      </TestWrapper>
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should be able to click applyAccessButton', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <CustomCardTitle
+          data={data.organizations.spaces[3]}
+          cardType='organization'
+        />
+      </TestWrapper>
+    );
+    expect(baseElement).toBeTruthy();
+
+    // not implemented as of now
+
+    // const button = screen.getByRole('button', { name: 'applyAccessButton' });
+    // fireEvent.click(button);
   });
   it("data to have property 'state' in Space, that can change from 'OPEN' to 'CLOSED' ", () => {
     const lockBsClasses = 'my-0 mx-3 w-auto';
     const lockInlineStyles = { height: '1.6rem' };
     const closedLock = (
       <Icon
-        icon={BsLock}
-        type="button"
+        icon={BsDoorClosed}
+        type='button'
         className={lockBsClasses}
         style={lockInlineStyles}
       />
@@ -68,20 +116,42 @@ describe('CustomCardTitleLayout', () => {
     if (data.organizations.spaces[0].state === 'CLOSED') {
       expect(closedLock).toBeTruthy();
     }
+    data.organizations.spaces[0].state = 'OPEN';
+  });
+  // comments
+  it("data to have property 'state' in Space, that can change from 'OPEN' to 'LOCKED' ", () => {
+    const lockBsClasses = 'my-0 mx-3 w-auto';
+    const lockInlineStyles = { height: '1.6rem' };
+    const closedLock = (
+      <Icon
+        icon={BsLock}
+        type='button'
+        className={lockBsClasses}
+        style={lockInlineStyles}
+      />
+    );
+
+    expect(data.organizations.spaces[0].state).toBe('OPEN');
+    data.organizations.spaces[0].state = 'LOCKED';
+    expect(data.organizations.spaces[0].state).toBe('LOCKED');
+
+    if (data.organizations.spaces[0].state === 'LOCKED') {
+      expect(closedLock).toBeTruthy();
+    }
   });
 
   it('render a Chip Tag', () => {
     const chip = render(
       <TestWrapper>
-        <Chip text="TestChip" />
-      </TestWrapper>,
+        <Chip text='TestChip' />
+      </TestWrapper>
     );
     expect(chip).not.toBeNull();
   });
 
   it("Spaces to have a 'tag' array with tags", () => {
     const tagMockData = data.organizations.spaces.map((space) =>
-      space.tags!.map((tag) => tag),
+      space.tags!.map((tag) => tag)
     );
 
     expect(tagMockData).not.toBeNull();

@@ -28,27 +28,27 @@ function SpaceDataTab({
 }) {
   const { formatMessage } = useIntl();
   return (
-    <div className="w-85" style={{ width: '85%' }}>
-      <h3 className="font-weight-medium mb-4">
+    <div className='w-85' style={{ width: '85%' }}>
+      <h3 className='font-weight-medium mb-4'>
         {formatMessage({
           id: 'AddEditOrgSpacesModal.space-description',
         })}
       </h3>
       <FormInput
-        id="name"
-        ariaLabel="name"
+        id='name'
+        ariaLabel='name'
         labelText={formatMessage({
           id: 'AddEditOrgSpacesModal.space-retention-time',
         })}
-        labelToolTipIcon={<Icon icon={FiInfo} size={19} type="button" />}
+        labelToolTipIcon={<Icon icon={FiInfo} size={19} type='button' />}
         labelToolTipText={formatMessage({
           id: 'AddEditOrgSpacesModal.space-retention-time-tooltip',
         })}
-        labelClassName="h6"
+        labelClassName='h6'
         placeholder={formatMessage({
           id: 'AddEditOrgSpacesModal.space-retention-time',
         })}
-        fontSize="sm"
+        fontSize='sm'
         value={modalData.defaultRetentionTime}
         onChange={(e) => {
           handleChange({
@@ -59,13 +59,13 @@ function SpaceDataTab({
       />
 
       <FormCheckbox
-        groupClassName="mt-3"
-        labelClassName="font-weight-medium d-flex"
+        groupClassName='mt-3'
+        labelClassName='font-weight-medium d-flex'
         labelText={formatMessage({
           id: 'AddEditOrgSpacesModal.metadata',
         })}
-        id="metadata"
-        labelToolTipIcon={<Icon icon={FiInfo} size={19} type="button" />}
+        id='metadata'
+        labelToolTipIcon={<Icon icon={FiInfo} size={19} type='button' />}
         labelToolTipText={formatMessage({
           id: 'AddEditOrgSpacesModal.metadata-checkbox-tooltip',
         })}

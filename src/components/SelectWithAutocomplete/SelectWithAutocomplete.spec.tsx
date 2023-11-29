@@ -29,7 +29,24 @@ describe('SelectWithAutocomplete', () => {
         }}
         placeholder={''}
         value={null}
-      />,
+      />
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render successfully is Disabled, isSearchable & isLoading true and with noOptionsMessage', () => {
+    const { baseElement } = render(
+      <SelectWithAutocomplete
+        options={[]}
+        onChange={function (value: DropdownOptions | null): void {
+          throw new Error('Function not implemented.');
+        }}
+        placeholder={''}
+        value={null}
+        isDisabled
+        isLoading
+        isSearchable
+        noOptionsMessage='no options'
+      />
     );
     expect(baseElement).toBeTruthy();
   });

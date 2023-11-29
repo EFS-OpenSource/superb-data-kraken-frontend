@@ -20,11 +20,13 @@ import TestWrapper from '@utils/TestWrapper/TestWrapper';
 import AppPage from './AppPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'cross-fetch/polyfill';
+import { OidcUserStatus, useOidc, useOidcUser } from '@axa-fr/react-oidc';
 
 const client = new QueryClient();
 
 describe('AppPage', () => {
   jest.mock('@axa-fr/react-oidc', () => ({
+    ...jest.requireActual('@axa-fr/react-oidc'),
     useOidc: () => ({
       oidcUser: {
         profile: { sub: '123' },
@@ -36,6 +38,8 @@ describe('AppPage', () => {
       },
       login: jest.fn(),
       oidcLogout: jest.fn(),
+      isAuthenticated: true,
+      oidcUserLoadingState: OidcUserStatus.Loaded,
     }),
     useOidcIdToken: () => ({
       oidcUser: {
@@ -46,24 +50,53 @@ describe('AppPage', () => {
           access_token_invalid: 'asd',
         },
       },
+      isAuthenticated: true,
+      oidcUserLoadingState: OidcUserStatus.Loaded,
     }),
   }));
 
-  it('should render the header successfully', async () => {
-    const baseElement = render(
+  const useOidcMock = jest.fn() as any;
+
+  const useOidcUserMock = jest.fn() as any;
+
+  it('should render the header successfully', (done) => {
+    // useOidcUserMock.mockImplementation({
+    //   oidcUser: { sub: 'fgfhfghghj' },
+    //   oidcUserLoadingState: OidcUserStatus.Loaded,
+    // });
+    // useOidcMock.mockImplementation({
+    //   login: async () => {},
+    //   logout: async () => {},
+    //   renewTokens: async () => {},
+    //   isAuthenticated: true,
+    // });
+    // useOidcUserMock.mockResolvedValue({
+    //   oidcUser: { sub: 'fgfhfghghj' },
+    //   oidcUserLoadingState: OidcUserStatus.Loaded,
+    // });
+    // useOidcMock.mockResolvedValue({
+    //   login: async () => {},
+    //   logout: async () => {},
+    //   renewTokens: async () => {},
+    //   isAuthenticated: true,
+    // });
+    const { baseElement } = render(
       <TestWrapper>
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Overview']}>
             <Routes>
-              <Route path="/org/:orgID/Overview/*" element={<AppPage />} />
+              <Route path='/org/:orgID/Overview/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
 
-    await waitFor(() => {
-      expect(baseElement).toBeTruthy();
+    expect(baseElement).toBeTruthy();
+
+    waitFor(() => {
+      done();
+      console.log(baseElement.innerHTML);
     });
   });
 
@@ -73,11 +106,11 @@ describe('AppPage', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Overview']}>
             <Routes>
-              <Route path="/org/:orgID/Overview/*" element={<AppPage />} />
+              <Route path='/org/:orgID/Overview/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     const overview = baseElement.findByText('Übersicht', {
       selector: 'div',
@@ -98,13 +131,13 @@ describe('AppPage', () => {
             <MemoryRouter initialEntries={['/org/2/space/234/Overview']}>
               <Routes>
                 <Route
-                  path="/org/:orgID/space/:spaceID/*"
+                  path='/org/:orgID/space/:spaceID/*'
                   element={<AppPage />}
                 />
               </Routes>
             </MemoryRouter>
           </QueryClientProvider>
-        </TestWrapper>,
+        </TestWrapper>
       );
     });
 

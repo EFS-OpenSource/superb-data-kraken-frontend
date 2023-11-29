@@ -22,11 +22,47 @@ import {
   FormCheckbox,
   FormRadioButtons,
 } from './FormFields';
+import { Bs123 } from 'react-icons/bs';
 
 describe('FormFields', () => {
-  it('should render successfully', () => {
+  it('should render FormInput successfully', () => {
     const { baseElement } = render(
-      <FormInput id={''} ariaLabel={''} labelText={''} />,
+      <FormInput id={''} ariaLabel={''} labelText={''} />
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render FormTextarea successfully', () => {
+    const { baseElement } = render(
+      <FormTextarea
+        id={''}
+        ariaLabel={''}
+        labelText={''}
+        labelToolTipIcon={<Bs123 />}
+      />
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render FormRadioButtons successfully', () => {
+    const { baseElement } = render(
+      <FormRadioButtons
+        id={''}
+        ariaLabel={''}
+        labelText={''}
+        labelToolTipIcon={<Bs123 />}
+        labelsAndValues={[]}
+      />
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render FormCheckbox successfully', () => {
+    const { baseElement } = render(
+      <FormCheckbox
+        id={''}
+        ariaLabel={''}
+        labelText={''}
+        labelToolTipIcon={<Bs123 />}
+        labelsAndValues={[{ name: 'test', value: 'test' }]}
+      />
     );
     expect(baseElement).toBeTruthy();
   });

@@ -103,7 +103,7 @@ function Navbar({ onLanguageChange }: NavbarProps) {
         }
       >
         <UserAvatar
-          dataTestId='user-avatar'
+          ariaLabel='user-avatar'
           size={40}
           color='text-light'
           dropdownItems={

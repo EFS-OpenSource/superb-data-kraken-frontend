@@ -19,8 +19,12 @@ import { render } from '@testing-library/react';
 import DashboardLogos from './DashboardLogos';
 
 describe('DashboardLogos', () => {
-  it('should render successfully', () => {
-    const { baseElement } = render(<DashboardLogos />);
+  it('should render successfully with type "SDK"', () => {
+    const { baseElement } = render(<DashboardLogos type='SDK' />);
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render successfully with type "SuperbDataKraken"', () => {
+    const { baseElement } = render(<DashboardLogos type='SuperbDataKraken' />);
     expect(baseElement).toBeTruthy();
   });
 });

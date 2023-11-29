@@ -28,23 +28,23 @@ import Icon from '../../Icon/Icon';
 
 function CustomCardTitleLayout({ data, userName, cardType }: OrgSpaceUserType) {
   // const { featureFlag } = React.useContext(FeatureFlags);
-  const { formatMessage } = useIntl();
+  // const { formatMessage } = useIntl();
 
-  const handleShow = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    e.preventDefault();
-  };
+  // const handleShow = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  //   e.preventDefault();
+  // };
 
-  const openPopoverButton = (
-    <Button
-      aria-label='applyAccessButton'
-      size='sm'
-      onClick={(e) => handleShow(e)}
-    >
-      {formatMessage({
-        id: 'Card.Access',
-      })}
-    </Button>
-  );
+  // const openPopoverButton = (
+  //   <Button
+  //     aria-label='applyAccessButton'
+  //     size='sm'
+  //     onClick={(e) => handleShow(e)}
+  //   >
+  //     {formatMessage({
+  //       id: 'Card.Access',
+  //     })}
+  //   </Button>
+  // );
 
   let iconState;
   let tooltipState;

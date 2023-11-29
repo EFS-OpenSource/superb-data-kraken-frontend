@@ -17,7 +17,7 @@ limitations under the License.
 import { CSSProperties } from 'react';
 import { IconType } from 'react-icons/lib';
 import { useIntl } from 'react-intl';
-import PropTypes, { number, oneOf } from 'prop-types';
+import { number, oneOf } from 'prop-types';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Placement } from 'react-bootstrap/esm/types';
 import { textColors, TextColor } from '@customTypes/colorTypes';

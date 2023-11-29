@@ -202,7 +202,7 @@ function MembersTab({
     e.preventDefault();
   };
 
-  const openPopoverButton = (
+  const openPopoverButton = (ariaLabel: string) => (
     <OverlayTrigger
       placement='right'
       transition={false}
@@ -216,7 +216,7 @@ function MembersTab({
     >
       <div className='me-2'>
         <Icon
-          ariaLabel='openAddMemberPopover'
+          ariaLabel={ariaLabel}
           icon={IoAdd}
           size={28}
           type='button'
@@ -248,7 +248,7 @@ function MembersTab({
                   id: 'AddMemberPopover.addMember-button',
                 })}
                 handleShow={handleShow}
-                popoverOpenButton={openPopoverButton}
+                popoverOpenButton={openPopoverButton('openAddOwnerPopover')}
                 onSend={(email) => {
                   handleAddOwner(email.value);
                 }}

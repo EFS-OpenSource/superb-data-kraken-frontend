@@ -14,7 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { fireEvent, getByDisplayValue, getByRole, getByText, render } from '@testing-library/react';
+import {
+  fireEvent,
+  getByDisplayValue,
+  getByRole,
+  getByText,
+  render,
+  screen,
+} from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 import UserAvatar from './UserAvatar';
 
@@ -22,18 +29,18 @@ describe('UserAvatar', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <UserAvatar size={0} dropdownItems={undefined} />,
-      </TestWrapper>,
+        <UserAvatar ariaLabel='avatar' size={0} dropdownItems={undefined} />,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
   it('should test click', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <UserAvatar size={0} dropdownItems={undefined} />,
-      </TestWrapper>,
+        <UserAvatar ariaLabel='avatar' size={0} dropdownItems={undefined} />,
+      </TestWrapper>
     );
-    const toggle = getByRole(baseElement, "button");
+    const toggle = getByRole(baseElement, 'button');
     expect(toggle).toBeTruthy();
     fireEvent.click(toggle);
     expect(baseElement).toBeTruthy();

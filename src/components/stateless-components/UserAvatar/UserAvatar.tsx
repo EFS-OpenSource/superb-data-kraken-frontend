@@ -22,14 +22,14 @@ import { oneOf } from 'prop-types';
 import { Icon } from '@components/index';
 
 interface UserAvatarProps {
-  dataTestId: string;
+  ariaLabel: string;
   size: number;
   color?: TextColor;
   dropdownItems: ReactNode;
 }
 
 function UserAvatar({
-  dataTestId,
+  ariaLabel,
   color,
   size,
   dropdownItems,
@@ -44,6 +44,7 @@ function UserAvatar({
   const CustomToggle = forwardRef(
     (props: CustomToggleProps, ref: LegacyRef<HTMLDivElement>) => (
       <div
+        aria-label='toggle'
         role='button'
         tabIndex={0}
         ref={ref}
@@ -66,7 +67,7 @@ function UserAvatar({
   CustomToggle.displayName = 'CustomToggle';
 
   return (
-    <div data-testid={dataTestId} className='d-flex align-items-center'>
+    <div aria-label={ariaLabel} className='d-flex align-items-center'>
       <Dropdown>
         <Dropdown.Toggle as={CustomToggle} id='dropdown-custom-components' />
         <Dropdown.Menu>{dropdownItems}</Dropdown.Menu>

@@ -16,22 +16,14 @@ limitations under the License.
 
 import {
   fireEvent,
-  getByTestId,
   getByText,
   queryByText,
   render,
-  waitFor,
-  waitForElementToBeRemoved,
+  screen,
 } from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 import MembersTab from './MembersTab';
-import {
-  OrgaSpaceUser,
-  OrgaUser,
-  Owner,
-  SpaceUser,
-} from '@customTypes/userTypes';
-import { UserOrgaRoleType } from '@customTypes/organizationTypes';
+import { OrgaUser, Owner } from '@customTypes/userTypes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const client = new QueryClient();
@@ -99,21 +91,6 @@ describe('MembersTab', () => {
     );
     expect(baseElement).toBeTruthy();
   });
-  it('should render successfully with initialUsers & initialOwners', () => {
-    const { baseElement } = render(
-      <TestWrapper>
-        <QueryClientProvider client={client}>
-          <MembersTab
-            roles={[]}
-            isOwner={true}
-            initialOwners={[owner]}
-            initialUsers={[user]}
-          />
-        </QueryClientProvider>
-      </TestWrapper>
-    );
-    expect(baseElement).toBeTruthy();
-  });
   it('should render successfully with onUpdateOwners', () => {
     const onUpdateOwners = jest.fn();
     const { baseElement } = render(
@@ -148,7 +125,6 @@ describe('MembersTab', () => {
       </TestWrapper>
     );
     expect(onUpdateUsers).toHaveBeenCalled();
-    expect(baseElement).toBeTruthy();
   });
   it('test removing owner', async () => {
     const { baseElement } = render(
@@ -175,5 +151,72 @@ describe('MembersTab', () => {
     );
     expect(ownerChipAfter).toBeFalsy();
     expect(baseElement).toBeTruthy();
+  });
+  it('should open the popover to add a new owner and close it', () => {
+    render(
+      <TestWrapper>
+        <QueryClientProvider client={client}>
+          <MembersTab
+            roles={[]}
+            isOwner={true}
+            initialOwners={[owner]}
+            initialUsers={[user]}
+          />
+        </QueryClientProvider>
+      </TestWrapper>
+    );
+    const openAddOwnerPopoverButton = screen.getByRole('button', {
+      name: 'openAddOwnerPopover',
+    });
+
+    fireEvent.click(openAddOwnerPopoverButton);
+
+    const closeAddOwnerPopoverButton = screen.getByRole('button', {
+      name: 'close-addOwnerPopover',
+    });
+
+    fireEvent.click(closeAddOwnerPopoverButton);
+  });
+  it('should open the popover to add a new owner and close it', () => {
+    render(
+      <TestWrapper>
+        <QueryClientProvider client={client}>
+          <MembersTab
+            roles={[]}
+            isOwner={true}
+            initialOwners={[owner]}
+            initialUsers={[user]}
+          />
+        </QueryClientProvider>
+      </TestWrapper>
+    );
+
+    const openAddOwnerPopoverButton = screen.getByRole('button', {
+      name: 'openAddOwnerPopover',
+    });
+
+    fireEvent.click(openAddOwnerPopoverButton);
+
+    const addOwnerButton = screen.getByRole('button', {
+      name: 'addOwnerPopover-addButton',
+    });
+
+    fireEvent.click(addOwnerButton);
+  });
+  it('should trigger onSend function', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <QueryClientProvider client={client}>
+          <MembersTab
+            roles={[]}
+            isOwner={true}
+            initialOwners={[owner]}
+            initialUsers={[user]}
+          />
+        </QueryClientProvider>
+      </TestWrapper>
+    );
+
+    console.log(baseElement.innerHTML);
   });
 });

@@ -27,7 +27,7 @@ const config: JestConfigWithTsJest = {
         diagnostics: false,
       },
     ],
-    // '^.+\\.svg$': '<rootDir>/svgTransform.js',
+    '^.+\\.svg$': '<rootDir>/svgTransform.js',
   },
   transformIgnorePatterns: ['../node_modules/', '^.+\\.(css|scss|sass)$'],
   moduleNameMapper: {

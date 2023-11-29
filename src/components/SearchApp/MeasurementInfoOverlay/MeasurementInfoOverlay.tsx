@@ -84,7 +84,7 @@ function MeasurementInfoOverlay({
         enableColumnFilter: false,
       }),
     ],
-    [],
+    []
   );
   // const columnData = DefaultColumnsData().map((defaultColumnData) => ({
   //   Header: defaultColumnData.label as keyof MassData,
@@ -127,7 +127,7 @@ function MeasurementInfoOverlay({
               ErrorToast(
                 'ErrorToast.title-download',
                 response.status,
-                response.statusText,
+                response.statusText
               );
             }
           });
@@ -135,7 +135,7 @@ function MeasurementInfoOverlay({
           ErrorToast(
             'ErrorToast.title-download',
             responseSas.status,
-            responseSas.statusText,
+            responseSas.statusText
           );
         }
       });
@@ -182,7 +182,7 @@ function MeasurementInfoOverlay({
           ErrorToast(
             'ErrorToast.title-download',
             response.status,
-            response.statusText,
+            response.statusText
           );
         }
       });
@@ -197,10 +197,11 @@ function MeasurementInfoOverlay({
     size: parseFloat((object.size / 1024 ** 2).toFixed(2)),
     download: (
       <>
-        <iframe className="d-none" title="some" name="hiddenIframe" />
+        <iframe className='d-none' title='some' name='hiddenIframe' />
         <Icon
           icon={BsDownload}
-          type="button"
+          ariaLabel='bsdownload'
+          type='button'
           onClick={() =>
             handleFileDownload({
               organization: data.organization,
@@ -219,17 +220,17 @@ function MeasurementInfoOverlay({
   const [rowCount, setRowCount] = useState<number>(rowCountValues[1]);
 
   return (
-    <Container fluid className="p-0 m-0">
+    <Container fluid className='p-0 m-0'>
       <ProjectInfo data={data} />
       <CustomTable
         data={convertedMassdata}
         columns={columnData}
-        tableName="MeasurementIndexOverlay"
+        tableName='MeasurementIndexOverlay'
         withDropdownColumnSelect={false}
       />
 
       <Button
-        className="mt-7 mb-10"
+        className='mt-7 mb-10'
         onClick={() => onOverlayToggler(undefined)}
       >
         {formatMessage({

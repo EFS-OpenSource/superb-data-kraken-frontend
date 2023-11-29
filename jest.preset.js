@@ -5,7 +5,12 @@ const globalConf = {
   verbose: true,
   collectCoverage: true,
   coverageDirectory: '../coverage',
-  coverageReporters: ['clover', 'json', 'lcov', ['text', { skipFull: true }]],
+  coverageReporters: [
+    'clover',
+    'json',
+    'lcov',
+    ['text', 'html', { skipFull: true }],
+  ],
   collectCoverageFrom: ['/**/*.{js,jsx,ts,tsx}'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   passWithNoTests: true,

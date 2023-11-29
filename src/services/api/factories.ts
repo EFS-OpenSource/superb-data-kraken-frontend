@@ -31,13 +31,13 @@ const getUrlHeaders = (baseURL: string | undefined): any => ({
 
 const assemblePathParams = (
   endpoint: string,
-  params: Params | undefined,
+  params: Params | undefined
 ): string => {
   if (params && params.pathParams) {
     return Object.entries(params.pathParams).reduce(
       (url, [key, value]) =>
         url.replace(new RegExp(`:${key}`, 'ug'), `${value ?? ''}`),
-      endpoint,
+      endpoint
     );
   }
   return endpoint;
@@ -45,34 +45,6 @@ const assemblePathParams = (
 
 const assembleQueryParams = (params: Params | undefined): URLSearchParams =>
   new URLSearchParams(params?.queryParams as Record<string, string>);
-
-const defaultError = (error: any): ResponseError => {
-  if (error.response.data) {
-    return {
-      name: error.name,
-      message: error.message,
-      data: error.response.data.description,
-      status: error.response.status,
-      ok: false,
-    };
-  }
-  if (error.request.data) {
-    return {
-      name: error.name,
-      message: error.message,
-      data: error.request.data.description,
-      status: error.response.status,
-      ok: false,
-    };
-  }
-  return {
-    name: error.name,
-    message: error.message,
-    statusText: error.code,
-    status: error.response.status,
-    ok: false,
-  };
-};
 
 /* ================================================================================================
 /* POST Factory
@@ -82,7 +54,7 @@ const defaultError = (error: any): ResponseError => {
 export const postFactory =
   <P, R>(
     options: AxiosOptions,
-    baseURL: string | undefined,
+    baseURL: string | undefined
   ): PostMethod<P, R> =>
   async (endpoint: string, payload?: P, params?: Params) => {
     const { headers } = getUrlHeaders(baseURL);
@@ -97,7 +69,7 @@ export const postFactory =
         headers,
         path,
         version,
-        options.responseType,
+        options.responseType
       ).post(pathParamsString, payload, {
         headers,
         params: queryParamsString,
@@ -133,7 +105,7 @@ export const getFactory =
         headers,
         path,
         version,
-        options.responseType,
+        options.responseType
       ).get(pathParamsString, { headers, params: queryParamsString });
 
       return {
@@ -155,7 +127,7 @@ export const getFactory =
 export const putFactory =
   <P, R>(
     options: AxiosOptions,
-    baseURL: string | undefined,
+    baseURL: string | undefined
   ): PostMethod<P, R> =>
   async (endpoint: string, payload?: P, params?: Params) => {
     const { headers } = getUrlHeaders(baseURL);
@@ -170,7 +142,7 @@ export const putFactory =
         {
           headers,
           params: queryParamsString,
-        },
+        }
       );
 
       return {
@@ -202,7 +174,7 @@ export const deleteFactory =
         url,
         headers,
         path,
-        version,
+        version
       ).delete(pathParamsString, {
         headers,
         params: queryParamsString,

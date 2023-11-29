@@ -14,9 +14,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 import AddTagPopover from './AddTagPopover';
+import userEvent from '@testing-library/user-event';
 
 describe('AddTagPopover', () => {
   it('should render successfully', () => {
@@ -24,8 +25,27 @@ describe('AddTagPopover', () => {
     const { baseElement } = render(
       <TestWrapper>
         <AddTagPopover handleAddTag={handleAddTag} placeholder={''} />
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
+  });
+  it('should be opened and closed', async () => {
+    const user = userEvent.setup();
+    const handleAddTag = jest.fn();
+    const { baseElement } = render(
+      <TestWrapper>
+        <AddTagPopover handleAddTag={handleAddTag} placeholder={''} />
+      </TestWrapper>
+    );
+
+    const openButton = screen.getByRole('button', {
+      name: 'openAddEditSpaceTagPopover',
+    });
+    await user.click(openButton);
+
+    const closeButton = screen.getByRole('button', {
+      name: 'closePopoverButton',
+    });
+    await user.click(closeButton);
   });
 });

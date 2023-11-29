@@ -259,14 +259,9 @@ function MembersTable({
           ? openPopoverButton
           : buttonPlaceholder;
       memberArray.push({
-        memberLastName:
-          member && member.lastName
-            ? `${member.lastName}`
-            : '',
+        memberLastName: member && member.lastName ? `${member.lastName}` : '',
         memberFirstName:
-          member && member.firstName 
-          ? `${member.firstName}`
-          : '',
+          member && member.firstName ? `${member.firstName}` : '',
         memberEmail: member.email,
         memberRoles: (
           <Form.Group className='d-flex m-0'>
