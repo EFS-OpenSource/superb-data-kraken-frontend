@@ -21,10 +21,9 @@ import {
   waitFor,
   act,
 } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { OrgGrid } from '@views/index';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import TestWrapper from '@utils/TestWrapper/TestWrapper';
 import 'cross-fetch/polyfill';
 import TestWrapperNoOIDC from '@utils/TestWrapper/TestWrapperNoOIDC';
 import MockOrganization from '@assets/UserData';

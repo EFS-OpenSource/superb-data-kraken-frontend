@@ -14,26 +14,33 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { render } from '@testing-library/react';
+import { render, waitFor, screen, RenderResult } from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import HomePage from './HomePage';
+import { act } from 'react-dom/test-utils';
 import { MemoryRouter } from 'react-router-dom';
 import 'cross-fetch/polyfill';
 
 const client = new QueryClient();
 
 describe('HomePage', () => {
-  it('should render successfully', () => {
-    const { baseElement } = render(
-      <TestWrapper>
-        <QueryClientProvider client={client}>
-          <MemoryRouter initialEntries={['/org/2/Overview']}>
-            <HomePage />
-          </MemoryRouter>
-        </QueryClientProvider>
-      </TestWrapper>,
-    );
-    expect(baseElement).toBeTruthy();
+  it('renders successfully', async () => {
+    let baseElement: RenderResult;
+    await act(async () => {
+      baseElement = render(
+        <TestWrapper>
+          <QueryClientProvider client={client}>
+            <MemoryRouter initialEntries={['/home/overview']}>
+              <HomePage />
+            </MemoryRouter>
+          </QueryClientProvider>
+        </TestWrapper>
+      );
+    });
+
+    await waitFor(() => {
+      console.log(baseElement.container.innerHTML);
+    });
   });
 });

@@ -1,28 +1,9 @@
 import { http, HttpResponse } from 'msw';
 
 const handlers = [
-  http.post('http://sdk-dev.efs.ai/api/v1.0/organization', async () =>
-    HttpResponse.json({
-      appConfigs: [
-        {
-          displayName: 'string',
-          appType: 'SEARCH',
-          path: 'string',
-        },
-      ],
-      company: 'e:fs TechHub GmbH',
-      confidentiality: 'INTERNAL',
-      description: 'description',
-      displayName: 'string',
-      name: 'string',
-      tags: [
-        {
-          name: 'string',
-        },
-      ],
-      id: 0,
-      owners: 'userId',
-    })
+  http.post(
+    'http://sdk-dev.efs.ai/api/v1.0/organization',
+    async () => new HttpResponse('Hello world', { status: 200 })
   ),
 
   // http.post('http://localhost:3030/order', async () => {

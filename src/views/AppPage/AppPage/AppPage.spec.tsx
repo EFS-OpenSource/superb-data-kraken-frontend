@@ -20,11 +20,13 @@ import TestWrapper from '@utils/TestWrapper/TestWrapper';
 import AppPage from './AppPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'cross-fetch/polyfill';
+import { OidcUserStatus, useOidc, useOidcUser } from '@axa-fr/react-oidc';
 
 const client = new QueryClient();
 
 describe('AppPage', () => {
   jest.mock('@axa-fr/react-oidc', () => ({
+    ...jest.requireActual('@axa-fr/react-oidc'),
     useOidc: () => ({
       oidcUser: {
         profile: { sub: '123' },
@@ -36,6 +38,8 @@ describe('AppPage', () => {
       },
       login: jest.fn(),
       oidcLogout: jest.fn(),
+      isAuthenticated: true,
+      oidcUserLoadingState: OidcUserStatus.Loaded,
     }),
     useOidcIdToken: () => ({
       oidcUser: {
@@ -46,10 +50,36 @@ describe('AppPage', () => {
           access_token_invalid: 'asd',
         },
       },
+      isAuthenticated: true,
+      oidcUserLoadingState: OidcUserStatus.Loaded,
     }),
   }));
 
-  it('should render the header successfully', () => {
+  const useOidcMock = jest.fn() as any;
+
+  const useOidcUserMock = jest.fn() as any;
+
+  it('should render the header successfully', (done) => {
+    // useOidcUserMock.mockImplementation({
+    //   oidcUser: { sub: 'fgfhfghghj' },
+    //   oidcUserLoadingState: OidcUserStatus.Loaded,
+    // });
+    // useOidcMock.mockImplementation({
+    //   login: async () => {},
+    //   logout: async () => {},
+    //   renewTokens: async () => {},
+    //   isAuthenticated: true,
+    // });
+    // useOidcUserMock.mockResolvedValue({
+    //   oidcUser: { sub: 'fgfhfghghj' },
+    //   oidcUserLoadingState: OidcUserStatus.Loaded,
+    // });
+    // useOidcMock.mockResolvedValue({
+    //   login: async () => {},
+    //   logout: async () => {},
+    //   renewTokens: async () => {},
+    //   isAuthenticated: true,
+    // });
     const { baseElement } = render(
       <TestWrapper>
         <QueryClientProvider client={client}>
@@ -63,6 +93,11 @@ describe('AppPage', () => {
     );
 
     expect(baseElement).toBeTruthy();
+
+    waitFor(() => {
+      done();
+      console.log(baseElement.innerHTML);
+    });
   });
 
   it('should render tabs sucessfully for an organization', (done) => {

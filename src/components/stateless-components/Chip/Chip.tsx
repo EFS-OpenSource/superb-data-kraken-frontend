@@ -24,7 +24,7 @@ export interface ChipProps {
   text?: string | undefined;
   icon?: JSX.Element;
   iconLeft?: boolean;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'default';
   height?: string;
   activeColor?: (typeof colors)[number];
   inactiveColor?: (typeof colors)[number];
@@ -109,14 +109,14 @@ function Chip({
       }
     >
       {iconLeft ? (
-        <div className="d-flex align-items-center justify-content-center">
-          {icon && <span className="me-1">{icon}</span>}
+        <div className='d-flex align-items-center justify-content-center'>
+          {icon && <span className='me-1'>{icon}</span>}
           <span>{`${text || 'ChipText'}`}</span>
         </div>
       ) : (
-        <div className="d-flex align-items-center justify-content-center">
+        <div className='d-flex align-items-center justify-content-center'>
           <span>{`${text || 'ChipText'} `}</span>
-          {icon && <span className="ms-1">{icon}</span>}
+          {icon && <span className='ms-1'>{icon}</span>}
         </div>
       )}
     </Button>
@@ -124,7 +124,7 @@ function Chip({
 
   return tooltip ? (
     <OverlayTrigger
-      placement="top"
+      placement='top'
       overlay={
         <Tooltip id={`tooltip-${tooltip}`}>
           {formatMessage({
@@ -133,7 +133,7 @@ function Chip({
         </Tooltip>
       }
     >
-      <span className="d-inline-block">{button}</span>
+      <span className='d-inline-block'>{button}</span>
     </OverlayTrigger>
   ) : (
     button

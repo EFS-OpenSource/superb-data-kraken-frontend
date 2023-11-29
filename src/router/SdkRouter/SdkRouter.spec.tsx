@@ -52,10 +52,11 @@ describe('SdkRouter', () => {
         <MemoryRouter initialEntries={['/home/overview']}>
           <SdkRouter />
         </MemoryRouter>
-      </TestWrapper>,
+      </TestWrapper>
     );
     await waitFor(() => {
       expect(baseElement).toBeTruthy();
+      console.log(baseElement.innerHTML);
     });
   });
 });

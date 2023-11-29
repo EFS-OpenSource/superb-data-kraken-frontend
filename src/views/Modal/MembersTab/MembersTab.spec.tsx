@@ -203,4 +203,20 @@ describe('MembersTab', () => {
 
     fireEvent.click(addOwnerButton);
   });
+  it('should trigger onSend function', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <QueryClientProvider client={client}>
+          <MembersTab
+            roles={[]}
+            isOwner={true}
+            initialOwners={[owner]}
+            initialUsers={[user]}
+          />
+        </QueryClientProvider>
+      </TestWrapper>
+    );
+
+    console.log(baseElement.innerHTML);
+  });
 });

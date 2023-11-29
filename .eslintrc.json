@@ -32,6 +32,7 @@
   // ignore test files
   "ignorePatterns": [
     "src/**/*.spec.tsx",
+    "src/**/*.spec.ts",
     "*.config.ts",
     "*.preset.js",
     "tsconfig.json",

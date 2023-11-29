@@ -14,13 +14,58 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { render } from '@testing-library/react';
+import { act, render, RenderResult, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import TestWrapperNoOIDC from '@utils/TestWrapper/TestWrapperNoOIDC';
+import { ErrorToast } from '@notifications/index';
 
-import ErrorToast from './ErrorToast';
-
-describe('ErrorToast', () => {
-  it('should render successfully', () => {
-    const { baseElement } = render(<ErrorToast />);
-    expect(baseElement).toBeTruthy();
+describe('SdkRouter', () => {
+  it('should launch SuccessToast', async () => {
+    let baseElement: RenderResult;
+    act(() => {
+      baseElement = render(
+        <MemoryRouter initialEntries={['/home/overview']}>
+          <TestWrapperNoOIDC>
+            <ToastContainer />
+          </TestWrapperNoOIDC>
+        </MemoryRouter>
+      );
+    });
+    ErrorToast();
+    let overview;
+    await waitFor(() => {
+      expect(baseElement).toBeTruthy();
+      overview = baseElement.getByText('Oh Nein! Das hat nicht geklappt...', {
+        selector: 'h5',
+      });
+      expect(overview).toBeDefined();
+    });
+  });
+  it('should not launch SuccessToast with default message if one is provided', async () => {
+    let baseElement: RenderResult;
+    act(() => {
+      baseElement = render(
+        <MemoryRouter initialEntries={['/home/overview']}>
+          <TestWrapperNoOIDC>
+            <ToastContainer />
+          </TestWrapperNoOIDC>
+        </MemoryRouter>
+      );
+    });
+    ErrorToast('ErrorToast.title-org-create');
+    await waitFor(() => {
+      expect(baseElement).toBeTruthy();
+      expect(() =>
+        baseElement.getByText('Oh Nein! Das hat nicht geklappt...', {
+          selector: 'h5',
+        })
+      ).toThrow();
+      expect(() =>
+        baseElement.getByText('Organisation konnte nicht angelegt werden...', {
+          selector: 'h5',
+        })
+      ).not.toThrow();
+    });
   });
 });

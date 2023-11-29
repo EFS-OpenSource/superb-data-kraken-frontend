@@ -31,6 +31,7 @@ import { useConvertSpaceDisplayName } from '@customHooks/index';
 import MockOrganization from '../../../assets/UserData';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'cross-fetch/polyfill';
+import { RiContactsBookUploadLine } from 'react-icons/ri';
 
 const client = new QueryClient();
 
@@ -69,11 +70,11 @@ describe('Spaces', () => {
           <QueryClientProvider client={client}>
             <MemoryRouter initialEntries={['/org/2/Spaces']}>
               <Routes>
-                <Route path="/org/:orgID/*" element={<AppPage />} />
+                <Route path='/org/:orgID/*' element={<AppPage />} />
               </Routes>
             </MemoryRouter>
           </QueryClientProvider>
-        </TestWrapper>,
+        </TestWrapper>
       );
     });
     let heading;
@@ -84,6 +85,7 @@ describe('Spaces', () => {
       heading = baseElement.findByText('Spaces', {
         selector: 'div',
       });
+      console.log(baseElement.container.innerHTML);
       expect(heading).toBeDefined();
     });
   });
@@ -96,13 +98,13 @@ describe('Spaces', () => {
             <MemoryRouter initialEntries={['/org/2/space/170/Spaces']}>
               <Routes>
                 <Route
-                  path="/org/:orgID/space/:spaceID/*"
+                  path='/org/:orgID/space/:spaceID/*'
                   element={<AppPage />}
                 />
               </Routes>
             </MemoryRouter>
           </QueryClientProvider>
-        </TestWrapper>,
+        </TestWrapper>
       );
     });
     waitFor(() => {
@@ -116,11 +118,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
 
@@ -138,11 +140,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
     waitFor(() => {
@@ -164,11 +166,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
     waitFor(() => {
@@ -200,11 +202,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
 
     const handleChange = jest.fn();
@@ -224,7 +226,7 @@ describe('Spaces', () => {
       });
 
       const { result } = renderHook(() =>
-        useConvertSpaceDisplayName('Mein erster Space!!!', handleChange, data),
+        useConvertSpaceDisplayName('Mein erster Space!!!', handleChange, data)
       );
 
       const containerName = result.current;
@@ -238,11 +240,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
 
     const handleChange = jest.fn();
@@ -268,14 +270,14 @@ describe('Spaces', () => {
         useConvertSpaceDisplayName(
           'aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaa aaaaaaaaaa ',
           handleChange,
-          data,
-        ),
+          data
+        )
       );
 
       const containerName = result.current;
 
       expect(containerName).toBe(
-        'aaaaaaaaa-aaaaaaaaa-aaaaaaaaa-aaaaaaaaa-aaaaaaaaa-aaaaaaaaa-aaa',
+        'aaaaaaaaa-aaaaaaaaa-aaaaaaaaa-aaaaaaaaa-aaaaaaaaa-aaaaaaaaa-aaa'
       );
     });
   });
@@ -285,11 +287,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
 
@@ -315,11 +317,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
 
@@ -342,11 +344,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
 
@@ -373,11 +375,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
 
@@ -408,11 +410,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
 
@@ -451,11 +453,11 @@ describe('Spaces', () => {
         <QueryClientProvider client={client}>
           <MemoryRouter initialEntries={['/org/2/Spaces']}>
             <Routes>
-              <Route path="/org/:orgID/*" element={<AppPage />} />
+              <Route path='/org/:orgID/*' element={<AppPage />} />
             </Routes>
           </MemoryRouter>
         </QueryClientProvider>
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
 

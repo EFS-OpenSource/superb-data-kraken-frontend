@@ -37,22 +37,26 @@ function ConfirmationModal({
   const { formatMessage } = useIntl();
   return (
     <Modal centered show={show} onHide={() => onSetShow(false)}>
-      <Modal.Header className="border-0" closeButton>
+      <Modal.Header className='border-0' closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body className="border-0">
+      <Modal.Body className='border-0'>
         {formatMessage({
           id: message,
         })}
       </Modal.Body>
-      <Modal.Footer className="border-0 d-flex justify-content-center">
-        <Button variant="outline-primary" data-testid="cancel" onClick={() => onSetShow(false)}>
+      <Modal.Footer className='border-0 d-flex justify-content-center'>
+        <Button
+          variant='outline-primary'
+          data-testid='cancel'
+          onClick={() => onSetShow(false)}
+        >
           {formatMessage({
             id: 'AddEditOrgSpacesModal.cancel-button',
           })}
         </Button>
         <Button
-          variant="primary"
+          variant='primary'
           onClick={() => {
             onHandleSubmit();
             onSetShow(false);

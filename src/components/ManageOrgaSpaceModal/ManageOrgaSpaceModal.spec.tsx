@@ -13,8 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-
-import { lazy } from 'react';
+import { createOrganization } from '@services/index';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper';
 import ManageOrgaSpaceModal from './ManageOrgaSpaceModal';
@@ -23,10 +22,11 @@ import { SpaceTabs, OrganizationTabs } from '@views/Modal/tabComponents';
 import { MapType } from '@customTypes/ManageOrgaSpaceModalTypes';
 import MockOrganization from '@assets/UserData';
 import 'cross-fetch/polyfill';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import TestWrapperNoOIDC from '@utils/TestWrapper/TestWrapperNoOIDC';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
+import MembersTab from '../../views/Modal/MembersTab/MembersTab';
 
 const client = new QueryClient();
 
@@ -34,6 +34,7 @@ beforeEach(() => {
   jest.mock('./ManageOrgaSpaceModal', () => ({
     ...jest.requireActual('./ManageOrgaSpaceModal'),
   }));
+  // jest.mock('@services/index');
 });
 
 afterEach(() => {
@@ -41,10 +42,10 @@ afterEach(() => {
 });
 
 describe('ManageOrgaSpaceModal', () => {
-  it('should render successfully', () => {
+  it('should render successfully with createOrganization', () => {
     const setShow = jest.fn();
     const { baseElement } = render(
-      <TestWrapper>
+      <TestWrapperNoOIDC>
         <QueryClientProvider client={client}>
           <ManageOrgaSpaceModal
             show={false}
@@ -52,11 +53,71 @@ describe('ManageOrgaSpaceModal', () => {
             owners={[]}
             tabNames={['General', 'Members']}
             modalType={'createOrganization'}
+            tabComponents={OrganizationTabs(true) as unknown as MapType}
+            roles={[]}
+          />
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render successfully with editOrganization', () => {
+    const setShow = jest.fn();
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <ManageOrgaSpaceModal
+            show={false}
+            setShow={setShow}
+            owners={[]}
+            tabNames={['General', 'Members']}
+            modalType={'editOrganization'}
+            tabComponents={OrganizationTabs(true) as unknown as MapType}
+            roles={[]}
+            orgData={MockOrganization}
+          />
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render successfully with createSpace', () => {
+    const setShow = jest.fn();
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <ManageOrgaSpaceModal
+            show={false}
+            setShow={setShow}
+            owners={[]}
+            tabNames={['General', 'Members']}
+            modalType={'createSpace'}
             tabComponents={SpaceTabs(true) as unknown as MapType}
             roles={[]}
           />
         </QueryClientProvider>
-      </TestWrapper>
+      </TestWrapperNoOIDC>
+    );
+    expect(baseElement).toBeTruthy();
+  });
+
+  it('should render successfully with editSpace', () => {
+    const setShow = jest.fn();
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <ManageOrgaSpaceModal
+            show={false}
+            setShow={setShow}
+            owners={[]}
+            tabNames={['General', 'Members']}
+            modalType={'editSpace'}
+            tabComponents={SpaceTabs(true) as unknown as MapType}
+            roles={[]}
+            spaceData={MockOrganization.spaces[0]}
+          />
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
     );
     expect(baseElement).toBeTruthy();
   });
@@ -116,7 +177,40 @@ describe('ManageOrgaSpaceModal', () => {
 
     fireEvent.click(nextButton);
   });
-  it('should be able to go to next page of the modal and then submit', async () => {
+  it('should not submit when required fields are missing', async () => {
+    const user = userEvent.setup();
+    const setShow = jest.fn();
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <ManageOrgaSpaceModal
+            show={true}
+            setShow={setShow}
+            owners={[]}
+            users={[]}
+            tabNames={['General', 'Members']}
+            modalType={'createOrganization'}
+            tabComponents={OrganizationTabs(true) as unknown as MapType}
+            roles={[]}
+          />
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+
+    expect(baseElement).toBeTruthy();
+
+    const nextButton = screen.getByRole('button', {
+      name: 'nextButton',
+    });
+    await user.click(nextButton);
+
+    const submitButton = await screen.findByRole('button', {
+      name: 'submitButton',
+    });
+    await user.click(submitButton);
+  });
+
+  it('should be able to go create an organization with required fields name and company', async () => {
     const user = userEvent.setup();
     const setShow = jest.fn();
     const { baseElement } = render(
@@ -139,24 +233,179 @@ describe('ManageOrgaSpaceModal', () => {
     expect(baseElement).toBeTruthy();
 
     const nameInput = await screen.findByRole('textbox', { name: 'name' });
+    const company = await screen.findByText('Unternehmen');
+    await user.type(nameInput, 'test name');
+    await user.type(company, 'test company');
 
     const nextButton = screen.getByRole('button', {
       name: 'nextButton',
     });
 
-    act(() => {
-      user.type(nameInput, 'test name');
-      user.click(nextButton);
-    });
+    await user.click(nextButton);
 
     const submitButton = await screen.findByRole('button', {
       name: 'submitButton',
     });
 
-    act(() => {
-      user.click(submitButton);
-    });
+    await user.click(submitButton);
 
     console.log(baseElement.innerHTML);
   });
+  it('should be able to go edit an organization', async () => {
+    const user = userEvent.setup();
+    const setShow = jest.fn();
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <ManageOrgaSpaceModal
+            show={true}
+            setShow={setShow}
+            owners={[]}
+            users={[]}
+            tabNames={['General', 'Members']}
+            modalType={'editOrganization'}
+            tabComponents={OrganizationTabs(true) as unknown as MapType}
+            roles={[]}
+            orgData={MockOrganization}
+          />
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+
+    expect(baseElement).toBeTruthy();
+
+    const descriptionInput = await screen.findByRole('textbox', {
+      name: 'description',
+    });
+
+    await user.type(descriptionInput, 'test description');
+
+    const saveButton = screen.getByText(/speichern/i);
+
+    await user.click(saveButton);
+  });
+
+  it('should be able to go create a space with required field name', async () => {
+    const user = userEvent.setup();
+    const setShow = jest.fn();
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <ManageOrgaSpaceModal
+            show={true}
+            setShow={setShow}
+            owners={[]}
+            users={[]}
+            tabNames={['General', 'Members']}
+            modalType={'createSpace'}
+            tabComponents={SpaceTabs(true) as unknown as MapType}
+            roles={[]}
+          />
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+
+    expect(baseElement).toBeTruthy();
+
+    const nameInput = await screen.findByRole('textbox', { name: 'name' });
+    await user.type(nameInput, 'test name');
+
+    const nextButton = screen.getByRole('button', {
+      name: 'nextButton',
+    });
+
+    await user.click(nextButton);
+
+    const submitButton = await screen.findByRole('button', {
+      name: 'submitButton',
+    });
+
+    await user.click(submitButton);
+  });
+  it('should be able to go update a space', async () => {
+    const user = userEvent.setup();
+    const setShow = jest.fn();
+    const { baseElement } = render(
+      <TestWrapperNoOIDC>
+        <QueryClientProvider client={client}>
+          <ManageOrgaSpaceModal
+            show={true}
+            setShow={setShow}
+            owners={[]}
+            users={[]}
+            tabNames={['General', 'Members']}
+            modalType={'editSpace'}
+            tabComponents={SpaceTabs(true) as unknown as MapType}
+            roles={[]}
+          />
+        </QueryClientProvider>
+      </TestWrapperNoOIDC>
+    );
+
+    expect(baseElement).toBeTruthy();
+
+    const saveButton = await screen.findByText(/speichern/i);
+
+    await user.click(saveButton);
+  });
+  // it('should be able to add new owner in space', async () => {
+  //   const user = userEvent.setup();
+  //   const setShow = jest.fn();
+  //   const orgId = 123;
+  //   const spaceId = 234;
+  //   const { baseElement } = render(
+  //     <TestWrapperNoOIDC>
+  //       <QueryClientProvider client={client}>
+  //         <MemoryRouter
+  //           initialEntries={[`/org/${orgId}/space/${spaceId}/Overview`]}
+  //         >
+  //           <ManageOrgaSpaceModal
+  //             show={true}
+  //             setShow={setShow}
+  //             owners={[
+  //               {
+  //                 id: 'sada',
+  //                 firstName: 'firstName',
+  //                 lastName: 'lastName',
+  //               },
+  //             ]}
+  //             users={[
+  //               {
+  //                 createdTimestamp: 123123,
+  //                 email: 'test@email.com',
+  //                 enabled: true,
+  //                 firstName: 'Test',
+  //                 id: 'string',
+  //                 lastName: 'User',
+  //                 username: 'string',
+  //                 permissions: ['supplier'],
+  //               },
+  //             ]}
+  //             tabNames={['General', 'Members']}
+  //             modalType={'editSpace'}
+  //             tabComponents={SpaceTabs(true) as unknown as MapType}
+  //             roles={['user', 'supplier']}
+  //             spaceData={MockOrganization.spaces[0]}
+  //             isOwner
+  //           />
+  //         </MemoryRouter>
+  //       </QueryClientProvider>
+  //     </TestWrapperNoOIDC>
+  //   );
+
+  //   const membersTabButton = screen.getByText('Mitglieder');
+  //   await user.click(membersTabButton);
+
+  //   const addOwnerPopupButton = screen.getByRole('button', {
+  //     name: 'openAddOwnerPopover',
+  //   });
+  //   await user.click(addOwnerPopupButton);
+
+  //   // const selectField = screen.getByRole('combobox');
+  //   // await user.click(selectField);
+  //   console.log(baseElement.innerHTML);
+
+  //   // const saveButton = await screen.findByText(/speichern/i);
+  //   // await user.click(saveButton);
+  // });
 });
