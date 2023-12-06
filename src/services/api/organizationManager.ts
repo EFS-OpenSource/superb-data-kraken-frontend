@@ -553,6 +553,25 @@ export const setSpaceOwnersByUserId = (
     }
   );
 
+/* Set space owners by email */
+
+const setSpaceOwnersByEmail_ = putFactory<string[], Space>(
+  urlOptionsV1,
+  baseURL
+);
+export const setSpaceOwnersByEmail = (
+  payload: string[],
+  orgaId: number | string,
+  spaceId: number | string,
+): Promise<Response<Space> | ResponseError> =>
+  setSpaceOwnersByEmail_(
+    'organization/:orgaId/space/:spaceId/owners?type=email',
+    payload,
+    {
+      pathParams: { orgaId, spaceId },
+    }
+  );
+
 /* Add owner to organization by username */
 
 const addOrganizationOwnerByUsername_ = putFactory<undefined, Organization>(

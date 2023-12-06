@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@tanstack/react-query';
@@ -45,7 +45,7 @@ type MembersTabProps = {
   roles: string[];
   initialOwners?: Owner[];
   initialUsers: OrgaUser[] | SpaceUser[];
-  onUpdateOwners?: (updatedOwners: string[]) => void;
+  onUpdateOwners?: (updatedOwners: Owner[]) => void;
   onUpdateUsers?: (updatedUsers: Record<string, unknown>[]) => void;
   isOwner: boolean;
 };
@@ -85,7 +85,10 @@ function MembersTab({
     }
   }, [data]);
 
-  const initialUsersFixed: Array<(typeof initialUsers)[number]> = initialUsers;
+  const initialUsersFixed: Array<(typeof initialUsers)[number]> = useMemo(
+    () => initialUsers || [],
+    [initialUsers]
+  );
 
   const initialOwnersPresent = initialOwners || [];
 
@@ -182,7 +185,6 @@ function MembersTab({
         type: 'update',
         element: currentUsers,
       });
-      // TODO: need to something in here if permissions are changed
     },
     [dispatchUsers]
   );
@@ -195,12 +197,17 @@ function MembersTab({
         ? { ...user, permissions: updatedUser.permissions }
         : user
     );
-    // TODO: Or do i need to do something in here
+    const updatedPossibleOwners = possibleOwners.map((owner) =>
+      owner.id === updatedUser.id
+      ? {...owner, permissions: updatedUser.permissions }
+      : owner
+    );
+    setPossibleOwners(updatedPossibleOwners as unknown as (OrgaUser | SpaceUser)[]);
     handleUpdateUser(updatedUsers);
   };
 
   useEffect(() => {
-    if (onUpdateOwners) onUpdateOwners(owners.map((owner) => owner.id));
+    if (onUpdateOwners) onUpdateOwners(owners);
   }, [onUpdateOwners, owners]);
 
   useEffect(() => {

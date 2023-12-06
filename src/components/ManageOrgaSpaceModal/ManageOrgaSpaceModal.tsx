@@ -36,6 +36,7 @@ import {
   updateOrganization,
   setOrganizationOwnersByUserId,
   setSpaceOwnersByUserId,
+  setSpaceOwnersByEmail,
   setOrganizationRoleByEmail,
   setSpaceRoleByEmail,
   addOrganizationOwnerByEmail,
@@ -62,6 +63,7 @@ import {
 } from '@customTypes/index';
 import { OrgSpaceModalParent } from '@views/index';
 import _ from 'lodash';
+import { number } from 'prop-types';
 
 type ManageOrgaSpaceModalProps = {
   show: boolean;
@@ -133,9 +135,7 @@ function ManageOrgaSpaceModal({
 
   const initialOwners = owners.map((owner) => owner.id);
 
-  const [updatedOwners, setUpdatedOwners] = useState<string[]>(
-    owners.map((owner) => owner.id)
-  );
+  const [updatedOwners, setUpdatedOwners] = useState<Owner[]>(owners);
 
   const [initialUsers, setInitialUsers] = useState<OrgaUser[] | SpaceUser[]>(
     []
@@ -241,13 +241,14 @@ function ManageOrgaSpaceModal({
         })
       )
   );
-
-  const updateOrganizationOwnersMutation = useMutation(
-    (newOwners?: string[]) =>
-      setOrganizationOwnersByUserId(
-        newOwners || updatedOwners.filter(owner => !owner.includes('@')),
-        orgID as string
-      ),
+  
+  // TODO: change with new Endpoint, to make it with bulk
+  const addOrganizationOwnerByEmailMutation = useMutation(
+    (newOwner: string) =>
+    addOrganizationOwnerByEmail(
+      orgID as string,
+      newOwner
+    ),
 
     {
       onSuccess: () => {
@@ -261,14 +262,13 @@ function ManageOrgaSpaceModal({
     }
   );
 
-  const addOrganizationOwnerByEmailMutation = useMutation(
-    (newOwner: string) =>
-    addOrganizationOwnerByEmail(
-      orgID as string,
-      newOwner
-    ),
-
-    {
+  const updateOrganizationOwnersMutation = useMutation(
+    (newOwners?: string[]) =>
+      setOrganizationOwnersByUserId(
+        newOwners || updatedOwners.map(owner => owner.id),
+        orgID as string
+      ),    
+      {
       onSuccess: () => {
         queryClient.invalidateQueries(['orgasWithSpaces']);
         queryClient.invalidateQueries(['organization', orgID]);
@@ -325,6 +325,38 @@ function ManageOrgaSpaceModal({
         })
       )
   );
+  
+  // TODO: user new Enpoint, with bulk
+  const addSpaceOwnersByEmailMutation = useMutation(
+    ({
+      currentSpaceID,
+      newOwnersEmail,
+    } : {
+      currentSpaceID: string;
+      newOwnersEmail: string;
+    }) =>
+      addSpaceOwnerByEmail(
+        orgID as string,
+        currentSpaceID,
+        newOwnersEmail
+      ),
+
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['spaces', `o_${orgID}`]);
+        queryClient.invalidateQueries(['space', spaceID, `o_${orgID}`]);
+        queryClient.invalidateQueries(['spaceOwners', spaceID, `o_${orgID}`]);
+        queryClient.invalidateQueries([
+          'spaceUsers',
+          spaceID,
+          `o_${orgID}`,
+        ]);
+      },
+      onError: () => {
+        ErrorToast('ErrorToast.title-owners-edit');
+      },
+    }
+  );
 
   const updateSpaceOwnersMutation = useMutation(
     ({
@@ -335,7 +367,7 @@ function ManageOrgaSpaceModal({
       newOwners?: string[];
     }) =>
       setSpaceOwnersByUserId(
-        newOwners || updatedOwners.filter((owner) => !owner.includes('@')),
+        newOwners || updatedOwners.map(owner => owner.id),
         orgID as string,
         currentSpaceID
       ),
@@ -351,19 +383,20 @@ function ManageOrgaSpaceModal({
       },
     }
   );
-
-  const addSpaceOwnersByEmailMutation = useMutation(
+  
+  // TODO: change to email
+  const updateSpaceOwnersByEmailMutation = useMutation(
     ({
       currentSpaceID,
-      newOwnersEmail,
-    } : {
+      newOwners,
+    }: {
       currentSpaceID: string;
-      newOwnersEmail: string;
-    }) => 
-      addSpaceOwnerByEmail(
+      newOwners?: string[];
+    }) =>
+      setSpaceOwnersByUserId(
+        newOwners || updatedOwners.map(owner => owner.id),
         orgID as string,
-        currentSpaceID,
-        newOwnersEmail
+        currentSpaceID
       ),
 
     {
@@ -414,13 +447,13 @@ function ManageOrgaSpaceModal({
       );
 
       if (removedUsers) {
-        let newOwners = updatedOwners.filter((id) => !id.includes('@'));
+        let newOwners = updatedOwners.map(owner => owner.id).filter((id) => !id.includes('@'));
         removedUsers.forEach((removedUser: OrgaUser | SpaceUser) => {
-          if (updatedOwners.includes(removedUser.id)) {
-            newOwners = updatedOwners.filter((id) => id !== removedUser.id);
+          if (updatedOwners.map(owner => owner.id).includes(removedUser.id)) {
+            newOwners = updatedOwners.map(owner => owner.id).filter((id) => id !== removedUser.id);
           }
         });
-        if (haveOwnersChanged(updatedOwners, newOwners)) {
+        if (haveOwnersChanged(updatedOwners.map(owner => owner.id), newOwners)) {
           if (modalType === 'editSpace') {
             updateSpaceOwnersMutation.mutate({
               newOwners,
@@ -454,14 +487,17 @@ function ManageOrgaSpaceModal({
         .then((response) => {
           if (!response.ok) throw new Error();
           if (isOwner) {
-            if (haveOwnersChanged(initialOwners, updatedOwners)) {
-              updateOrganizationOwnersMutation.mutate(updatedOwners);
+            if (haveOwnersChanged(initialOwners, updatedOwners.map(owner => owner.id))) {
+              updateOrganizationOwnersMutation.mutate(updatedOwners.map(owner => owner.id).filter(owner => !owner.includes('@')));
 
-              const newUsersOwners = updatedOwners.filter(owner => owner.includes('@'));
+              const newUsersOwners = updatedOwners.map(owner => owner.id).filter(owner => owner.includes('@'));
               if(newUsersOwners.length !== 0) {
-                newUsersOwners.forEach((owner) => {
-                  addOrganizationOwnerByEmailMutation.mutate(owner);
-                })
+                // TODO: mutate with list of OwnersByEmail
+
+
+                // newUsersOwners.forEach((owner) => {
+                //   addOrganizationOwnerByEmailMutation.mutate(owner);
+                // })
               }
             }
           }
@@ -533,20 +569,30 @@ function ManageOrgaSpaceModal({
         .then((response) => {
           if (!response.ok) throw new Error();
           if (isOwner) {
-            if (haveOwnersChanged(initialOwners, updatedOwners)) {
+            if (haveOwnersChanged(initialOwners, updatedOwners.map(owner => owner.id))) {
               updateSpaceOwnersMutation.mutate({
                 currentSpaceID: spaceID as string,
               });
 
-              const newUsersOwners = updatedOwners.filter(owner => owner.includes('@'));
+              const newUsersOwners = updatedOwners.map(owner => owner.id).filter(owner => owner.includes('@'));
               if(newUsersOwners.length !== 0) {
-                newUsersOwners.forEach((owner) => {
-                  addSpaceOwnersByEmailMutation.mutate( {
-                    currentSpaceID: spaceID as string,
-                    newOwnersEmail: owner
-                  }
-                  )
-                })
+                // TODO: mutate with list of OwnersByEmail
+
+                let i = 0;
+                const addSpaceOwnerByEmailLoop = () => {
+                  setTimeout(() => {
+                    addSpaceOwnersByEmailMutation.mutate( {
+                      currentSpaceID: spaceID as string,
+                      newOwnersEmail: newUsersOwners[i]
+                    }
+                    )
+                    i+= 1;
+                    if( i < newUsersOwners.length) {
+                      addSpaceOwnerByEmailLoop();
+                    }
+                  }, 500)
+                }
+                addSpaceOwnerByEmailLoop();
               }
             }
           }
