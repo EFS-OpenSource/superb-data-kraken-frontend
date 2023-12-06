@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { useQuery } from '@tanstack/react-query';
@@ -85,16 +85,19 @@ function MembersTab({
     }
   }, [data]);
 
-  const initialUsersFixed: Array<(typeof initialUsers)[number]> = initialUsers;
+  const initialUsersFixed: Array<(typeof initialUsers)[number]> = useMemo(
+    () => initialUsers || [],
+    [initialUsers]
+  );
 
   const initialOwnersPresent = initialOwners || [];
 
   const ids1 = new Set(initialOwnersPresent.map((user) => user.id));
-  const ids2 = new Set(initialUsersFixed.map((user) => user.id));
+  // const ids2 = new Set(initialUsersFixed.map((user) => user.id));
 
   const uniqueUsers = [
-    ...initialUsersFixed.filter((user) => !ids1.has(user.id)),
-    ...initialOwnersPresent.filter((user) => !ids2.has(user.id)),
+    ...(initialUsersFixed.filter((user) => !ids1.has(user.id)) || []),
+    // ...initialOwnersPresent.filter((user) => !ids2.has(user.id) || []),
   ];
 
   const possibleOwners = uniqueUsers as unknown as (OrgaUser | SpaceUser)[];
@@ -254,8 +257,8 @@ function MembersTab({
                 }}
                 dropdownOptions={
                   spaceID
-                    ? possibleOwners.map((initialUser) => initialUser.email)
-                    : possibleOwners
+                    ? uniqueUsers.map((initialUser) => initialUser.email)
+                    : uniqueUsers
                         .filter((initialUser: Record<string, any>) =>
                           initialUser.permissions
                             .map((permission: UserOrgaRoleType) =>

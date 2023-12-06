@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-return */
 /*
 Copyright (C) 2023 e:fs TechHub GmbH (sdk@efs-techhub.com)
 
@@ -564,6 +565,29 @@ function ManageOrgaSpaceModal({
     [tabComponents, formatMessage, modalData, users, owners, roles, isOwner]
   );
 
+  const handleNextPage = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (
+      (modalType === 'createOrganization' && !modalData.name) ||
+      modalData.name.length < 3 ||
+      (modalType === 'createOrganization' &&
+        'company' in modalData &&
+        !modalData.company)
+    ) {
+      setValidated(true);
+
+      return;
+    }
+
+    setActiveKey(
+      tabNames[tabNames.indexOf(activeKey) + 1] as SetStateAction<'General'>
+    );
+  };
+
   let nextButton: JSX.Element;
 
   switch (activeKey) {
@@ -579,18 +603,7 @@ function ManageOrgaSpaceModal({
 
     default:
       nextButton = (
-        <Button
-          aria-label='nextButton'
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            setActiveKey(
-              tabNames[
-                tabNames.indexOf(activeKey) + 1
-              ] as SetStateAction<'General'>
-            );
-          }}
-        >
+        <Button aria-label='nextButton' onClick={handleNextPage}>
           {formatMessage({
             id: 'AddEditOrgSpacesModal.next-button',
           })}

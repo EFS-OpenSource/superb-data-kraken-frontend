@@ -35,27 +35,29 @@ describe('MembersTab', () => {
     lastName: 'Stranger',
   };
 
-  const user: OrgaUser = {
-    id: '0',
-    createdTimestamp: 3,
-    username: 'someUserName',
-    enabled: true,
-    firstName: 'Someone',
-    lastName: 'strange',
-    email: 'someone@strange.com',
-    permissions: ['trustee', 'admin'],
-  };
+  const users: OrgaUser[] = [
+    {
+      id: '0',
+      createdTimestamp: 3,
+      username: 'someUserName',
+      enabled: true,
+      firstName: 'Someone',
+      lastName: 'strange',
+      email: 'someone@strange.com',
+      permissions: ['trustee', 'admin'],
+    },
+    {
+      id: '1',
+      createdTimestamp: 4,
+      username: 'anotherUserName',
+      enabled: true,
+      firstName: 'Someone',
+      lastName: 'strangeToo',
+      email: 'someone@strangeToo.com',
+      permissions: ['admin'],
+    },
+  ];
 
-  const anotherUser: OrgaUser = {
-    id: '1',
-    createdTimestamp: 4,
-    username: 'anotherUserName',
-    enabled: true,
-    firstName: 'Someone',
-    lastName: 'strangeToo',
-    email: 'someone@strangeToo.com',
-    permissions: ['admin'],
-  };
   it('should render successfully', () => {
     const { baseElement } = render(
       <TestWrapper>
@@ -74,7 +76,7 @@ describe('MembersTab', () => {
             roles={[]}
             isOwner={false}
             initialOwners={[owner]}
-            initialUsers={[anotherUser]}
+            initialUsers={users}
           />
         </QueryClientProvider>
       </TestWrapper>
@@ -85,7 +87,7 @@ describe('MembersTab', () => {
     const { baseElement } = render(
       <TestWrapper>
         <QueryClientProvider client={client}>
-          <MembersTab roles={[]} isOwner={true} initialUsers={[user]} />
+          <MembersTab roles={[]} isOwner={true} initialUsers={users} />
         </QueryClientProvider>
       </TestWrapper>
     );
@@ -101,7 +103,7 @@ describe('MembersTab', () => {
             roles={[]}
             isOwner={true}
             initialOwners={[owner]}
-            initialUsers={[user]}
+            initialUsers={users}
           />
         </QueryClientProvider>
       </TestWrapper>
@@ -119,7 +121,7 @@ describe('MembersTab', () => {
             roles={[]}
             isOwner={true}
             initialOwners={[owner]}
-            initialUsers={[user, anotherUser]}
+            initialUsers={users}
           />
         </QueryClientProvider>
       </TestWrapper>
@@ -134,7 +136,7 @@ describe('MembersTab', () => {
             roles={[]}
             isOwner={true}
             initialOwners={[owner]}
-            initialUsers={[user]}
+            initialUsers={users}
           />
         </QueryClientProvider>
       </TestWrapper>
@@ -160,7 +162,7 @@ describe('MembersTab', () => {
             roles={[]}
             isOwner={true}
             initialOwners={[owner]}
-            initialUsers={[user]}
+            initialUsers={users}
           />
         </QueryClientProvider>
       </TestWrapper>
@@ -185,7 +187,7 @@ describe('MembersTab', () => {
             roles={[]}
             isOwner={true}
             initialOwners={[owner]}
-            initialUsers={[user]}
+            initialUsers={users}
           />
         </QueryClientProvider>
       </TestWrapper>
@@ -211,12 +213,10 @@ describe('MembersTab', () => {
             roles={[]}
             isOwner={true}
             initialOwners={[owner]}
-            initialUsers={[user]}
+            initialUsers={users}
           />
         </QueryClientProvider>
       </TestWrapper>
     );
-
-    console.log(baseElement.innerHTML);
   });
 });
