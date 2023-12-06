@@ -54,7 +54,7 @@ function OrganizationGeneralTab({
   };
 
   const [inputName, setInputName] = useState(
-    modalData.displayName || modalData.name,
+    modalData.displayName || modalData.name
   );
   useConvertOrganizationDisplayName(inputName, handleChange, modalData);
 
@@ -66,42 +66,42 @@ function OrganizationGeneralTab({
   }, [company, description, handleChange]);
 
   return (
-    <div className="w-85" style={{ width: '85%' }}>
-      <h3 className="font-weight-medium mb-4">
+    <div className='w-85' style={{ width: '85%' }}>
+      <h3 className='font-weight-medium mb-4'>
         {formatMessage({
           id: 'AddEditOrgSpacesModal.space-description',
         })}
       </h3>
       <FormInput
-        ariaLabel="name"
-        id="name"
+        ariaLabel='name'
+        id='name'
         labelText={formatMessage({
           id: 'AddEditOrgSpacesModal.space-name',
         })}
-        labelClassName="h6"
-        groupClassName="mb-0"
+        labelClassName='h6'
+        groupClassName='mb-0'
         placeholder={formatMessage({
           id: 'AddEditOrgSpacesModal.space-name',
         })}
-        fontSize="sm"
+        fontSize='sm'
         value={inputName}
         onChange={(e) => setInputName(e.target.value)}
         required
       />
-      <span className="h5">{`${formatMessage({
+      <span className='h5'>{`${formatMessage({
         id: 'Overview.container-id',
       })} ${modalData.name}`}</span>
       <FormInput
-        ariaLabel="company"
-        id="company"
+        ariaLabel='company'
+        id='company'
         labelText={formatMessage({
           id: 'AddEditOrgSpacesModal.space-company',
         })}
-        labelClassName="h6 mt-2"
+        labelClassName='h6 mt-2'
         placeholder={formatMessage({
           id: 'AddEditOrgSpacesModal.space-company',
         })}
-        fontSize="sm"
+        fontSize='sm'
         value={company}
         onChange={(e) => {
           setCompany(e.target.value);
@@ -109,24 +109,25 @@ function OrganizationGeneralTab({
         required
       />
       <FormTextarea
-        id="description"
-        ariaLabel="description"
+        rows={4}
+        id='description'
+        ariaLabel='description'
         labelText={`${formatMessage({
           id: 'AddEditOrgSpacesModal.space-description',
         })} (optional)`}
-        labelClassName="h6 mb-2"
+        labelClassName='h6 mb-2'
         placeholder={formatMessage({
           id: 'AddEditOrgSpacesModal.space-description',
         })}
         value={description}
-        inputStyle={{ resize: 'none' }}
+        inputStyle={{}}
         onChange={(e) => {
           setDescription(e.target.value);
         }}
-        groupClassName="mt-3"
+        groupClassName='mt-3'
       />
 
-      <Form.Group className="mt-3">
+      <Form.Group className='mt-3'>
         <OrganizationAddTagPopover
           handleAddOrgaTag={(name) => {
             handleAddOrgaTag({ name });
@@ -135,32 +136,32 @@ function OrganizationGeneralTab({
         {modalData.tags &&
           modalData.tags.map((currentTag) => (
             <Chip
-              ariaLabel="tagChip"
+              ariaLabel='tagChip'
               key={currentTag.name}
               text={currentTag.name}
               onClick={() => handleRemoveSpaceTag(currentTag)}
               icon={
                 <Icon
-                  ariaLabel="deleteAddEditModalTag"
+                  ariaLabel='deleteAddEditModalTag'
                   icon={IoClose}
-                  type="button"
-                  color="text-light"
+                  type='button'
+                  color='text-light'
                   size={16}
                 />
               }
-              activeColor="accent"
-              size="sm"
+              activeColor='accent'
+              size='sm'
             />
           ))}
       </Form.Group>
       <FormRadioButtons
-        groupClassName="mb-4 mt-3"
-        id="confidentiality"
-        labelClassName="font-weight-medium d-flex me-2"
+        groupClassName='mb-4 mt-3'
+        id='confidentiality'
+        labelClassName='font-weight-medium d-flex me-2'
         labelText={formatMessage({
           id: 'AddEditOrgSpacesModal.space-confidentiality',
         })}
-        labelToolTipIcon={<Icon icon={FiInfo} size={19} type="button" />}
+        labelToolTipIcon={<Icon icon={FiInfo} size={19} type='button' />}
         labelToolTipText={
           <ul>
             <li>

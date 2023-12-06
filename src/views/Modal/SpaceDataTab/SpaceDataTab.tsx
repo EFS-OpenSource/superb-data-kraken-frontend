@@ -37,6 +37,7 @@ function SpaceDataTab({
       <FormInput
         id='name'
         ariaLabel='name'
+        type='number'
         labelText={formatMessage({
           id: 'AddEditOrgSpacesModal.space-retention-time',
         })}

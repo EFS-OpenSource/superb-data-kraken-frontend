@@ -16,7 +16,7 @@ limitations under the License.
 
 import { Confidentiality, Tag, AppConfig, Space } from './spaceTypes';
 
-export interface Organization {
+export type Organization = {
   appConfigs?: AppConfig[];
   company: string | undefined;
   confidentiality: Confidentiality;
@@ -27,7 +27,7 @@ export interface Organization {
   tags?: Tag[];
   id: number;
   owners?: string[];
-}
+};
 
 export interface OrganizationBaseInfo {
   name: string;

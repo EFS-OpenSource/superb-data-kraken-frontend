@@ -44,7 +44,7 @@ export interface AppConfig {
   path: string;
 }
 
-export interface Space {
+export type Space = {
   appConfigs?: AppConfig[];
   capabilities: Capability[];
   confidentiality?: Confidentiality;
@@ -65,7 +65,7 @@ export interface Space {
   tags?: Tag[];
   id: number;
   owners?: string[];
-}
+};
 
 export const userSpaceRoleTypes = ['user', 'trustee', 'supplier'] as const;
 export const spaceRoleTypes = [...userSpaceRoleTypes, 'public'] as const;

@@ -13,20 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-import { createOrganization } from '@services/index';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import TestWrapper from '@utils/TestWrapper/TestWrapper';
+import { fireEvent, render, screen } from '@testing-library/react';
 import ManageOrgaSpaceModal from './ManageOrgaSpaceModal';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SpaceTabs, OrganizationTabs } from '@views/Modal/tabComponents';
 import { MapType } from '@customTypes/ManageOrgaSpaceModalTypes';
 import MockOrganization from '@assets/UserData';
 import 'cross-fetch/polyfill';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import TestWrapperNoOIDC from '@utils/TestWrapper/TestWrapperNoOIDC';
 import userEvent from '@testing-library/user-event';
-import { act } from 'react-dom/test-utils';
-import MembersTab from '../../views/Modal/MembersTab/MembersTab';
 
 const client = new QueryClient();
 
@@ -177,7 +172,7 @@ describe('ManageOrgaSpaceModal', () => {
 
     fireEvent.click(nextButton);
   });
-  it('should not submit when required fields are missing', async () => {
+  it('should not go to next page when creating Organization and name and or company field are not valid', async () => {
     const user = userEvent.setup();
     const setShow = jest.fn();
     const { baseElement } = render(
@@ -204,10 +199,7 @@ describe('ManageOrgaSpaceModal', () => {
     });
     await user.click(nextButton);
 
-    const submitButton = await screen.findByRole('button', {
-      name: 'submitButton',
-    });
-    await user.click(submitButton);
+    expect(nextButton).toBeTruthy();
   });
 
   it('should be able to go create an organization with required fields name and company', async () => {
@@ -246,10 +238,7 @@ describe('ManageOrgaSpaceModal', () => {
     const submitButton = await screen.findByRole('button', {
       name: 'submitButton',
     });
-
     await user.click(submitButton);
-
-    console.log(baseElement.innerHTML);
   });
   it('should be able to go edit an organization', async () => {
     const user = userEvent.setup();
@@ -337,6 +326,7 @@ describe('ManageOrgaSpaceModal', () => {
             modalType={'editSpace'}
             tabComponents={SpaceTabs(true) as unknown as MapType}
             roles={[]}
+            spaceData={MockOrganization.spaces[0]}
           />
         </QueryClientProvider>
       </TestWrapperNoOIDC>

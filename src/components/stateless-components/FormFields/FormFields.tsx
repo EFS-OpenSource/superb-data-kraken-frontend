@@ -37,6 +37,7 @@ interface FormInputType {
   required?: boolean;
   validationFeedback?: string;
   disabled?: boolean;
+  type?: 'text' | 'number';
 }
 
 export function FormInput({
@@ -58,6 +59,7 @@ export function FormInput({
   required,
   validationFeedback,
   disabled,
+  type,
 }: FormInputType) {
   return (
     <Form.Group className={groupClassName} style={groupStyle}>
@@ -85,7 +87,7 @@ export function FormInput({
         aria-label={ariaLabel}
         size={fontSize}
         id={id}
-        type='text'
+        type={type || 'text'}
         className={inputClassName}
         style={inputStyle}
         placeholder={placeholder}

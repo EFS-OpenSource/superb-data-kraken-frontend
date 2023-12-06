@@ -114,7 +114,7 @@ function SpaceGeneralTab({
         })}
         fontSize='sm'
         value={description}
-        inputStyle={{ resize: 'none' }}
+        inputStyle={{}}
         onChange={(e) => {
           setDescription(e.target.value);
         }}
