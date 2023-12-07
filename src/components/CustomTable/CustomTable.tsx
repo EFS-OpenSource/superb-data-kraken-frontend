@@ -170,16 +170,16 @@ function Filter({
   const { formatMessage } = useIntl();
   return typeof firstValue === 'number' ? (
     <div>
-      <div className="flex space-x-2">
+      <div className='flex space-x-2'>
         <DebouncedInput
-          type="number"
+          type='number'
           min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
           max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
           value={(columnFilterValue as [number, number])?.[0] ?? ''}
           onChange={(value) =>
             column.setFilterValue((old: [number, number]) => [value, old?.[1]])
           }
-          placeholder="Min"
+          placeholder='Min'
           maxLength={3}
           style={{
             width: '3.7rem',
@@ -187,46 +187,46 @@ function Filter({
             fontSize: '14px',
             display: 'inline-block',
           }}
-          className="form-control form-control-sm rounded me-1"
+          className='form-control form-control-sm rounded me-1'
         />
         <DebouncedInput
-          type="number"
+          type='number'
           min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
           max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
           value={(columnFilterValue as [number, number])?.[1] ?? ''}
           onChange={(value) =>
             column.setFilterValue((old: [number, number]) => [old?.[0], value])
           }
-          placeholder="Max"
+          placeholder='Max'
           style={{
             width: '3.7rem',
             height: '.5rem',
             fontSize: '14px',
             display: 'inline-block',
           }}
-          className="form-control form-control-sm rounded"
+          className='form-control form-control-sm rounded'
         />
       </div>
-      <div className="h-1" />
+      <div className='h-1' />
     </div>
   ) : (
     <>
       <datalist id={`${column.id}list`}>
         {sortedUniqueValues.slice(0, 5000).map((value: any) => (
-          <option value={value} key={value} aria-label="Search" />
+          <option value={value} key={value} aria-label='Search' />
         ))}
       </datalist>
       <DebouncedInput
-        type="text"
+        type='text'
         value={(columnFilterValue ?? '') as string}
         onChange={(value) => column.setFilterValue(value)}
         placeholder={`${formatMessage({
           id: 'Search.name-short',
         })}... (${column.getFacetedUniqueValues().size})`}
-        className="form-control form-control-sm rounded w-auto"
+        className='form-control form-control-sm rounded w-auto'
         list={`${column.id}list`}
       />
-      <div className="h-1" />
+      <div className='h-1' />
     </>
   );
 }
@@ -242,12 +242,12 @@ function DropdownRowCount({
 }: DropdownRowCountProps): JSX.Element {
   return (
     <Dropdown>
-      <Dropdown.Toggle variant="secondary" className="px-0 ps-2">
+      <Dropdown.Toggle variant='secondary' className='px-0 ps-2'>
         <CustomButton
-          size="sm"
-          placementTooltip="bottom"
+          size='sm'
+          placementTooltip='bottom'
           icon={<Icon icon={MdTableRows} size={16} />}
-          tooltipMessage="CustomTable.row-count"
+          tooltipMessage='CustomTable.row-count'
           onClick={() => undefined}
         />
       </Dropdown.Toggle>
@@ -272,12 +272,12 @@ function DropdownColumnSelect({ table }: { table: Table<any> }) {
   const { formatMessage } = useIntl();
   return (
     <Dropdown>
-      <Dropdown.Toggle variant="secondary" className="px-0">
+      <Dropdown.Toggle variant='secondary' className='px-0'>
         <CustomButton
-          size="sm"
-          placementTooltip="bottom"
+          size='sm'
+          placementTooltip='bottom'
           icon={<Icon icon={BiColumns} size={16} />}
-          tooltipMessage="CustomTable.column-select"
+          tooltipMessage='CustomTable.column-select'
           onClick={() => undefined}
         />
       </Dropdown.Toggle>
@@ -292,7 +292,7 @@ function DropdownColumnSelect({ table }: { table: Table<any> }) {
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
         <label>
           <input
-            className="ms-3"
+            className='ms-3'
             {...{
               type: 'checkbox',
 
@@ -308,7 +308,7 @@ function DropdownColumnSelect({ table }: { table: Table<any> }) {
         {table.getAllLeafColumns().map((column) => (
           <div key={column.id} id={column.id}>
             <input
-              className="ms-3"
+              className='ms-3'
               {...{
                 type: 'checkbox',
                 checked: column.getIsVisible(),
@@ -342,7 +342,7 @@ function CustomTable<T extends object>({
   const [globalFilter, setGlobalFilter] = useState('');
   const [columnVisibility, setColumnVisibility] = useLocalStorage(
     `${tableName}-columnStorage`,
-    defaultColumnsVisibility,
+    defaultColumnsVisibility
   );
 
   const { formatMessage } = useIntl();
@@ -385,22 +385,29 @@ function CustomTable<T extends object>({
   return (
     <div>
       <div>
-        <Row className="d-flex mb-2 m-0 ">
+        <Row className='d-flex mb-2 m-0 '>
           {/* GLOBAL FILTER */}
           {withTotalFilter && (
-            <Col className="d-flex mt-2 p-0">
+            <Col className='d-flex mt-2 p-0'>
               {!showGlobalFiltering && (
-                <Row className="">
-                  <div className=" pt-1 pe-2 mb-2">
+                <Row className=''>
+                  <div className='pt-1 pe-2 mb-2'>
                     <div>
                       {' '}
-                      <BsSearch
-                        type="button"
-                        size={20}
+                      <button
+                        aria-label='globalFilterIcon'
+                        style={{
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          height: '30px',
+                        }}
+                        type='button'
                         onClick={() =>
                           setShowGlobalFiltering(!showGlobalFiltering)
                         }
-                      />{' '}
+                      >
+                        <BsSearch size={20} />{' '}
+                      </button>
                       <span style={{ fontSize: '1rem' }}>
                         {formatMessage({
                           id: 'CustomTable.global-filtering',
@@ -411,35 +418,51 @@ function CustomTable<T extends object>({
                 </Row>
               )}
               {showGlobalFiltering && (
-                <div className="d-flex">
+                <div className='d-flex pt-1 pe-2 mb-2'>
                   <DebouncedInput
                     value={globalFilter ?? ''}
                     onChange={(value) => setGlobalFilter(String(value))}
-                    className="form-control w-auto"
+                    className='form-control w-auto'
                     placeholder={formatMessage({
                       id: 'CustomTable.filter-all-columns',
                     })}
+                    style={{
+                      height: '30px',
+                    }}
                   />
-                  <GrClose
-                    type="button"
-                    className="ms-1 mt-2"
-                    size={20}
+                  <button
+                    aria-label='closeButton'
+                    style={{
+                      backgroundColor: 'transparent',
+                      border: 'none',
+                      height: '30px',
+                    }}
+                    type='button'
                     onClick={() => {
                       setShowGlobalFiltering(!showGlobalFiltering);
                       setGlobalFilter(String(''));
                     }}
-                  />
+                  >
+                    <GrClose className='ms-1 ' size={20} />
+                  </button>
                 </div>
               )}
               {showColumnsFiltering && (
-                <Row className="ms-2">
-                  <div className="pt-1 pe-2 mb-2">
+                <Row className='ms-2'>
+                  <div className='pt-1 pe-2 mb-2'>
                     <div>
-                      <BsFilterLeft
-                        type="button"
-                        size={24}
+                      <button
+                        type='button'
+                        aria-label='columnsFiltering'
+                        style={{
+                          backgroundColor: 'transparent',
+                          border: 'none',
+                          height: '30px',
+                        }}
                         onClick={() => setColumnFiltering(!columnFiltering)}
-                      />{' '}
+                      >
+                        <BsFilterLeft size={24} />
+                      </button>{' '}
                       <span style={{ fontSize: '1rem' }}>
                         {formatMessage({
                           id: 'CustomTable.column-filtering',
@@ -454,15 +477,15 @@ function CustomTable<T extends object>({
           {/* GLOBAL FILTER END */}
           <Col>
             {/* DROPDOWNS */}
-            <Container fluid className="d-flex justify-content-end p-0">
+            <Container fluid className='d-flex justify-content-end p-0'>
               <Row>
                 {withDropdownColumnSelect && (
-                  <Col className="p-0 m-0">
+                  <Col className='p-0 m-0'>
                     <DropdownColumnSelect table={table} />
                   </Col>
                 )}
                 {withDropdownRowCount && (
-                  <Col className="p-0 m-0">
+                  <Col className='p-0 m-0'>
                     <DropdownRowCount
                       rowCountValues={rowCountValues}
                       table={table}
@@ -475,10 +498,10 @@ function CustomTable<T extends object>({
           </Col>
         </Row>
       </div>
-      <div className="h-2 p-0" />
-      <Row className="table-wrapper">
+      <div className='h-2 p-0' />
+      <Row className='table-wrapper'>
         <table>
-          <thead className="text-white bg-primary align-text-top">
+          <thead className='text-white bg-primary align-text-top'>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -504,25 +527,25 @@ function CustomTable<T extends object>({
                         >
                           {flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                           {{
                             asc: (
                               <Icon
                                 icon={PiCaretUpFill}
                                 size={16}
-                                color="text-secondary"
-                                type="button"
-                                className="mb-1 ms-1"
+                                color='text-secondary'
+                                type='button'
+                                className='mb-1 ms-1'
                               />
                             ),
                             desc: (
                               <Icon
                                 icon={PiCaretDownFill}
                                 size={16}
-                                color="text-secondary"
-                                type="button"
-                                className="mb-1 ms-1"
+                                color='text-secondary'
+                                type='button'
+                                className='mb-1 ms-1'
                               />
                             ),
                           }[header.column.getIsSorted() as string] ?? null}
@@ -532,16 +555,16 @@ function CustomTable<T extends object>({
                               <Icon
                                 icon={PiCaretUpDownFill}
                                 size={16}
-                                color="text-secondary"
-                                type="button"
-                                className="mb-1 ms-1"
+                                color='text-secondary'
+                                type='button'
+                                className='mb-1 ms-1'
                               />
                             )
                           ) : null}
                         </div>
                         {/* COLUMNS FILTER */}
                         {columnFiltering && header.column.getCanFilter() ? (
-                          <div className="small text-nowrap mt-2">
+                          <div className='small text-nowrap mt-2'>
                             <Filter column={header.column} table={table} />
                           </div>
                         ) : null}
@@ -578,30 +601,30 @@ function CustomTable<T extends object>({
       {/* PAGINATION */}
       {withPagination && (
         <>
-          <div className="h-2" />
-          <div className="d-flex justify-content-center small">
-            <div className="d-flex items-center gap-2">
+          <div className='h-2' />
+          <div className='d-flex justify-content-center small'>
+            <div className='d-flex items-center gap-2'>
               {table.getCanPreviousPage() && (
                 <>
                   <Icon
                     icon={BsChevronDoubleLeft}
                     size={16}
-                    color="text-primary"
-                    type="button"
+                    color='text-primary'
+                    type='button'
                     onClick={() => table.setPageIndex(0)}
                   />
                   <Icon
                     icon={BsChevronLeft}
                     size={16}
-                    color="text-primary"
-                    type="button"
+                    color='text-primary'
+                    type='button'
                     onClick={() => table.previousPage()}
                   />
                 </>
               )}
-              <div className="d-flex justify-content-center ">
-                <div className="d-flex items-center gap-2">
-                  <span className="flex items-center gap-1">
+              <div className='d-flex justify-content-center '>
+                <div className='d-flex items-center gap-2'>
+                  <span className='flex items-center gap-1'>
                     {table.getPageCount() === 0
                       ? '0'
                       : table.getState().pagination.pageIndex + 1}{' '}
@@ -618,15 +641,15 @@ function CustomTable<T extends object>({
                   <Icon
                     icon={BsChevronRight}
                     size={16}
-                    color="text-primary"
-                    type="button"
+                    color='text-primary'
+                    type='button'
                     onClick={() => table.nextPage()}
                   />
                   <Icon
                     icon={BsChevronDoubleRight}
                     size={16}
-                    color="text-primary"
-                    type="button"
+                    color='text-primary'
+                    type='button'
                     onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                   />
                 </>
@@ -635,13 +658,13 @@ function CustomTable<T extends object>({
           </div>
           {/* ONLY SHOW "GO TO PAGE" IF THERE ARE MORE THAN 2 PAGES */}
           {table.getPageCount() > 2 && (
-            <div className="d-flex justify-content-center mt-2 small">
-              <span className="align-middle">
+            <div className='d-flex justify-content-center mt-2 small'>
+              <span className='align-middle'>
                 {formatMessage({
                   id: 'CustomTable.go-to-page',
                 })}{' '}
                 <input
-                  type="number"
+                  type='number'
                   style={{ width: '4rem' }}
                   defaultValue={table.getState().pagination.pageIndex + 1}
                   onChange={(e) => {
@@ -650,7 +673,7 @@ function CustomTable<T extends object>({
                       : 0;
                     table.setPageIndex(page);
                   }}
-                  className="border p-1 rounded w-16"
+                  className='border p-1 rounded w-16'
                 />
               </span>
             </div>

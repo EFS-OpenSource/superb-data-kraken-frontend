@@ -234,7 +234,7 @@ function AppPage() {
 
             content: (
               <div
-                style={{ width: '100%', height: '100%', minHeight: '440px' }}
+                style={{ width: '100%', height: '100%', minHeight: '80vh' }}
                 className='d-flex flex-column overflow-scroll'
               >
                 <Suspense fallback={<LoadingIndicator />}>

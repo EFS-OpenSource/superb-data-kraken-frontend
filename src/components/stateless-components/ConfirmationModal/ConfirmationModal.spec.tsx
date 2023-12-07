@@ -14,7 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { fireEvent, getByTestId, getByText, render } from '@testing-library/react';
+import {
+  fireEvent,
+  getByTestId,
+  getByText,
+  render,
+  screen,
+} from '@testing-library/react';
 import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 import ConfirmationModal from './ConfirmationModal';
 
@@ -26,49 +32,53 @@ describe('ConfirmationModal', () => {
       <TestWrapper>
         <ConfirmationModal
           show={false}
-          confirmButtonText={'asdasd'}
+          confirmButtonText={'SuccessToast.title'}
           onSetShow={onSetShow}
           onHandleSubmit={onHandleSubmit}
-          message={'esf'}
+          message={'SuccessToast.title'}
         />
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
-  it('tests the cancel button', () => {
+  it('tests the cancel button', async () => {
     const onSetShow = jest.fn();
     const onHandleSubmit = jest.fn();
     const { baseElement } = render(
       <TestWrapper>
         <ConfirmationModal
           show={true}
-          confirmButtonText={'asdasd'}
+          confirmButtonText={'SuccessToast.title'}
           onSetShow={onSetShow}
           onHandleSubmit={onHandleSubmit}
-          message={'esf'}
+          message={'SuccessToast.title'}
         />
-      </TestWrapper>,
+      </TestWrapper>
     );
-    const cancelButton = getByTestId(baseElement, "cancel");
+    const cancelButton = getByTestId(baseElement, 'cancel');
     fireEvent.click(cancelButton);
     expect(onSetShow).toHaveBeenCalled();
     expect(baseElement).toBeTruthy();
+
+    console.log(baseElement.innerHTML);
   });
-  it('tests the confirm button', () => {
+  it('tests the confirm button', async () => {
     const onSetShow = jest.fn();
     const onHandleSubmit = jest.fn();
     const { baseElement } = render(
       <TestWrapper>
         <ConfirmationModal
           show={true}
-          confirmButtonText={'asdasd'}
+          confirmButtonText={'SuccessToast.title'}
           onSetShow={onSetShow}
           onHandleSubmit={onHandleSubmit}
-          message={'esf'}
+          message={'SuccessToast.title'}
         />
-      </TestWrapper>,
+      </TestWrapper>
     );
-    const confirmButton = getByText(baseElement, 'asdasd');
+    const confirmButton = await screen.findByRole('button', {
+      name: 'Erfolg!',
+    });
     fireEvent.click(confirmButton);
     expect(onSetShow).toHaveBeenCalled();
     expect(onHandleSubmit).toHaveBeenCalled();

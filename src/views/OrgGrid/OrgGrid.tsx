@@ -59,7 +59,7 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
   ]);
   const [spacesData, setSpacesData] = useState<Space[]>([
     ...orgasWithSpaces.flatMap((org) =>
-      org.spaces.map((space: Space) => space),
+      org.spaces.map((space: Space) => space)
     ),
   ]);
 
@@ -77,6 +77,7 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
           firstName: userInfo.given_name,
           lastName: userInfo.family_name,
           id: userInfo.sub,
+          email: userInfo.email,
         },
       ];
       return owners;
@@ -120,8 +121,8 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
         (org) =>
           JSON.stringify(org)
             .toLowerCase()
-            .indexOf(searchInput.toLowerCase()) !== -1,
-      ),
+            .indexOf(searchInput.toLowerCase()) !== -1
+      )
     );
   }, [orgsData, searchInput]);
 
@@ -131,8 +132,8 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
         (org) =>
           JSON.stringify(org)
             .toLowerCase()
-            .indexOf(searchInput.toLowerCase()) !== -1,
-      ),
+            .indexOf(searchInput.toLowerCase()) !== -1
+      )
     );
   }, [spacesData, searchInput]);
 
@@ -236,7 +237,7 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
       checkedFilters,
       orgsData,
       spacesData,
-    ],
+    ]
   );
 
   useEffect(() => {
@@ -247,13 +248,13 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
     setOrgsData([...orgasWithSpaces]);
     setSpacesData([
       ...orgasWithSpaces.flatMap((org) =>
-        org.spaces.map((space: Space) => space),
+        org.spaces.map((space: Space) => space)
       ),
     ]);
   }, [orgasWithSpaces]);
 
   return (
-    <section className="mb-4 ms-0 ps-0 pt-3">
+    <section className='mb-4 ms-0 ps-0 pt-3'>
       {sdkAdmin() !== undefined && (
         <ManageOrgaSpaceModal
           show={showModal}
@@ -261,14 +262,14 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
           owners={sdkAdmin() as Owner[]}
           tabComponents={OrganizationTabs(true) as any}
           tabNames={OrganizationModalTabNames}
-          modalType="createOrganization"
+          modalType='createOrganization'
           roles={userOrgaRoleTypes}
           onMutation={setFetchActive}
         />
       )}
-      <Col className="ms-3 ps-0 d-flex">
+      <Col className='ms-3 ps-0 d-flex'>
         <InputText
-          className="mb-2 me-11"
+          className='mb-2 me-11'
           placeholder={formatMessage({
             id: 'Search.name-short',
           })}
@@ -276,53 +277,53 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
         />
         {sdkAdmin() !== undefined && (
           <Chip
-            ariaLabel="addOrganizationButton"
-            height="38px"
+            ariaLabel='addOrganizationButton'
+            height='38px'
             text={formatMessage({
               id: 'Organizations.add-organization',
             })}
             icon={
               fetchActive ? (
                 <Spinner
-                  className="ms-2"
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
+                  className='ms-2'
+                  as='span'
+                  animation='border'
+                  size='sm'
+                  role='status'
+                  aria-hidden='true'
                 />
               ) : (
                 <IoAdd size={28} />
               )
             }
-            size="md"
-            activeColor="accent"
+            size='md'
+            activeColor='accent'
             onClick={() => setShowModal(true)}
             disabled={fetchActive}
           />
         )}
       </Col>
-      <Col className="ps-3">
+      <Col className='ps-3'>
         <ChipGroup
-          size="sm"
-          inactiveColor="outline-accent"
-          activeColor="accent"
-          activeTextColor="#ffffff"
+          size='sm'
+          inactiveColor='outline-accent'
+          activeColor='accent'
+          activeTextColor='#ffffff'
           options={SpaceOrgaFilterChips}
           checked={checkedFilters}
           onChange={onFilterChipHandler}
         />
       </Col>
-      <Row className="ps-3">
+      <Row className='ps-3'>
         {filteredOrganizations.length < 1 && filteredSpaces.length < 1 && (
-          <h1 className="text-center pt-8 text-lg">NO DATA FOUND</h1>
+          <h1 className='text-center pt-8 text-lg'>NO DATA FOUND</h1>
         )}
-        <Col className="d-flex flex-row flex-wrap">
+        <Col className='d-flex flex-row flex-wrap'>
           {filteredOrganizations.map((organization: Organization) => (
             <Link
               key={organization.id}
               to={`/org/${organization.id}/Overview`}
-              className="my-3 ms-0 me-6"
+              className='my-3 ms-0 me-6'
               style={{
                 color: 'inherit',
                 textDecoration: 'none',
@@ -337,7 +338,7 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
                   <CustomCardTitle
                     data={organization}
                     userName={userName}
-                    cardType="organization"
+                    cardType='organization'
                   />
                 }
                 cardBodyElement={<CustomCardBody data={organization} />}
@@ -349,14 +350,14 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
             <Link
               key={space.id}
               to={`/org/${space.orgId}/space/${space.id}/Overview`}
-              className="my-3 ms-0 me-6"
+              className='my-3 ms-0 me-6'
               style={{
                 color: 'inherit',
                 textDecoration: 'none',
               }}
               onClick={() => {
                 onChangeActivePath(
-                  `/org/${space.orgId}/space/${space.id}/Overview`,
+                  `/org/${space.orgId}/space/${space.id}/Overview`
                 );
               }}
             >
@@ -364,13 +365,13 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
                 key={space.id}
                 style={customCardStyle}
                 cardTitleElement={
-                  <CustomCardTitle data={space} cardType="space" />
+                  <CustomCardTitle data={space} cardType='space' />
                 }
                 cardBodyElement={
                   <CustomCardBody
                     data={space}
                     userName={userName}
-                    cardType="space"
+                    cardType='space'
                   />
                 }
               />

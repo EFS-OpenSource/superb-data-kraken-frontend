@@ -93,11 +93,11 @@ function MembersTab({
   const initialOwnersPresent = initialOwners || [];
 
   const ids1 = new Set(initialOwnersPresent.map((user) => user.id));
-  const ids2 = new Set(initialUsersFixed.map((user) => user.id));
+  // const ids2 = new Set(initialUsersFixed.map((user) => user.id));
 
   const uniqueUsers = [
-    ...initialUsersFixed.filter((user) => !ids1.has(user.id)),
-    ...initialOwnersPresent.filter((user) => !ids2.has(user.id)),
+    ...(initialUsersFixed.filter((user) => !ids1.has(user.id)) || []),
+    // ...initialOwnersPresent.filter((user) => !ids2.has(user.id) || []),
   ];
 
   const [possibleOwners, setPossibleOwners] = useState(uniqueUsers as unknown as (OrgaUser | SpaceUser)[]);
@@ -232,7 +232,7 @@ function MembersTab({
     return `${owner.firstName} ${owner.lastName}`;
   } 
 
-  const openPopoverButton = (
+  const openPopoverButton = (ariaLabel: string) => (
     <OverlayTrigger
       placement='right'
       transition={false}
@@ -246,7 +246,7 @@ function MembersTab({
     >
       <div className='me-2'>
         <Icon
-          ariaLabel='openAddMemberPopover'
+          ariaLabel={ariaLabel}
           icon={IoAdd}
           size={28}
           type='button'
@@ -278,7 +278,7 @@ function MembersTab({
                   id: 'AddMemberPopover.addMember-button',
                 })}
                 handleShow={handleShow}
-                popoverOpenButton={openPopoverButton}
+                popoverOpenButton={openPopoverButton('openAddOwnerPopover')}
                 onSend={(email) => {
                   handleAddOwner(email.value);
                 }}

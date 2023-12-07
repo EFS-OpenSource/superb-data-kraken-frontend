@@ -45,6 +45,7 @@ import OrganizationAddTagPopover from './stateless-components/popovers/Organizat
 import AddTagPopover from './stateless-components/popovers/AddTagPopover/AddTagPopover';
 import ConfirmationModal from './stateless-components/ConfirmationModal/ConfirmationModal';
 import ManageOrgaSpaceModal from './ManageOrgaSpaceModal/ManageOrgaSpaceModal';
+import Navbar from './Navbar/Navbar';
 
 export * from './stateless-components/FormFields/FormFields';
 
@@ -80,4 +81,5 @@ export {
   AddTagPopover,
   ConfirmationModal,
   ManageOrgaSpaceModal,
+  Navbar,
 };

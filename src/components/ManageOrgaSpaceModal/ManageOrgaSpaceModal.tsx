@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-return */
 /*
 Copyright (C) 2023 e:fs TechHub GmbH (sdk@efs-techhub.com)
 
@@ -35,12 +36,11 @@ import {
   updateSpace,
   updateOrganization,
   setOrganizationOwnersByUserId,
+  setOrganizationOwnersByEmail,
   setSpaceOwnersByUserId,
   setSpaceOwnersByEmail,
   setOrganizationRoleByEmail,
-  setSpaceRoleByEmail,
-  addOrganizationOwnerByEmail,
-  addSpaceOwnerByEmail
+  setSpaceRoleByEmail
 } from '@services/index';
 import {
   Confidentiality,
@@ -241,16 +241,14 @@ function ManageOrgaSpaceModal({
         })
       )
   );
-  
-  // TODO: change with new Endpoint, to make it with bulk
-  const addOrganizationOwnerByEmailMutation = useMutation(
-    (newOwner: string) =>
-    addOrganizationOwnerByEmail(
-      orgID as string,
-      newOwner
-    ),
 
-    {
+  const updateOrganizationOwnersMutation = useMutation(
+    (newOwners?: string[]) =>
+      setOrganizationOwnersByUserId(
+        newOwners || updatedOwners.map(owner => owner.id),
+        orgID as string
+      ),    
+      {
       onSuccess: () => {
         queryClient.invalidateQueries(['orgasWithSpaces']);
         queryClient.invalidateQueries(['organization', orgID]);
@@ -262,10 +260,10 @@ function ManageOrgaSpaceModal({
     }
   );
 
-  const updateOrganizationOwnersMutation = useMutation(
+  const updateOrganizationOwnersByEmailMutation = useMutation(
     (newOwners?: string[]) =>
-      setOrganizationOwnersByUserId(
-        newOwners || updatedOwners.map(owner => owner.id),
+      setOrganizationOwnersByEmail(
+        newOwners || updatedOwners.map(owner => owner.email),
         orgID as string
       ),    
       {
@@ -325,38 +323,6 @@ function ManageOrgaSpaceModal({
         })
       )
   );
-  
-  // TODO: user new Enpoint, with bulk
-  const addSpaceOwnersByEmailMutation = useMutation(
-    ({
-      currentSpaceID,
-      newOwnersEmail,
-    } : {
-      currentSpaceID: string;
-      newOwnersEmail: string;
-    }) =>
-      addSpaceOwnerByEmail(
-        orgID as string,
-        currentSpaceID,
-        newOwnersEmail
-      ),
-
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['spaces', `o_${orgID}`]);
-        queryClient.invalidateQueries(['space', spaceID, `o_${orgID}`]);
-        queryClient.invalidateQueries(['spaceOwners', spaceID, `o_${orgID}`]);
-        queryClient.invalidateQueries([
-          'spaceUsers',
-          spaceID,
-          `o_${orgID}`,
-        ]);
-      },
-      onError: () => {
-        ErrorToast('ErrorToast.title-owners-edit');
-      },
-    }
-  );
 
   const updateSpaceOwnersMutation = useMutation(
     ({
@@ -377,6 +343,11 @@ function ManageOrgaSpaceModal({
         queryClient.invalidateQueries(['spaces', `o_${orgID}`]);
         queryClient.invalidateQueries(['space', spaceID, `o_${orgID}`]);
         queryClient.invalidateQueries(['spaceOwners', spaceID, `o_${orgID}`]);
+        queryClient.invalidateQueries([
+          'spaceUsers',
+          spaceID,
+          `o_${orgID}`,
+        ]);
       },
       onError: () => {
         ErrorToast('ErrorToast.title-owners-edit');
@@ -384,7 +355,6 @@ function ManageOrgaSpaceModal({
     }
   );
   
-  // TODO: change to email
   const updateSpaceOwnersByEmailMutation = useMutation(
     ({
       currentSpaceID,
@@ -393,8 +363,8 @@ function ManageOrgaSpaceModal({
       currentSpaceID: string;
       newOwners?: string[];
     }) =>
-      setSpaceOwnersByUserId(
-        newOwners || updatedOwners.map(owner => owner.id),
+      setSpaceOwnersByEmail(
+        newOwners || updatedOwners.map(owner => owner.email),
         orgID as string,
         currentSpaceID
       ),
@@ -404,6 +374,11 @@ function ManageOrgaSpaceModal({
         queryClient.invalidateQueries(['spaces', `o_${orgID}`]);
         queryClient.invalidateQueries(['space', spaceID, `o_${orgID}`]);
         queryClient.invalidateQueries(['spaceOwners', spaceID, `o_${orgID}`]);
+        queryClient.invalidateQueries([
+          'spaceUsers',
+          spaceID,
+          `o_${orgID}`,
+        ]);
       },
       onError: () => {
         ErrorToast('ErrorToast.title-owners-edit');
@@ -488,17 +463,7 @@ function ManageOrgaSpaceModal({
           if (!response.ok) throw new Error();
           if (isOwner) {
             if (haveOwnersChanged(initialOwners, updatedOwners.map(owner => owner.id))) {
-              updateOrganizationOwnersMutation.mutate(updatedOwners.map(owner => owner.id).filter(owner => !owner.includes('@')));
-
-              const newUsersOwners = updatedOwners.map(owner => owner.id).filter(owner => owner.includes('@'));
-              if(newUsersOwners.length !== 0) {
-                // TODO: mutate with list of OwnersByEmail
-
-
-                // newUsersOwners.forEach((owner) => {
-                //   addOrganizationOwnerByEmailMutation.mutate(owner);
-                // })
-              }
+              updateOrganizationOwnersByEmailMutation.mutate(updatedOwners.map(owner => owner.email));
             }
           }
           return response;
@@ -570,30 +535,9 @@ function ManageOrgaSpaceModal({
           if (!response.ok) throw new Error();
           if (isOwner) {
             if (haveOwnersChanged(initialOwners, updatedOwners.map(owner => owner.id))) {
-              updateSpaceOwnersMutation.mutate({
+              updateSpaceOwnersByEmailMutation.mutate({
                 currentSpaceID: spaceID as string,
               });
-
-              const newUsersOwners = updatedOwners.map(owner => owner.id).filter(owner => owner.includes('@'));
-              if(newUsersOwners.length !== 0) {
-                // TODO: mutate with list of OwnersByEmail
-
-                let i = 0;
-                const addSpaceOwnerByEmailLoop = () => {
-                  setTimeout(() => {
-                    addSpaceOwnersByEmailMutation.mutate( {
-                      currentSpaceID: spaceID as string,
-                      newOwnersEmail: newUsersOwners[i]
-                    }
-                    )
-                    i+= 1;
-                    if( i < newUsersOwners.length) {
-                      addSpaceOwnerByEmailLoop();
-                    }
-                  }, 500)
-                }
-                addSpaceOwnerByEmailLoop();
-              }
             }
           }
           return response;
@@ -676,6 +620,29 @@ function ManageOrgaSpaceModal({
     [tabComponents, formatMessage, modalData, users, owners, roles, isOwner]
   );
 
+  const handleNextPage = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (
+      (modalType === 'createOrganization' && !modalData.name) ||
+      modalData.name.length < 3 ||
+      (modalType === 'createOrganization' &&
+        'company' in modalData &&
+        !modalData.company)
+    ) {
+      setValidated(true);
+
+      return;
+    }
+
+    setActiveKey(
+      tabNames[tabNames.indexOf(activeKey) + 1] as SetStateAction<'General'>
+    );
+  };
+
   let nextButton: JSX.Element;
 
   switch (activeKey) {
@@ -691,18 +658,7 @@ function ManageOrgaSpaceModal({
 
     default:
       nextButton = (
-        <Button
-          aria-label='nextButton'
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            setActiveKey(
-              tabNames[
-                tabNames.indexOf(activeKey) + 1
-              ] as SetStateAction<'General'>
-            );
-          }}
-        >
+        <Button aria-label='nextButton' onClick={handleNextPage}>
           {formatMessage({
             id: 'AddEditOrgSpacesModal.next-button',
           })}

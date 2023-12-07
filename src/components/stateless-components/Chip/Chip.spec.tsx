@@ -25,15 +25,23 @@ describe('Chip', () => {
     const { baseElement } = render(
       <TestWrapper>
         <Chip />
-      </TestWrapper>,
+      </TestWrapper>
+    );
+    expect(baseElement).toBeTruthy();
+  });
+  it('should render successfully with no font size', () => {
+    const { baseElement } = render(
+      <TestWrapper>
+        <Chip size='default' />
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
   it('should render successfully with xs font', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <Chip size="xs" />
-      </TestWrapper>,
+        <Chip size='xs' />
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
@@ -48,24 +56,24 @@ describe('Chip', () => {
   it('should render successfully with md font', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <Chip size="md" />
-      </TestWrapper>,
+        <Chip size='md' />
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
   it('should render successfully with lg font', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <Chip size="lg" />
-      </TestWrapper>,
+        <Chip size='lg' />
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
   it('should render successfully with xl font', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <Chip size="xl" />
-      </TestWrapper>,
+        <Chip size='xl' />
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
@@ -73,7 +81,7 @@ describe('Chip', () => {
     const { baseElement } = render(
       <TestWrapper>
         <Chip icon={<Bs0CircleFill />} />
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
@@ -81,22 +89,23 @@ describe('Chip', () => {
     const { baseElement } = render(
       <TestWrapper>
         <Chip icon={<Bs0CircleFill />} iconLeft />
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
+
   it('should render successfully with state:undefined', () => {
     const { baseElement } = render(
       <TestWrapper>
         <Chip state={{ isActive: undefined }} />
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
   it('should render successfully with state:true', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <Chip state={{ isActive: true}} />
+        <Chip state={{ isActive: true }} />
       </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
@@ -104,7 +113,7 @@ describe('Chip', () => {
   it('should render successfully with state:false', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <Chip state={{ isActive: false}} />
+        <Chip state={{ isActive: false }} />
       </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
@@ -112,7 +121,7 @@ describe('Chip', () => {
   it('should render successfully with disabled: true', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <Chip disabled= {true}/>
+        <Chip disabled={true} />
       </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
@@ -120,7 +129,7 @@ describe('Chip', () => {
   it('should render successfully with tooltip', () => {
     const { baseElement } = render(
       <TestWrapper>
-        <Chip tooltip='Confidentiality.PUBLIC-description'/>
+        <Chip tooltip='Confidentiality.PUBLIC-description' />
       </TestWrapper>
     );
     expect(baseElement).toBeTruthy();

@@ -37,6 +37,7 @@ interface FormInputType {
   required?: boolean;
   validationFeedback?: string;
   disabled?: boolean;
+  type?: 'text' | 'number';
 }
 
 export function FormInput({
@@ -58,6 +59,7 @@ export function FormInput({
   required,
   validationFeedback,
   disabled,
+  type,
 }: FormInputType) {
   return (
     <Form.Group className={groupClassName} style={groupStyle}>
@@ -69,13 +71,13 @@ export function FormInput({
         {labelText}
         {labelToolTipIcon && (
           <OverlayTrigger
-            placement="right"
+            placement='right'
             transition={false}
             overlay={
               <Tooltip id={labelText as string}>{labelToolTipText}</Tooltip>
             }
           >
-            <div className="ms-1 d-flex align-items-center">
+            <div className='ms-1 d-flex align-items-center'>
               {labelToolTipIcon as JSX.Element}
             </div>
           </OverlayTrigger>
@@ -85,7 +87,7 @@ export function FormInput({
         aria-label={ariaLabel}
         size={fontSize}
         id={id}
-        type="text"
+        type={type || 'text'}
         className={inputClassName}
         style={inputStyle}
         placeholder={placeholder}
@@ -94,8 +96,8 @@ export function FormInput({
         required={required}
         disabled={disabled}
       />
-      <Form.Control.Feedback type="invalid">
-        <div className="h6">{validationFeedback}</div>
+      <Form.Control.Feedback type='invalid'>
+        <div className='h6'>{validationFeedback}</div>
       </Form.Control.Feedback>
     </Form.Group>
   );
@@ -107,6 +109,7 @@ interface FormTextAreaType extends FormInputType {
 
 export function FormTextarea({
   id,
+  ariaLabel,
   groupClassName,
   groupStyle,
   labelClassName,
@@ -129,22 +132,23 @@ export function FormTextarea({
         {labelText}
         {labelToolTipIcon && (
           <OverlayTrigger
-            placement="right"
+            placement='right'
             overlay={
               <Tooltip id={labelText as string}>{labelToolTipText}</Tooltip>
             }
           >
-            <div className="ms-1 d-flex align-items-center">
+            <div className='ms-1 d-flex align-items-center'>
               {labelToolTipIcon as JSX.Element}
             </div>
           </OverlayTrigger>
         )}
       </Form.Label>
       <Form.Control
+        aria-label={ariaLabel}
         id={id}
-        as="textarea"
+        as='textarea'
         size={fontSize}
-        type="text"
+        type='text'
         className={inputClassName}
         style={inputStyle}
         rows={rows || 0}
@@ -248,23 +252,23 @@ export function FormRadioButtons({
         {labelText}
         {labelToolTipIcon && (
           <OverlayTrigger
-            placement="right"
+            placement='right'
             overlay={
               <Tooltip id={labelText as string}>{labelToolTipText}</Tooltip>
             }
           >
-            <div className="ms-1 d-flex align-items-center">
+            <div className='ms-1 d-flex align-items-center'>
               {labelToolTipIcon as JSX.Element}
             </div>
           </OverlayTrigger>
         )}
       </Form.Label>
-      <div className="ms-2">
+      <div className='ms-2'>
         {labelsAndValues.map((radioButton) => (
           <Form.Check
             aria-label={radioButton.name}
             key={radioButton.name}
-            type="radio"
+            type='radio'
             inline={inline}
             name={id}
             label={radioButton.name}
@@ -317,34 +321,35 @@ export function FormCheckbox({
         {labelText}
         {labelToolTipIcon && (
           <OverlayTrigger
-            placement="right"
+            placement='right'
             overlay={
               <Tooltip id={labelText as string}>{labelToolTipText}</Tooltip>
             }
           >
-            <div className="ms-1 d-flex align-items-center">
+            <div className='ms-1 d-flex align-items-center'>
               {labelToolTipIcon as JSX.Element}
             </div>
           </OverlayTrigger>
         )}
       </Form.Label>
-      <div className="ms-2">
+      <div className='ms-2'>
         {warning && (
-          <Alert variant="warning" className="font-weight-normal py-1 px-2">
+          <Alert variant='warning' className='font-weight-normal py-1 px-2'>
             {warning}
           </Alert>
         )}
         {labelsAndValues.map((checkbox) => (
           <Form.Check
-            aria-label={checkbox.name}
+            // aria-label={checkbox.name}
             key={checkbox.name}
             inline={inline}
             name={id}
             required={required}
           >
             <Form.Check.Input
-              className="me-2"
-              type="checkbox"
+              aria-label={checkbox.name}
+              className='me-2'
+              type='checkbox'
               value={checkbox.name}
               disabled={disabled}
               checked={
@@ -357,7 +362,7 @@ export function FormCheckbox({
               onChange={onChange}
             />
             <Form.Check.Label
-              className="font-weight-normal"
+              className='font-weight-normal'
               style={{
                 fontSize: '17px',
               }} /* TODO set style globally change with updating to bootstrap 5 */

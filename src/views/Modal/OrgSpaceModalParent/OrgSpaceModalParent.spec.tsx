@@ -36,7 +36,7 @@ describe('OrgSpaceModalParent', () => {
           setActiveKey={setActiveKey}
           nextButton={<button />}
         />
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
@@ -54,7 +54,7 @@ describe('OrgSpaceModalParent', () => {
           setActiveKey={setActiveKey}
           nextButton={<button />}
         />
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
@@ -72,7 +72,7 @@ describe('OrgSpaceModalParent', () => {
           setActiveKey={setActiveKey}
           nextButton={<button />}
         />
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });
@@ -90,7 +90,7 @@ describe('OrgSpaceModalParent', () => {
           setActiveKey={setActiveKey}
           nextButton={<button />}
         />
-      </TestWrapper>,
+      </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
   });

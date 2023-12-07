@@ -51,20 +51,20 @@ function InputChipField({
   const handleDeleteChip = (
     property: string,
     operator: string,
-    value: string | undefined,
+    value: string | undefined
   ): void => {
     const reducedSelectedFilterOptions = selectedFilters.filter(
       (options) =>
         options.value !== value ||
         options.property !== property ||
-        options.operator !== operator,
+        options.operator !== operator
     );
 
     const updateIndexAttributes = sortBy(
       produce(reducedIndexAttributes, (draft) => {
         draft.push(property);
       }),
-      [(item: string) => item],
+      [(item: string) => item]
     );
 
     onSelectedFilters(reducedSelectedFilterOptions);
@@ -76,12 +76,12 @@ function InputChipField({
   };
 
   return (
-    <Row className="m-0 align-items-center">
-      <Col xs={11} className="p-0 d-flex flex-wrap">
+    <Row className='m-0 align-items-center'>
+      <Col xs={11} className='p-0 d-flex flex-wrap'>
         {selectedFilters.map((filterOptions) => (
-          <div key={nanoid()} className="mr-3 my-2">
+          <div key={filterOptions.value} className='mr-3 my-2'>
             <Chip
-              ariaLabel="search-chip"
+              ariaLabel='search-chip'
               key={`${
                 filterOptions.property
               } ${filterOptions.operator.toLowerCase()} ${filterOptions.value}`}
@@ -90,31 +90,31 @@ function InputChipField({
               } ${filterOptions.operator.toLowerCase()} ${filterOptions.value}`}
               icon={
                 <Icon
-                  ariaLabel="deleteAddEditModalTag"
+                  ariaLabel='deleteAddEditModalTag'
                   icon={IoClose}
-                  type="button"
-                  color="text-light"
+                  type='button'
+                  color='text-light'
                   size={16}
                   onClick={() =>
                     handleDeleteChip(
                       filterOptions.property,
                       filterOptions.operator,
-                      filterOptions.value,
+                      filterOptions.value
                     )
                   }
                 />
               }
-              activeColor="accent"
-              size="sm"
+              activeColor='accent'
+              size='sm'
             />
           </div>
         ))}
       </Col>
-      <Col xs={1} className="p-0 text-center">
+      <Col xs={1} className='p-0 text-center'>
         <BsX
           size={32}
-          role="button"
-          className="btn btn-secondary disabled p-0 m-0"
+          role='button'
+          className='btn btn-secondary disabled p-0 m-0'
           onClick={removeAllInputChips}
         />
       </Col>
