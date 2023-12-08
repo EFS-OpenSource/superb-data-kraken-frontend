@@ -14,31 +14,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { LoadingIndicator } from '@components/index';
-import validParams from '@utils/validParams';
-import { getOrganizationsWithSpaces } from '@services/index';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useOidc } from '@axa-fr/react-oidc';
 
 function RequireAuthorization() {
-  const { orgID, spaceID } = useParams();
   const location = useLocation();
+  const { isAuthenticated } = useOidc();
 
-  const { data: valid, isLoading } = useQuery(
-    ['orgasWithSpacesForAuth'],
-    async () => {
-      const orgData = await getOrganizationsWithSpaces();
-
-      const validParamsReturn = validParams(orgID, spaceID, orgData);
-
-      return validParamsReturn;
-    }
-  );
-
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-  return valid ? (
+  return isAuthenticated ? (
     <Outlet />
   ) : (
     <Navigate to='/home/overview' state={{ from: location.pathname }} replace />
