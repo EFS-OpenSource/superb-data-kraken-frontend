@@ -19,54 +19,58 @@ import TestWrapper from '@utils/TestWrapper/TestWrapper.spec';
 import { MemoryRouter } from 'react-router-dom';
 import RequireAuthorization from './RequireAuthorization';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import 'cross-fetch/polyfill';
+import { act } from 'react-dom/test-utils';
+import '@axa-fr/react-oidc';
 
 const client = new QueryClient();
+jest.mock('@axa-fr/react-oidc', () => ({
+  useOidc: () => ({
+    isAuthenticated: true,
+    oidcUser: {
+      profile: { sub: '123' },
+      tokens: {
+        id_token: 'abc123',
+        access_token: 'xyz456',
+        access_token_invalid: 'asd',
+      },
+    },
+    login: jest.fn(),
+    oidcLogout: jest.fn(),
+  }),
+  useOidcIdToken: () => ({
+    oidcUser: {
+      profile: { sub: '123' },
+      tokens: {
+        id_token: 'abc123',
+        access_token: 'xyz456',
+        access_token_invalid: 'asd',
+      },
+    },
+  }),
+  useOidcIdUser: () => ({
+    oidcUser: {
+      profile: { sub: '123' },
+      tokens: {
+        id_token: 'abc123',
+        access_token: 'xyz456',
+        access_token_invalid: 'asd',
+      },
+    },
+  }),
+}));
 describe('RequireAuthorization', () => {
-  jest.mock('@axa-fr/react-oidc', () => ({
-    useOidc: () => ({
-      isAuthenticated: true,
-      oidcUser: {
-        profile: { sub: '123' },
-        tokens: {
-          id_token: 'abc123',
-          access_token: 'xyz456',
-          access_token_invalid: 'asd',
-        },
-      },
-      login: jest.fn(),
-      oidcLogout: jest.fn(),
-    }),
-    useOidcIdToken: () => ({
-      oidcUser: {
-        profile: { sub: '123' },
-        tokens: {
-          id_token: 'abc123',
-          access_token: 'xyz456',
-          access_token_invalid: 'asd',
-        },
-      },
-    }),
-    useOidcIdUser: () => ({
-      oidcUser: {
-        profile: { sub: '123' },
-        tokens: {
-          id_token: 'abc123',
-          access_token: 'xyz456',
-          access_token_invalid: 'asd',
-        },
-      },
-    }),
-  }));
-  it('should render successfully', () => {
-    const { baseElement } = render(
-      <TestWrapper>
-        <QueryClientProvider client={client}>
-          <MemoryRouter initialEntries={['/home/overview']}>
-            <RequireAuthorization />
-          </MemoryRouter>
-        </QueryClientProvider>
-      </TestWrapper>,
-    );
-    expect(baseElement).toBeTruthy();
+  it('should render successfully', async () => {
+    await act(async () => {
+      render(
+        <TestWrapper>
+          <QueryClientProvider client={client}>
+            <MemoryRouter initialEntries={['/org/436/Overview']}>
+              <RequireAuthorization />
+            </MemoryRouter>
+          </QueryClientProvider>
+        </TestWrapper>
+      );
+    });
   });
 });

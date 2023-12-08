@@ -18,6 +18,7 @@ import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { OidcProvider } from '@axa-fr/react-oidc';
 import { SdkRouter } from '@router/index';
 import { IntlWrapper } from '@contexts/index';
@@ -53,6 +54,7 @@ root.render(
                 <Route path='/login' element={<SdkRouter />} />
               )}
             </Routes>
+            <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </IntlWrapper>
       </StrictMode>
