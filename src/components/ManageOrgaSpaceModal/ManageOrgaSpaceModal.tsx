@@ -425,7 +425,7 @@ function ManageOrgaSpaceModal({
         let newOwners = updatedOwners.map(owner => owner.id).filter((id) => !id.includes('@'));
         removedUsers.forEach((removedUser: OrgaUser | SpaceUser) => {
           if (updatedOwners.map(owner => owner.id).includes(removedUser.id)) {
-            newOwners = newOwners.map(id => id).filter((id) => id !== removedUser.id);
+            newOwners = newOwners.filter((id) => id !== removedUser.id);
           }
         });
         if (haveOwnersChanged(updatedOwners.map(owner => owner.id), newOwners)) {
