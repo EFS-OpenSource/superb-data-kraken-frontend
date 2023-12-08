@@ -77,6 +77,7 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
           firstName: userInfo.given_name,
           lastName: userInfo.family_name,
           id: userInfo.sub,
+          email: userInfo.email,
         },
       ];
       return owners;

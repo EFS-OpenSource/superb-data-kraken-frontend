@@ -52,7 +52,7 @@ export interface TabData {
   roles?: readonly string[];
   initialUsers?: User[];
   initialOwners?: Owner[];
-  onUpdateOwners?: (updatedOwners: string[]) => void;
+  onUpdateOwners?: (updatedOwners: Owner[]) => void;
   onUpdateUsers?: (updatedUsers: OrgaUser[] | SpaceUser[]) => void;
   isOwner?: boolean;
 }

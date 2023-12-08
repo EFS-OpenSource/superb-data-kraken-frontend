@@ -81,6 +81,7 @@ function Spaces({ orgData, userDataState }: SpaceType) {
     firstName: isAuthenticated ? (idTokenPayload.given_name as string) : '',
     lastName: isAuthenticated ? (idTokenPayload.family_name as string) : '',
     id: isAuthenticated ? (idTokenPayload.sub as string) : '',
+    email: isAuthenticated ? (idTokenPayload.email as string) : '',
   }; /* //TODO Merge with userDataState or the context, which provides the userInfos */
 
   const userOrgaRoles = useGetRoles<OrgaRoleType>(
