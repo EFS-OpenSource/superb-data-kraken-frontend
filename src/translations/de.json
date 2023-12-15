@@ -90,6 +90,7 @@
   "AppPage.FileUpload": "Upload",
   "AppPage.Tabs.app-disabled-roles": "Rollen: {roles} erforderlich",
   "AppPage.Tabs.app-disabled-capabilities": "Capabilities: {capabilities} erforderlich",
+  "AppPage.Tabs.app-disabled-capabilities-org": "Capabilities: {capabilities} in einem space erforderlich",
   "AppPage.Tabs.app-disabled-roles-and-capabilities": "Capabilities: {capabilities} und Rollen: {roles} erforderlich",
   "AppPageHeader.confirmation-modal-delete-message": "Mit der Bestätigung wird der Space und die zugehörigen Daten nach sieben Tagen unwiderruflich gelöscht. In dieser Zeit ist es möglich den Löschvorgang zu widerrufen.",
   "AppPageHeader.confirmation-modal-revoke-deletion-message": "Mit der Bestätigung wird die Löschung des Space aufgehoben.",
