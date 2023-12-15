@@ -72,6 +72,18 @@ function OverviewApp({ orgData, spaceData }: OverviewAppType) {
               </Col>
               <Col xs={10}>{spaceID ? spaceData?.name : orgData?.name}</Col>
             </Row>
+            {spaceID ? "" : 
+                          <Row className=" my-2">
+                          <Col xs={2} aria-label="title-company">
+                            {formatMessage({
+                              id: 'Overview.company',
+                            })}
+                          </Col>
+                          <Col xs={10}>
+                            {orgData?.company}
+                          </Col>
+                        </Row>
+            }
             <Row className=" my-2">
               <Col xs={2} aria-label="title-description">
                 {formatMessage({
