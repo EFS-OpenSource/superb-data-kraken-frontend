@@ -166,21 +166,22 @@ function OrganizationGeneralTab({
           <ul>
             <li>
               {formatMessage({
-                id: 'AddEditOrgSpacesModal.space-confidentiality-public-tooltip',
+                id: 'AddEditOrgSpacesModal.orga-confidentiality-public-tooltip',
               })}
             </li>
             <li>
               {formatMessage({
-                id: 'AddEditOrgSpacesModal.space-confidentiality-internal-tooltip',
+                id: 'AddEditOrgSpacesModal.orga-confidentiality-internal-tooltip',
               })}
             </li>
             <li>
               {formatMessage({
-                id: 'AddEditOrgSpacesModal.space-confidentiality-private-tooltip',
+                id: 'AddEditOrgSpacesModal.orga-confidentiality-private-tooltip',
               })}
             </li>
           </ul>
         }
+        labelToolTipClassName='sdk-tooltip'
         labelsAndValues={[
           {
             name: formatMessage({
