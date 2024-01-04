@@ -57,7 +57,7 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
   const assembleIndexName = (): string => {
     if (orgData && !spaceData) {
       return (
-        `${orgData.name}_.*_${process.env.VITE_INDEX_NAME}` ?? 'measurements'
+        `${orgData.name}_.*_${process.env.VITE_INDEX_NAME}` ?? '*_*_measurements'
       ); /* TODO .* only aplicable on criteria endpoint and in current Backend version, will be changed in the future */
     }
 
@@ -70,10 +70,10 @@ function SearchApp({ orgData, spaceData }: SearchAppProps) {
       }
       return (
         `${orgData.name}_${spaceData.name}_${process.env.VITE_INDEX_NAME}` ??
-        'measurements'
+        '*_*_measurements'
       );
     }
-    return process.env.VITE_INDEX_NAME ?? 'measurements';
+    return `*_*_${process.env.VITE_INDEX_NAME}` ?? '*_*_measurements';
   };
 
   const [indexName, setIndexName] = useState<string>(
