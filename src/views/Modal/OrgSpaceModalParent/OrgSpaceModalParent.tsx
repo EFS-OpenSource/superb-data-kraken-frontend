@@ -107,7 +107,7 @@ function OrgSpaceModalParent({
             onSetActiveKey={setActiveKey}
           />
 
-          <Row className='mt-auto mb-6 mx-0 w-100 d-flex justify-content-center'>
+          <Row className='mt-4 mx-0 w-100 d-flex justify-content-center'>
             <Col
               xs={{ span: 4, offset: 4 }}
               xl={{ span: 2, offset: 5 }}
