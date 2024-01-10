@@ -133,6 +133,12 @@ $sizes: (
 /*-------------------------------------------------------------------*/
 /* === Boostrap Main SCSS === */
 @import 'bootstrap/scss/bootstrap';
+/* === Boostrap Custom SCSS === */
+.sdk-tooltip .tooltip-inner {
+  background-color: $primary;
+  text-align: left;
+  padding-top: 12px;
+}
 
 /*-------------------------------------------------------------------*/
 /* Custom component styles */
