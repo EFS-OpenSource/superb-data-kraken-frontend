@@ -288,7 +288,7 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
         {sdkAdmin() !== undefined && (
           <Chip
             ariaLabel='addOrganizationButton'
-            height='38px'
+            height='auto'
             text={formatMessage({
               id: 'Organizations.add-organization',
             })}
