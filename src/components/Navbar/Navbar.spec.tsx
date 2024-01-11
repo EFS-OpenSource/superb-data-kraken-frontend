@@ -68,9 +68,6 @@ describe('test navbar', () => {
         </TestWrapper>
       );
       expect(baseElement).toBeTruthy();
-      await waitFor(() => {
-        console.log(baseElement.container.innerHTML);
-      });
     });
   });
 });

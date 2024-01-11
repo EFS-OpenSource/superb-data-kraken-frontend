@@ -45,10 +45,6 @@ const statusCodesArray: { [code: string]: string } = {
   '50202': 'ErrorToast.status-code-storagemanager-service-error',
 };
 
-const checkCode = (statusCode: string | undefined) => {
-  console.log(`In check code ${statusCode}`);
-  console.log(statusCodesArray[String(statusCode)]);
-  return statusCodesArray[String(statusCode)];
-};
+const checkCode = (statusCode: string | undefined) => statusCodesArray[String(statusCode)];
 
 export default checkCode;

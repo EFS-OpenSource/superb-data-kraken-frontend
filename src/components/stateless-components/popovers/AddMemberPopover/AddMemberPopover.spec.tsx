@@ -56,7 +56,6 @@ describe('AddMemberPopover', () => {
     });
 
     await user.click(openPopover);
-    console.log(baseElement.innerHTML);
     const inputFields = await screen.findAllByRole('combobox');
     inputFields.forEach(async (field) => {
       await user.type(field, 'user@test.com');

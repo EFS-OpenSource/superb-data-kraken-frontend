@@ -59,8 +59,6 @@ describe('ConfirmationModal', () => {
     fireEvent.click(cancelButton);
     expect(onSetShow).toHaveBeenCalled();
     expect(baseElement).toBeTruthy();
-
-    console.log(baseElement.innerHTML);
   });
   it('tests the confirm button', async () => {
     const onSetShow = jest.fn();

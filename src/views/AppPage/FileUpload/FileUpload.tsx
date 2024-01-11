@@ -184,7 +184,6 @@ function FileUpload({ orgData, spaceData }: CustomTagProps) {
 
       return true;
     } catch (error: any) {
-      console.log('1', error);
       ErrorToast('ErrorToast.title-upload', error);
       return false;
     }
@@ -210,7 +209,6 @@ function FileUpload({ orgData, spaceData }: CustomTagProps) {
       }),
     )
       .then((commitResponse) => {
-        console.log('0', commitResponse);
         SuccessToast(
           'SuccessToast.title-upload',
           `${formatMessage({
@@ -223,12 +221,10 @@ function FileUpload({ orgData, spaceData }: CustomTagProps) {
         resetUI();
       })
       .catch((error) => {
-        console.log('1', error);
         ErrorToast('ErrorToast.title-upload', error);
         resetUI();
       })
       .catch((error) => {
-        console.log('2', error);
         ErrorToast('ErrorToast.title-upload', '403', 'Unauthorized');
         resetUI();
       });

@@ -22,6 +22,4 @@ it('should call handleToggler function', () => {
   const button = screen.getByRole('button');
 
   fireEvent.click(button);
-
-  console.log(baseElement.innerHTML);
 });

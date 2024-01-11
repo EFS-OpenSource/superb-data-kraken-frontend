@@ -38,9 +38,5 @@ describe('HomePage', () => {
         </TestWrapper>
       );
     });
-
-    await waitFor(() => {
-      console.log(baseElement.container.innerHTML);
-    });
   });
 });
