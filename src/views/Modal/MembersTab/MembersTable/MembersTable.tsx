@@ -15,7 +15,7 @@ limitations under the License.
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { useIntl } from 'react-intl';
 import { createColumnHelper } from '@tanstack/react-table';
 import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
@@ -53,6 +53,7 @@ function MembersTable({
   onHandleChange,
 }: MembersTableProps) {
   const { formatMessage } = useIntl();
+  const location = useLocation();
 
   const [membersToRender, setMembersToRender] = useState<MembersToRenderType[]>(
     []
@@ -376,6 +377,7 @@ function MembersTable({
     roles,
   ]);
 
+  const renderAdminNote = !location.pathname.includes('Spaces') && !spaceID;
   return (
     <>
       <div className='mt-4'>
@@ -388,22 +390,22 @@ function MembersTable({
           customRowCount={5}
         />
       </div>
-      <p className='text-center mt-4' style={{ fontSize: '0.75rem' }}>
-        <span>
-          {!spaceID &&
-            formatMessage({
+      {renderAdminNote && (
+        <p className='text-center mt-4' style={{ fontSize: '0.75rem' }}>
+          <span>
+            {formatMessage({
               id: 'MembersTable.note-admin-owner',
             })}
-        </span>
-        <br />
-        <br />
-        <span>
-          {!spaceID &&
-            formatMessage({
+          </span>
+          <br />
+          <br />
+          <span>
+            {formatMessage({
               id: 'MembersTable.note-admin-owner2',
             })}
-        </span>
-      </p>
+          </span>
+        </p>
+      )}
     </>
   );
 }
