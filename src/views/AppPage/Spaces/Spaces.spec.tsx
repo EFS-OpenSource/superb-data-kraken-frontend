@@ -85,7 +85,6 @@ describe('Spaces', () => {
       heading = baseElement.findByText('Spaces', {
         selector: 'div',
       });
-      console.log(baseElement.container.innerHTML);
       expect(heading).toBeDefined();
     });
   });

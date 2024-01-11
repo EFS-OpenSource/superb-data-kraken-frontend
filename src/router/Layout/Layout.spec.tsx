@@ -34,8 +34,6 @@ test('should render successfully', () => {
       <Layout onLanguageChange={onLanguageChange} />
     </TestWrapper>
   );
-
-  console.log(baseElement.innerHTML);
 });
 
 // should go to Navbar test

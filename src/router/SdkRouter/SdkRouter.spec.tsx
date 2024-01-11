@@ -56,7 +56,6 @@ describe('SdkRouter', () => {
     );
     await waitFor(() => {
       expect(baseElement).toBeTruthy();
-      console.log(baseElement.innerHTML);
     });
   });
 });

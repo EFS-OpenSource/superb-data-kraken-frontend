@@ -27,7 +27,6 @@ describe('OrganizationAddTagPopover', () => {
       </TestWrapper>
     );
     expect(baseElement).toBeTruthy();
-    console.log(baseElement.innerHTML);
   });
   it('should click the + button to open the modal, enter a tag and add it', () => {
     const handleAddOrgaTag = jest.fn();

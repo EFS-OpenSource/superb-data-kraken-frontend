@@ -51,9 +51,7 @@ describe('ChipGroup', () => {
         <ChipGroup
           options={[{label: 'AnOption', value: 'IAmAnOption'}]}
           checked={['AnotherOption']}
-          onChange={function (checked: string[]): void {
-            console.log('I work');
-          }}
+          onChange={function (checked: string[]): void {}}
         />
       </TestWrapperNoOIDC>
     );

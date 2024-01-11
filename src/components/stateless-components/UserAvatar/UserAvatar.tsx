@@ -67,7 +67,7 @@ function UserAvatar({
   CustomToggle.displayName = 'CustomToggle';
 
   return (
-    <div aria-label={ariaLabel} className='d-flex align-items-center'>
+    <div aria-label={ariaLabel} className='d-flex flex-column align-items-center'>
       <Dropdown>
         <Dropdown.Toggle as={CustomToggle} id='dropdown-custom-components' />
         <Dropdown.Menu>{dropdownItems}</Dropdown.Menu>

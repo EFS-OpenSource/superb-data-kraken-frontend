@@ -63,9 +63,6 @@ test('should trigger onChange in SelectWithAutocomplete', async () => {
       />
     </TestWrapperNoOIDC>
   );
-
-  console.log(baseElement.innerHTML);
-
   const input = screen.getByText('Attribut');
   // await user.type(input, 'test');
 });
