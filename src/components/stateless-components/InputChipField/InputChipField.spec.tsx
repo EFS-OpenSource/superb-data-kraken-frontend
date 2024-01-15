@@ -43,8 +43,6 @@ it('should render with selectedFilters and click the available buttons', () => {
     </TestWrapperNoOIDC>
   );
 
-  console.log(baseElement.innerHTML);
-
   const buttons = screen.getAllByRole('button');
   buttons.forEach((button) => {
     fireEvent.click(button);

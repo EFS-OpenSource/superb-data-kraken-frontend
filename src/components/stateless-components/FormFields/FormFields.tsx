@@ -28,6 +28,7 @@ interface FormInputType {
   labelText: string;
   labelToolTipIcon?: JSX.Element;
   labelToolTipText?: string | ReactNode;
+  labelToolTipClassName?: string;
   inputClassName?: string;
   inputStyle?: Record<string, unknown>;
   fontSize?: 'sm' | 'lg';
@@ -50,6 +51,7 @@ export function FormInput({
   labelText,
   labelToolTipIcon,
   labelToolTipText,
+  labelToolTipClassName,
   inputClassName,
   inputStyle,
   fontSize,
@@ -74,7 +76,12 @@ export function FormInput({
             placement='right'
             transition={false}
             overlay={
-              <Tooltip id={labelText as string}>{labelToolTipText}</Tooltip>
+              <Tooltip
+                id={labelText as string}
+                className={labelToolTipClassName}
+              >
+                {labelToolTipText}
+              </Tooltip>
             }
           >
             <div className='ms-1 d-flex align-items-center'>
@@ -117,6 +124,7 @@ export function FormTextarea({
   labelText,
   labelToolTipIcon,
   labelToolTipText,
+  labelToolTipClassName,
   fontSize,
   inputClassName,
   inputStyle,
@@ -134,7 +142,12 @@ export function FormTextarea({
           <OverlayTrigger
             placement='right'
             overlay={
-              <Tooltip id={labelText as string}>{labelToolTipText}</Tooltip>
+              <Tooltip
+                id={labelText as string}
+                className={labelToolTipClassName}
+              >
+                {labelToolTipText}
+              </Tooltip>
             }
           >
             <div className='ms-1 d-flex align-items-center'>
@@ -197,7 +210,7 @@ export function FormTextarea({
 //         <OverlayTrigger
 //           placement="right"
 //           overlay={
-//             <Tooltip id={labelText as string}>{labelToolTipText}</Tooltip>
+//             <Tooltip id={labelText as string} className={labelToolTipClassName}>{labelToolTipText}</Tooltip>
 //           }
 //         >
 //           <div className="ms-1 d-flex align-items-center">
@@ -239,6 +252,7 @@ export function FormRadioButtons({
   labelText,
   labelToolTipIcon,
   labelToolTipText,
+  labelToolTipClassName,
   inline,
   labelsAndValues,
   checkedValue,
@@ -254,7 +268,12 @@ export function FormRadioButtons({
           <OverlayTrigger
             placement='right'
             overlay={
-              <Tooltip id={labelText as string}>{labelToolTipText}</Tooltip>
+              <Tooltip
+                id={labelText as string}
+                className={labelToolTipClassName}
+              >
+                {labelToolTipText}
+              </Tooltip>
             }
           >
             <div className='ms-1 d-flex align-items-center'>
@@ -303,6 +322,7 @@ export function FormCheckbox({
   labelText,
   labelToolTipIcon,
   labelToolTipText,
+  labelToolTipClassName,
   labelsAndValues,
   onChange,
   required,
@@ -323,7 +343,12 @@ export function FormCheckbox({
           <OverlayTrigger
             placement='right'
             overlay={
-              <Tooltip id={labelText as string}>{labelToolTipText}</Tooltip>
+              <Tooltip
+                id={labelText as string}
+                className={labelToolTipClassName}
+              >
+                {labelToolTipText}
+              </Tooltip>
             }
           >
             <div className='ms-1 d-flex align-items-center'>

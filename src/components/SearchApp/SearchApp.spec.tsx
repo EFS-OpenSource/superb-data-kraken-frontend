@@ -42,7 +42,6 @@ describe('SearchApp', () => {
       </TestWrapperNoOIDC>
     );
     expect(baseElement).toBeTruthy();
-    console.log(baseElement.innerHTML);
   });
   it('do things', (done) => {
     const [searchValue, setSearchValue] = useStateMock<string | undefined>(
@@ -60,7 +59,6 @@ describe('SearchApp', () => {
       done();
       setSelectedFilters([{ operator: 'sd', property: 'we', value: 'as' }]);
       setSearchValue('hello');
-      console.log(baseElement.innerHTML);
     });
   });
   it('it has orgData & spaceData', () => {

@@ -40,6 +40,13 @@ function OverviewApp({ orgData, spaceData }: OverviewAppType) {
     return [''];
   };
 
+  const formatDescription = (desc: string | undefined) => {
+    if(desc === undefined || desc == null) {
+      return "";
+    }
+    return desc.split("\n").map((i) => <div>{i}</div>);
+  }
+
   return (
     <Container fluid className="my-6 px-8">
       <Col md="auto">
@@ -72,6 +79,18 @@ function OverviewApp({ orgData, spaceData }: OverviewAppType) {
               </Col>
               <Col xs={10}>{spaceID ? spaceData?.name : orgData?.name}</Col>
             </Row>
+            {spaceID ? "" : 
+                          <Row className=" my-2">
+                          <Col xs={2} aria-label="title-company">
+                            {formatMessage({
+                              id: 'Overview.company',
+                            })}
+                          </Col>
+                          <Col xs={10}>
+                            {orgData?.company}
+                          </Col>
+                        </Row>
+            }
             <Row className=" my-2">
               <Col xs={2} aria-label="title-description">
                 {formatMessage({
@@ -79,7 +98,7 @@ function OverviewApp({ orgData, spaceData }: OverviewAppType) {
                 })}
               </Col>
               <Col xs={10}>
-                {spaceID ? spaceData?.description : orgData?.description}
+                {spaceID ? formatDescription(spaceData?.description) : formatDescription(orgData?.description)}
               </Col>
             </Row>
             <Row className="my-2">

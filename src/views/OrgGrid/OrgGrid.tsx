@@ -117,22 +117,32 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
 
   const filterOrgsData = useCallback(() => {
     setFilteredOrganizations(
-      orgsData.filter(
-        (org) =>
-          JSON.stringify(org)
-            .toLowerCase()
-            .indexOf(searchInput.toLowerCase()) !== -1
+      orgsData.filter((org) =>
+        Object.values(org).some(
+          (value) =>
+            value !== null &&
+            value !== undefined &&
+            value
+              .toString()
+              .toLowerCase()
+              .indexOf(searchInput.toLowerCase()) !== -1
+        )
       )
     );
   }, [orgsData, searchInput]);
 
   const filterSpacesData = useCallback(() => {
     setFilteredSpaces(
-      spacesData.filter(
-        (org) =>
-          JSON.stringify(org)
-            .toLowerCase()
-            .indexOf(searchInput.toLowerCase()) !== -1
+      spacesData.filter((org) =>
+        Object.values(org).some(
+          (value) =>
+            value !== null &&
+            value !== undefined &&
+            value
+              .toString()
+              .toLowerCase()
+              .indexOf(searchInput.toLowerCase()) !== -1
+        )
       )
     );
   }, [spacesData, searchInput]);
@@ -278,7 +288,7 @@ function OrgGrid({ username, orgasWithSpaces, userInfo }: OrgGridProps) {
         {sdkAdmin() !== undefined && (
           <Chip
             ariaLabel='addOrganizationButton'
-            height='38px'
+            height='auto'
             text={formatMessage({
               id: 'Organizations.add-organization',
             })}

@@ -210,11 +210,16 @@ function AppPage() {
                 capabilities,
                 roles
               );
-            if (!roles && capabilities)
+            if (!roles && capabilities && spaceID)
               return intlWrapper(
                 'AppPage.Tabs.app-disabled-capabilities',
                 capabilities
               );
+            if (!roles && capabilities && !spaceID)
+              return intlWrapper(
+                'AppPage.Tabs.app-disabled-capabilities-org',
+                capabilities
+            );
             if (roles && !capabilities)
               return intlWrapper('AppPage.Tabs.app-disabled-roles', roles);
             return undefined;

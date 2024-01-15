@@ -86,7 +86,6 @@ describe('InputSelectPopover', () => {
     await user.click(openButton);
     const input = screen.getByPlaceholderText('inputPlaceholder');
     await user.type(input, 'test input');
-    console.log(baseElement.innerHTML);
     const roleDropdown = screen.getByRole('combobox');
     // await user.selectOptions(roleDropdown, 'user');
     const sendButton = screen.getByRole('button', { name: 'input-addButton' });

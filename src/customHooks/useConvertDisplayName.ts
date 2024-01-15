@@ -20,12 +20,12 @@ import { Organization, Space } from '@customTypes/index';
 export const useConvertSpaceDisplayName = <T extends Space | Organization>(
   inputName: string,
   handleChange: (passedData: T) => void,
-  data: T,
+  data: T
 ) => {
   const regexedName = inputName
     .toLowerCase()
-    .replace(/ /g, '-')
-    .replace(/[^a-z0-9-]/g, '');
+    .replace(/[^a-z0-9-]+/g, '-')
+    .replace(/[-]+/g, '-');
 
   let containerName = regexedName;
 
@@ -49,11 +49,11 @@ export const useConvertSpaceDisplayName = <T extends Space | Organization>(
 };
 
 export const useConvertOrganizationDisplayName = <
-  T extends Space | Organization,
+  T extends Space | Organization
 >(
   inputName: string,
   handleChange: (passedData: T) => void,
-  data: T,
+  data: T
 ) => {
   const regexedName = inputName
     .toLowerCase()

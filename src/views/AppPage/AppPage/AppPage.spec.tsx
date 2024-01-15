@@ -96,7 +96,6 @@ describe('AppPage', () => {
 
     waitFor(() => {
       done();
-      console.log(baseElement.innerHTML);
     });
   });
 

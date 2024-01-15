@@ -21,12 +21,19 @@ import { OrgSpaceUserType } from '@customTypes/index';
 function CustomCardBodyLayout({ data }: OrgSpaceUserType) {
   const { formatMessage } = useIntl();
 
+  const formatDescription = (desc: string | undefined) => {
+    if(desc === undefined || desc === null) {
+      return "";
+    }
+    return desc.split("\n").map((i) => <div>{i}</div>);
+  }
+
   return (
     <div className='p-0 d-flex align-items-start flex-column h-100'>
       <div className='mt-2 mb-3'>
         {data && data.description && data.description.length > 200
-          ? `${data.description.substring(0, 200)}...`
-          : data.description}
+          ? formatDescription(`${data.description.substring(0, 200)}...`)
+          : formatDescription(data.description)}
       </div>
       <div className='mt-auto mb-4'>
         <div className='font-weight-medium mb-2'>

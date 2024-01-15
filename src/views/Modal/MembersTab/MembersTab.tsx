@@ -203,7 +203,11 @@ function MembersTab({
       : owner
     );
     setPossibleOwners(updatedPossibleOwners as unknown as (OrgaUser | SpaceUser)[]);
-    handleUpdateUser(updatedUsers);
+    if(!updatedUser.firstName && updatedUser.permissions.length === 0) {
+      handleUpdateUser(updatedUsers.filter((user) => user.id !== updatedUser.id))
+    } else {
+      handleUpdateUser(updatedUsers);
+    }
   };
 
   useEffect(() => {

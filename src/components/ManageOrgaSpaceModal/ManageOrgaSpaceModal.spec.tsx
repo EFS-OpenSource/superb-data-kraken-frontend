@@ -393,7 +393,6 @@ describe('ManageOrgaSpaceModal', () => {
 
   //   // const selectField = screen.getByRole('combobox');
   //   // await user.click(selectField);
-  //   console.log(baseElement.innerHTML);
 
   //   // const saveButton = await screen.findByText(/speichern/i);
   //   // await user.click(saveButton);
