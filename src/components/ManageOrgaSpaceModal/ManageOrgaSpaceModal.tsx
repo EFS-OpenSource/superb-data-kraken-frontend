@@ -213,10 +213,11 @@ function ManageOrgaSpaceModal({
           const initialUser = initialUsersFixed.find(
             (user: { email: string }) => user.email === updatedUser.email
           );
+          const numberOfAdmins = 
           return (
             !initialUser ||
             JSON.stringify(initialUser.permissions) !==
-              JSON.stringify(updatedUser.permissions)
+              JSON.stringify(updatedUser.permissions) || otherOwnerexists
           );
         }
       )
@@ -227,6 +228,15 @@ function ManageOrgaSpaceModal({
           updatedUser.permissions as unknown as string[]
         ).then((response) => {
           if (response.ok) {
+            // Check if 'admin' role was withdrawn
+            if(initialUsers.find(user => user.email === updatedUser.email)?.permissions == 'admin' &&
+              updatedUser.permissions != 'admin'){
+                // only remove admin and owner if there is another owner
+                if (initialOwners.length > 1) {
+                  // TODO Remove user as owner
+                  setOrganizationOwnersByUserId();
+                }
+              }
             queryClient.invalidateQueries(['orgasWithSpaces']);
             queryClient.invalidateQueries(['organization', orgID]);
             queryClient.invalidateQueries(['orgaUsers', orgID]);
