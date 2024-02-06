@@ -52,17 +52,17 @@ export function SearchInputAdvanced({
     Criteria | undefined
   >(undefined);
   const [selectedOption, setSelectedOption] = useState<DropdownOptions | null>(
-    null,
+    null
   );
   const [inputType, setInputType] = useState<string>('text');
   const [operatorValue, setOperatorValue] = useState<string | null>('LIKE');
   const handlePropertyOptionClick = (
-    selected: DropdownOptions | null,
+    selected: DropdownOptions | null
   ): void => {
     setSelectedOption(selected);
     if (criteria && selected) {
       const selectedProperties = criteria.find(
-        (e: Criteria) => e.property === selected.value,
+        (e: Criteria) => e.property === selected.value
       );
       setSelectedIndexProperties(selectedProperties);
 
@@ -79,7 +79,7 @@ export function SearchInputAdvanced({
 
   const disabled = (operator: string): boolean => {
     const isOperator = selectedIndexProperties?.operator.find(
-      (e: string) => e === operator,
+      (e: string) => e === operator
     );
     if (!isOperator) {
       return true;
@@ -90,7 +90,7 @@ export function SearchInputAdvanced({
   const handleAddChip = (
     newOperator: string,
     newProperty: string,
-    value: string,
+    value: string
   ): void => {
     const filters = produce<(state: Filter[]) => Filter[]>((draft) => {
       if (
@@ -98,7 +98,7 @@ export function SearchInputAdvanced({
           (filterOptions: Filter) =>
             filterOptions.value === value &&
             filterOptions.operator === newOperator &&
-            filterOptions.property === newProperty,
+            filterOptions.property === newProperty
         )
       ) {
         draft.push({
@@ -109,13 +109,18 @@ export function SearchInputAdvanced({
       }
     });
 
-    const updateIndexAttributes = filter(
-      data,
-      (item: string) => item !== selectedOption?.value,
-    );
+    const isDateProperty = newProperty.toLowerCase().includes('date');
 
+    if (!isDateProperty) {
+      const updateIndexAttributes = filter(
+        data,
+        (item: string) => item !== selectedOption?.value
+      );
+      onReducedIndexAttributes(updateIndexAttributes);
+    } else {
+      onReducedIndexAttributes(data);
+    }
     onSetSelectFilters(filters);
-    onReducedIndexAttributes(updateIndexAttributes);
   };
 
   const addFilter = (): void => {
@@ -123,7 +128,7 @@ export function SearchInputAdvanced({
       handleAddChip(
         operatorValue,
         selectedIndexProperties.property,
-        searchValue,
+        searchValue
       );
 
       setSelectedIndexProperties(undefined);
@@ -142,7 +147,7 @@ export function SearchInputAdvanced({
   return (
     <Col
       xs={{ span: 12, offset: 0 }}
-      className="p-0 m-0 d-flex justify-content-between"
+      className='p-0 m-0 d-flex justify-content-between'
     >
       <SelectWithAutocomplete
         options={stringToLoadOptions(data)}
@@ -159,10 +164,10 @@ export function SearchInputAdvanced({
         onClick={onOperatorClick}
         disabled={disabled}
       />
-      <Row className="m-0 bg-white border border-middle rounded-lg p-0">
-        <Col xs={{ span: 10, offset: 0 }} className="px-1">
+      <Row className='m-0 bg-white border border-middle rounded-lg p-0'>
+        <Col xs={{ span: 10, offset: 0 }} className='px-1'>
           <Form.Control
-            className="h-100 border border-white p-0 m-0 shadow-none"
+            className='h-100 border border-white p-0 m-0 shadow-none'
             type={inputType}
             value={searchValue}
             onChange={(e) => onSetSearchValue(e.target.value)}
@@ -171,14 +176,14 @@ export function SearchInputAdvanced({
         </Col>
         <Col
           xs={{ span: 1, offset: 0 }}
-          className="p-0 m-0 d-flex align-items-center"
+          className='p-0 m-0 d-flex align-items-center'
         >
           {operatorValue && selectedIndexProperties && searchValue && (
             <Icon
               icon={BsPlus}
               size={28}
-              color="text-primary"
-              type="button"
+              color='text-primary'
+              type='button'
               onClick={addFilter}
             />
           )}
